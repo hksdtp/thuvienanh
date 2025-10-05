@@ -1,0 +1,88 @@
+services:
+  # PostgreSQL Database (Local - Currently DISABLED, using remote server)
+  # Uncomment this service if you want to use local PostgreSQL instead of remote
+  postgres:
+    image: postgres:15-alpine
+    container_name: tva-postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Demo1234
+      - POSTGRES_DB=Ninh96
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d Ninh96"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # pgAdmin 4
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: tva-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@tva.com
+      - PGADMIN_DEFAULT_PASSWORD=Villad24@
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    ports:
+      - "5051:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  # Fabric Library App
+  fabric-library:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tva-fabric-library
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      # Database - Remote Server
+      - DATABASE_URL=postgresql://postgres:Demo1234@222.252.23.248:5499/Ninh96
+      - POSTGRES_HOST=222.252.23.248
+      - POSTGRES_PORT=5499
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Demo1234
+      - POSTGRES_DB=Ninh96
+      # Synology
+      - SYNOLOGY_BASE_URL=http://222.252.23.248:8888
+      - SYNOLOGY_ALTERNATIVE_URL=http://222.252.23.248:6868
+      - SYNOLOGY_USERNAME=haininh
+      - SYNOLOGY_PASSWORD=Villad24@
+      # SMB
+      - SMB_HOST=222.252.23.248
+      - SMB_SHARE=marketing
+      - SMB_DOMAIN=WORKGROUP
+      - SMB_USERNAME=haininh
+      - SMB_PASSWORD=Villad24@
+      - SMB_PORT=445
+    restart: unless-stopped
+    # Note: No dependency on local postgres since using remote database
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  default:
+    name: fabric-library-network

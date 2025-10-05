@@ -1,0 +1,195 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { SparklesIcon, TagIcon, ArchiveBoxIcon, PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import PageHeader from '@/components/PageHeader'
+import Image from 'next/image'
+
+const VALID_CATEGORIES = {
+  'phu-kien-trang-tri': {
+    title: 'Phụ kiện trang trí',
+    subtitle: 'Mành rèm, dây buộc, móc cài, đường bo, viền trang trí',
+    icon: SparklesIcon,
+    dbValue: 'phu-kien-trang-tri'
+  },
+  'thanh-phu-kien': {
+    title: 'Thanh phụ kiện',
+    subtitle: 'Thanh treo rèm và phụ kiện liên quan',
+    icon: TagIcon,
+    dbValue: 'thanh-phu-kien'
+  },
+  'thanh-ly': {
+    title: 'Thanh lý',
+    subtitle: 'Sản phẩm thanh lý, giảm giá',
+    icon: ArchiveBoxIcon,
+    dbValue: 'thanh-ly'
+  }
+} as const
+
+type CategorySlug = keyof typeof VALID_CATEGORIES
+
+interface Accessory {
+  id: string
+  name: string
+  code: string
+  category: string
+  description?: string
+  price: number
+  stock_quantity: number
+  image_url?: string
+  created_at: string
+}
+
+interface PageProps {
+  params: {
+    category: string
+  }
+}
+
+export default function AccessoriesCategoryPage({ params }: PageProps) {
+  const router = useRouter()
+  const [accessories, setAccessories] = useState<Accessory[]>([])
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const categoryInfo = VALID_CATEGORIES[params.category as CategorySlug]
+
+  useEffect(() => {
+    if (categoryInfo) {
+      fetchAccessories()
+    }
+  }, [params.category])
+
+  const fetchAccessories = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch(`/api/accessories/${params.category}`)
+      const result = await response.json()
+      if (result.success && result.data) {
+        setAccessories(result.data)
+      }
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!categoryInfo) {
+    return (
+      <div className="min-h-screen bg-macos-bg-secondary flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-macos-text-primary mb-2">Không tìm thấy danh mục</h2>
+          <p className="text-sm text-macos-text-secondary mb-4">Danh mục "{params.category}" không tồn tại</p>
+          <button
+            onClick={() => router.push('/')}
+            className="text-ios-blue hover:text-ios-blue-dark font-medium"
+          >
+            ← Về trang chủ
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const Icon = categoryInfo.icon
+
+  const filteredAccessories = accessories.filter(accessory =>
+    accessory.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    accessory.code.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  return (
+    <div className="min-h-screen bg-macos-bg-secondary">
+      <PageHeader
+        title={categoryInfo.title}
+        subtitle={`${accessories.length} sản phẩm`}
+        icon={<Icon className="w-8 h-8 text-ios-blue" strokeWidth={1.8} />}
+        actions={
+          <button className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md">
+            <PlusIcon className="w-5 h-5" strokeWidth={2} />
+            <span>Thêm mới</span>
+          </button>
+        }
+      />
+
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="mb-6">
+          <div className="relative max-w-xl">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <MagnifyingGlassIcon className="h-5 w-5 text-ios-gray-500" strokeWidth={2} />
+            </div>
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Tìm kiếm phụ kiện..."
+              className="block w-full pl-10 pr-4 py-2.5 border border-ios-gray-300 rounded-lg text-sm bg-white placeholder-ios-gray-500 focus:outline-none focus:bg-white focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
+            />
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="flex items-center justify-center py-16">
+            <div className="animate-spin rounded-full h-10 w-10 border-2 border-ios-blue border-t-transparent"></div>
+            <span className="ml-3 text-macos-text-secondary font-medium">Đang tải...</span>
+          </div>
+        ) : filteredAccessories.length === 0 ? (
+          <div className="bg-white rounded-xl border border-macos-border-light p-16 text-center">
+            <Icon className="w-16 h-16 text-ios-gray-400 mx-auto mb-4" strokeWidth={1.5} />
+            <h3 className="text-lg font-semibold text-macos-text-primary mb-2">
+              Chưa có dữ liệu
+            </h3>
+            <p className="text-sm text-macos-text-secondary">
+              Bắt đầu bằng cách thêm {categoryInfo.title.toLowerCase()} mới
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 animate-fadeIn">
+            {filteredAccessories.map((accessory, index) => (
+              <div
+                key={accessory.id}
+                className="animate-slideUp cursor-pointer"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 border border-macos-border-light group">
+                  <div className="aspect-[3/4] relative overflow-hidden bg-ios-gray-50">
+                    {accessory.image_url ? (
+                      <Image
+                        src={accessory.image_url}
+                        alt={accessory.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Icon className="w-12 h-12 text-ios-gray-300" strokeWidth={1.5} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-macos-text-primary truncate">
+                      {accessory.name}
+                    </h3>
+                    <p className="text-sm text-macos-text-secondary truncate mt-1">
+                      {accessory.code}
+                    </p>
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-macos-border-light">
+                      <span className="text-sm font-medium text-ios-blue">
+                        {accessory.price?.toLocaleString('vi-VN')}đ
+                      </span>
+                      <span className="text-xs text-macos-text-secondary">
+                        SL: {accessory.stock_quantity}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
