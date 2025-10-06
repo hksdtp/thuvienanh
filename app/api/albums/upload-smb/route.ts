@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { AlbumService } from '@/lib/database'
 import { SMBUploadService } from '@/lib/smbUpload'
-import { ApiResponse } from '@/types/api'
+import { ApiResponse } from '@/types/database'
 
 interface AlbumImage {
   id: string

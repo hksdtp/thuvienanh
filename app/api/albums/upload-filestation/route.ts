@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { AlbumService } from '@/lib/database'
-import { ApiResponse } from '@/types/api'
+import { ApiResponse } from '@/types/database'
 import { createFolderName } from '@/lib/utils'
 
 interface AlbumImage {
