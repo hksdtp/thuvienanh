@@ -12,9 +12,9 @@ export default function EventCard({ event, onClick }: EventCardProps) {
   const content = (
     <div className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 border border-macos-border-light group cursor-pointer">
       <div className="aspect-[4/3] relative overflow-hidden bg-ios-gray-50">
-        {event.thumbnail_url ? (
+        {event.cover_image_url ? (
           <Image
-            src={event.thumbnail_url}
+            src={event.cover_image_url}
             alt={event.name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
