@@ -13,10 +13,10 @@ const VALID_CATEGORIES = ['phu-kien-trang-tri', 'thanh-phu-kien', 'thanh-ly', 'a
 
 export async function GET(
   request: Request,
-  { params }: { params: { category: string } }
+  context: { params: { category: string } }
 ) {
   try {
-    const { category } = params
+    const { category } = context.params
 
     if (!VALID_CATEGORIES.includes(category)) {
       return NextResponse.json(

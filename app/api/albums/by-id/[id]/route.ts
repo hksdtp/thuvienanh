@@ -5,10 +5,10 @@ import { UpdateAlbumForm, ApiResponse } from '@/types/database'
 // GET /api/albums/[id] - Get album by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const album = await AlbumService.getById(params.id)
+    const album = await AlbumService.getById(context.params.id)
     
     if (!album) {
       const response: ApiResponse<null> = {
@@ -39,7 +39,7 @@ export async function GET(
 // PATCH /api/albums/[id] - Update album
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const body = await request.json()
@@ -91,7 +91,7 @@ export async function PATCH(
       updateData.tags = body.tags
     }
 
-    const updatedAlbum = await AlbumService.update(params.id, updateData)
+    const updatedAlbum = await AlbumService.update(context.params.id, updateData)
 
     if (!updatedAlbum) {
       const response: ApiResponse<null> = {
@@ -123,7 +123,7 @@ export async function PATCH(
 // DELETE /api/albums/[id] - Delete album (soft delete)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     const { searchParams } = new URL(request.url)
@@ -131,7 +131,7 @@ export async function DELETE(
 
     if (hardDelete) {
       // Hard delete - xóa hoàn toàn khỏi database
-      const deleted = await AlbumService.delete(params.id)
+      const deleted = await AlbumService.delete(context.params.id)
       
       if (!deleted) {
         const response: ApiResponse<null> = {
@@ -149,7 +149,7 @@ export async function DELETE(
       return NextResponse.json(response)
     } else {
       // Soft delete - set is_active = false
-      const updatedAlbum = await AlbumService.update(params.id, { is_active: false })
+      const updatedAlbum = await AlbumService.update(context.params.id, { is_active: false })
 
       if (!updatedAlbum) {
         const response: ApiResponse<null> = {

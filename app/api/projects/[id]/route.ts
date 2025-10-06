@@ -5,10 +5,10 @@ import { Project, ApiResponse } from '@/types/database'
 // GET /api/projects/[id] - Lấy chi tiết project
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = params
+    const { id } = context.params
 
     const sql = `
       SELECT 
@@ -65,10 +65,10 @@ export async function GET(
 // PUT /api/projects/[id] - Cập nhật project
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = params
+    const { id } = context.params
     const body = await request.json()
 
     const {
@@ -150,10 +150,10 @@ export async function PUT(
 // DELETE /api/projects/[id] - Xóa project (soft delete)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = params
+    const { id } = context.params
 
     const sql = `
       UPDATE projects

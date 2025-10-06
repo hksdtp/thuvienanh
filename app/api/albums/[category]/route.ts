@@ -13,10 +13,10 @@ const VALID_CATEGORIES = ['fabric', 'accessory', 'event']
 
 export async function GET(
   request: Request,
-  { params }: { params: { category: string } }
+  context: { params: { category: string } }
 ) {
   try {
-    const { category } = params
+    const { category } = context.params
 
     if (!VALID_CATEGORIES.includes(category)) {
       return NextResponse.json(

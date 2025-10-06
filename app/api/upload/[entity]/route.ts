@@ -14,10 +14,10 @@ const VALID_ENTITIES: EntityType[] = ['fabric', 'collection', 'project', 'event'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { entity: string } }
+  context: { params: { entity: string } }
 ) {
   try {
-    const entity = params.entity as EntityType
+    const entity = context.params.entity as EntityType
     
     // Validate entity type
     if (!VALID_ENTITIES.includes(entity)) {
@@ -142,10 +142,10 @@ export async function POST(
 // GET endpoint to retrieve upload info
 export async function GET(
   request: NextRequest,
-  { params }: { params: { entity: string } }
+  context: { params: { entity: string } }
 ) {
   try {
-    const entity = params.entity as EntityType
+    const entity = context.params.entity as EntityType
     const { searchParams } = new URL(request.url)
     const entityId = searchParams.get('entityId')
 
