@@ -5,10 +5,10 @@ import { Event, ApiResponse } from '@/types/database'
 // GET /api/events/[id] - Lấy chi tiết event
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = params
+    const { id } = context.params
 
     const sql = `
       SELECT 
@@ -66,10 +66,10 @@ export async function GET(
 // PUT /api/events/[id] - Cập nhật event
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = params
+    const { id } = context.params
     const body = await request.json()
 
     const {
@@ -154,10 +154,10 @@ export async function PUT(
 // DELETE /api/events/[id] - Xóa event (soft delete)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = params
+    const { id } = context.params
 
     const sql = `
       UPDATE events
