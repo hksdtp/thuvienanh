@@ -7,7 +7,7 @@ import PageHeader from '@/components/PageHeader'
 import CreateAlbumModal from '@/components/CreateAlbumModal'
 import EditAlbumModal from '@/components/EditAlbumModal'
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { CreateAlbumForm } from '@/types/database'
+import { CreateAlbumForm, Album } from '@/types/database'
 import Image from 'next/image'
 
 const VALID_CATEGORIES = {
@@ -32,16 +32,6 @@ const VALID_CATEGORIES = {
 } as const
 
 type CategorySlug = keyof typeof VALID_CATEGORIES
-
-interface Album {
-  id: string
-  name: string
-  category: string
-  description?: string
-  thumbnail_url?: string
-  image_count: number
-  created_at: string
-}
 
 interface PageProps {
   params: {
