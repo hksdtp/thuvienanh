@@ -36,10 +36,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return new Promise<NextResponse>((resolve) => {
       const smb2Client = new SMB2(smbConfig)
 
-      smb2Client.readFile(cleanPath, (err: any, data: Buffer) => {
+      smb2Client.readFile(cleanPath, (err?: Error, data?: Buffer) => {
         smb2Client.disconnect()
 
-        if (err) {
+        if (err || !data) {
           console.error('❌ SMB read error:', err)
           resolve(NextResponse.json(
             { error: 'File not found or access denied' },
