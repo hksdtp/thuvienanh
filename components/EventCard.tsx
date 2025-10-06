@@ -37,7 +37,7 @@ export default function EventCard({ event, onClick }: EventCardProps) {
             {event.event_type || 'Chưa phân loại'}
           </span>
           <span className="text-xs text-macos-text-secondary">
-            {new Date(event.event_date).toLocaleDateString('vi-VN')}
+            {event.event_date ? new Date(event.event_date).toLocaleDateString('vi-VN') : 'Chưa xác định'}
           </span>
         </div>
       </div>

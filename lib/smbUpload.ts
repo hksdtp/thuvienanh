@@ -43,10 +43,10 @@ export class SMBUploadService {
         // Create SMB2 client
         const smb2Client = new SMB2({
           share: `\\\\${this.config.host}\\${this.config.share}`,
-          domain: this.config.domain,
+          domain: this.config.domain || 'WORKGROUP',
           username: this.config.username,
           password: this.config.password,
-          port: this.config.port,
+          port: this.config.port || 445,
           autoCloseTimeout: 10000
         })
 
@@ -93,10 +93,10 @@ export class SMBUploadService {
       try {
         const smb2Client = new SMB2({
           share: `\\\\${this.config.host}\\${this.config.share}`,
-          domain: this.config.domain,
+          domain: this.config.domain || 'WORKGROUP',
           username: this.config.username,
           password: this.config.password,
-          port: this.config.port,
+          port: this.config.port || 445,
           autoCloseTimeout: 10000
         })
 
@@ -131,20 +131,20 @@ export class SMBUploadService {
       try {
         const smb2Client = new SMB2({
           share: `\\\\${this.config.host}\\${this.config.share}`,
-          domain: this.config.domain,
+          domain: this.config.domain || 'WORKGROUP',
           username: this.config.username,
           password: this.config.password,
-          port: this.config.port,
+          port: this.config.port || 445,
           autoCloseTimeout: 10000
         })
 
-        smb2Client.exists(path, (err: any, exists: boolean) => {
+        smb2Client.exists(path, (err: any, exists?: boolean) => {
           smb2Client.disconnect()
           if (err) {
             console.error('❌ Check file exists error:', err)
             resolve(false)
           } else {
-            resolve(exists)
+            resolve(exists || false)
           }
         })
       } catch (error) {

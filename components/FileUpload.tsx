@@ -210,7 +210,8 @@ export default function FileUpload({
         pendingFiles,
         {
           maxSizeMB: 2,
-          maxWidthOrHeight: 1920,
+          maxWidth: 1920,
+          maxHeight: 1920,
           quality: 0.8
         },
         (current, total) => {

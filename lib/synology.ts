@@ -532,7 +532,7 @@ class SynologyPhotosService {
 
       // Convert File to Buffer if needed
       let buffer: Buffer
-      if (file instanceof Buffer) {
+      if (Buffer.isBuffer(file)) {
         buffer = file
       } else {
         const arrayBuffer = await file.arrayBuffer()
@@ -680,7 +680,7 @@ class SynologyPhotosService {
     } catch (error) {
       console.error('❌ Synology upload EXCEPTION')
       console.error('📍 Location: lib/synology.ts -> uploadImage() catch block')
-      console.error('📁 Upload path:', normalizedPath)
+      console.error('📁 Album path:', albumPath)
       console.error('📄 Filename:', filename)
       console.error('💥 Exception:', error)
       console.error('📚 Stack trace:', error instanceof Error ? error.stack : 'No stack trace')
@@ -759,7 +759,7 @@ class SynologyPhotosService {
 
       // Convert File to Buffer if needed
       let buffer: Buffer
-      if (file instanceof Buffer) {
+      if (Buffer.isBuffer(file)) {
         buffer = file
       } else {
         const arrayBuffer = await file.arrayBuffer()
@@ -827,7 +827,7 @@ class SynologyPhotosService {
         }
       } else {
         const errorCode = result.error?.code || -1
-        const errorMessage = this.getErrorMessage(errorCode)
+        const errorMessage = result.error?.message || 'Unknown error'
 
         console.error(`❌ Synology Photos Upload FAILED`)
         console.error(`📍 Location: lib/synology.ts -> uploadToPhotos()`)
@@ -1126,7 +1126,7 @@ export class SynologyPhotosAPIService {
 
       // Convert Buffer to Blob if needed
       let fileToUpload: File | Blob
-      if (file instanceof Buffer) {
+      if (Buffer.isBuffer(file)) {
         // Detect MIME type from filename extension
         const ext = filename.toLowerCase().split('.').pop()
         const mimeTypes: Record<string, string> = {
@@ -1172,19 +1172,19 @@ export class SynologyPhotosAPIService {
         method: 'upload_to_folder'
       })
 
-      const fileSize = file instanceof Buffer ? file.length : file.size
+      const fileSize = Buffer.isBuffer(file) ? file.length : file.size
       console.log(`📤 Uploading file: ${filename} (${(fileSize / 1024 / 1024).toFixed(2)} MB)`)
       console.log(`📁 Folder ID: ${folderId || 'root'}`)
 
-      // Debug: Log FormData entries
-      console.log('📋 FormData entries:')
-      for (const [key, value] of formData.entries()) {
-        if (value instanceof Blob) {
-          console.log(`  ${key}: [Blob ${value.size} bytes, type: ${value.type}]`)
-        } else {
-          console.log(`  ${key}: ${value}`)
-        }
-      }
+      // Debug: Log FormData entries (commented out due to ES5 compatibility)
+      // console.log('📋 FormData entries:')
+      // for (const [key, value] of formData.entries()) {
+      //   if (value instanceof Blob) {
+      //     console.log(`  ${key}: [Blob ${value.size} bytes, type: ${value.type}]`)
+      //   } else {
+      //     console.log(`  ${key}: ${value}`)
+      //   }
+      // }
 
       const uploadUrl = `${this.workingUrl}/photo/webapi/entry.cgi?${params.toString()}`
       console.log('📋 Upload URL:', uploadUrl)
@@ -1332,7 +1332,7 @@ export class SynologyPhotosAPIService {
           api: 'SYNO.FileStation.List',
           version: '2',
           method: 'getinfo',
-          _sid: this.sessionId,
+          _sid: this.sessionId || '',
           path: filePath,
           additional: '["size","time","type"]'
         })
