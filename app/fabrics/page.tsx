@@ -9,6 +9,7 @@ import FabricFilters from '@/components/FabricFilters'
 import FabricUploadModal from '@/components/FabricUploadModal'
 import { GalleryImage } from '@/components/ImageGallery'
 import PageHeader from '@/components/PageHeader'
+import { fabricsApi, collectionsApi } from '@/lib/api-client'
 
 export default function FabricsPage() {
   const [fabrics, setFabrics] = useState<Fabric[]>([])
@@ -23,29 +24,21 @@ export default function FabricsPage() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        
-        // Fetch fabrics
-        const fabricsResponse = await fetch('/api/fabrics')
-        const fabricsResult: ApiResponse<Fabric[]> = await fabricsResponse.json()
-        
-        if (fabricsResult.success && fabricsResult.data) {
-          setFabrics(fabricsResult.data)
-        }
-        
+
+        // Fetch fabrics using API client
+        const fabricsData = await fabricsApi.getAll()
+        setFabrics(fabricsData)
+
         // Fetch collections for filter
-        const collectionsResponse = await fetch('/api/collections')
-        const collectionsResult: ApiResponse<Collection[]> = await collectionsResponse.json()
-        
-        if (collectionsResult.success && collectionsResult.data) {
-          setCollections(collectionsResult.data)
-        }
+        const collectionsData = await collectionsApi.getAll()
+        setCollections(collectionsData)
       } catch (error) {
         console.error('Error fetching data:', error)
       } finally {
         setLoading(false)
       }
     }
-    
+
     fetchData()
   }, [])
 
