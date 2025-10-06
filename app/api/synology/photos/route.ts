@@ -136,10 +136,9 @@ export async function POST(request: NextRequest) {
     const uploadResults = await Promise.all(
       files.map(async (file) => {
         try {
-          const result = await synologyService.uploadFile(
+          const result = await synologyService.fileStation.uploadFile(
             file,
-            '/marketing/Ninh/thuvienanh',  // Default path
-            true  // Create parent folders
+            '/marketing/Ninh/thuvienanh'  // Default path
           )
 
           if (result.success) {
