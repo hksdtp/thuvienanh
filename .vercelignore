@@ -1,0 +1,23 @@
+# Vercel Ignore File
+# Files and directories to ignore during Vercel deployment
+
+# API Routes - Not needed for static export
+app/api/**
+
+# Server-side only files
+middleware.ts
+
+# Development files
+.env.local
+.env.development
+
+# Test files
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Documentation (optional - uncomment if you want to exclude)
+# docs/**
+# *.md
+
