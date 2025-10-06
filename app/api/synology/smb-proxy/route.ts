@@ -5,7 +5,7 @@ import sharp from 'sharp'
 /**
  * Proxy to serve files from Synology NAS via SMB
  */
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const searchParams = request.nextUrl.searchParams
     const filePath = searchParams.get('path')
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     // Remove leading /marketing/ from path since it's already in the share
     const cleanPath = filePath.replace(/^\/marketing\//i, '')
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
       const smb2Client = new SMB2(smbConfig)
 
       smb2Client.readFile(cleanPath, (err: any, data: Buffer) => {
