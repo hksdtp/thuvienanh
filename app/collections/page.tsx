@@ -34,6 +34,28 @@ export default function CollectionsPage() {
     }
   }
 
+  const handleDelete = async (id: string) => {
+    if (!confirm('Bạn có chắc chắn muốn xóa collection này?')) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/collections/${id}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        // Refresh collections list
+        fetchCollections()
+      } else {
+        alert('Không thể xóa collection')
+      }
+    } catch (error) {
+      console.error('Error deleting collection:', error)
+      alert('Có lỗi xảy ra khi xóa collection')
+    }
+  }
+
   const filteredCollections = collections
     .filter(collection =>
       collection.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -132,7 +154,7 @@ export default function CollectionsPage() {
                 className="animate-slideUp"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <CollectionCard collection={collection} />
+                <CollectionCard collection={collection} onDelete={handleDelete} />
               </div>
             ))}
           </div>
