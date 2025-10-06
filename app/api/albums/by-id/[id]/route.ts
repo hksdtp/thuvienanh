@@ -77,16 +77,16 @@ export async function PATCH(
       return NextResponse.json(response, { status: 400 })
     }
 
-    const updateData: UpdateAlbumForm = {}
-    
+    const updateData: Partial<UpdateAlbumForm> = {}
+
     if (body.name !== undefined) {
       updateData.name = body.name.trim()
     }
-    
+
     if (body.description !== undefined) {
       updateData.description = body.description.trim() || undefined
     }
-    
+
     if (body.tags !== undefined) {
       updateData.tags = body.tags
     }
