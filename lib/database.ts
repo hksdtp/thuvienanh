@@ -374,7 +374,11 @@ export class AlbumService {
         paramIndex++
       }
 
-
+      if (data.is_active !== undefined) {
+        updateFields.push(`is_active = $${paramIndex}`)
+        updateValues.push(data.is_active)
+        paramIndex++
+      }
 
       if (updateFields.length === 0) {
         return this.getById(id)

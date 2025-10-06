@@ -228,6 +228,7 @@ export interface CreateAlbumForm {
 export interface UpdateAlbumForm extends CreateAlbumForm {
   id: string
   cover_image_id?: string
+  is_active?: boolean
 }
 
 export interface AlbumFilter {
