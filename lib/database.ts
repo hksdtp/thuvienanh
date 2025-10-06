@@ -332,7 +332,7 @@ export class AlbumService {
     }
   }
 
-  static async update(id: string, data: UpdateAlbumForm): Promise<Album | null> {
+  static async update(id: string, data: Partial<UpdateAlbumForm>): Promise<Album | null> {
     try {
       const updateFields: string[] = []
       const updateValues: any[] = []
