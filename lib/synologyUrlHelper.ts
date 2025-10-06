@@ -7,8 +7,8 @@ interface SynologyConfig {
 }
 
 /**
- * Generate thumbnail URL from Synology Photos API
- * Uses SYNO.Foto.Thumbnail API
+ * Generate thumbnail URL from Synology Photos API via proxy
+ * Uses internal proxy to avoid mixed content issues (HTTPS/HTTP)
  */
 export function generateSynologyThumbnailUrl(
   fileId: number,
@@ -22,36 +22,20 @@ export function generateSynologyThumbnailUrl(
     xl: 'xl'    // Original size
   }
 
-  const params = new URLSearchParams({
-    api: 'SYNO.Foto.Thumbnail',
-    method: 'get',
-    version: '1',
-    id: fileId.toString(),
-    size: sizeMap[size],
-    type: 'unit',
-    _sid: config.sessionId
-  })
-
-  return `${config.baseUrl}/photo/webapi/entry.cgi?${params.toString()}`
+  // Use proxy URL to avoid mixed content issues
+  return `/api/synology/image-proxy?id=${fileId}&type=thumbnail&size=${sizeMap[size]}`
 }
 
 /**
- * Generate download URL from Synology Photos API
- * Uses SYNO.Foto.Download API
+ * Generate download URL from Synology Photos API via proxy
+ * Uses internal proxy to avoid mixed content issues (HTTPS/HTTP)
  */
 export function generateSynologyDownloadUrl(
   fileId: number,
   config: SynologyConfig
 ): string {
-  const params = new URLSearchParams({
-    api: 'SYNO.Foto.Download',
-    method: 'download',
-    version: '1',
-    id: fileId.toString(),
-    _sid: config.sessionId
-  })
-
-  return `${config.baseUrl}/photo/webapi/entry.cgi?${params.toString()}`
+  // Use proxy URL to avoid mixed content issues
+  return `/api/synology/image-proxy?id=${fileId}&type=download`
 }
 
 /**
