@@ -60,7 +60,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             .jpeg({ quality: 80 })
             .toBuffer()
             .then((thumbnailBuffer) => {
-              resolve(new NextResponse(thumbnailBuffer, {
+              resolve(new NextResponse(thumbnailBuffer as unknown as BodyInit, {
                 headers: {
                   'Content-Type': 'image/jpeg',
                   'Cache-Control': 'public, max-age=31536000, immutable'
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             .catch((error) => {
               console.error('❌ Thumbnail generation error:', error)
               // Return original if thumbnail fails
-              resolve(new NextResponse(data, {
+              resolve(new NextResponse(data as unknown as BodyInit, {
                 headers: {
                   'Content-Type': getContentType(filePath),
                   'Cache-Control': 'public, max-age=31536000, immutable'
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             })
         } else {
           // Return original file
-          resolve(new NextResponse(data, {
+          resolve(new NextResponse(data as unknown as BodyInit, {
             headers: {
               'Content-Type': getContentType(filePath),
               'Cache-Control': 'public, max-age=31536000, immutable'
