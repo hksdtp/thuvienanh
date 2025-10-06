@@ -236,6 +236,7 @@ export interface AlbumFilter {
   category?: Album['category']
   tags?: string[]
   created_by?: string
+  is_active?: boolean
   date_range?: {
     start: Date
     end: Date

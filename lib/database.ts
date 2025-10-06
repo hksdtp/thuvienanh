@@ -221,12 +221,21 @@ export class AlbumService {
                created_at, updated_at, created_by, is_active,
                tags, category
         FROM albums
-        WHERE is_active = true
+        WHERE 1=1
       `
       const queryParams: any[] = []
       let paramIndex = 1
 
-      // Apply filters
+      // Apply is_active filter (default to true if not specified)
+      if (filter?.is_active !== undefined) {
+        queryText += ` AND is_active = $${paramIndex}`
+        queryParams.push(filter.is_active)
+        paramIndex++
+      } else {
+        queryText += ` AND is_active = true`
+      }
+
+      // Apply other filters
       if (filter?.search) {
         queryText += ` AND (name ILIKE $${paramIndex} OR description ILIKE $${paramIndex})`
         queryParams.push(`%${filter.search}%`)
