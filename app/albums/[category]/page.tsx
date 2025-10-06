@@ -208,9 +208,9 @@ export default function AlbumsCategoryPage({ params }: PageProps) {
               >
                 <div className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 border border-macos-border-light group">
                   <div className="aspect-[4/3] relative overflow-hidden bg-ios-gray-50">
-                    {album.thumbnail_url ? (
+                    {album.cover_image_url ? (
                       <Image
-                        src={album.thumbnail_url}
+                        src={album.cover_image_url}
                         alt={album.name}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
