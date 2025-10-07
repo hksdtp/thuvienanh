@@ -161,7 +161,7 @@ export class SynologyFileStationService {
         },
         body: new URLSearchParams({
           api: 'SYNO.API.Auth',
-          version: '6',
+          version: '3',
           method: 'login',
           account: this.config.username,
           passwd: this.config.password,
