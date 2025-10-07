@@ -102,22 +102,30 @@ export async function POST(request: NextRequest) {
 
     // Tự động tạo folder trên Synology cho album mới
     // Tổ chức theo hierarchy: /thuvienanh/{category}/{album-name}_{id}
-    const category = newAlbum.category || 'other'
-    const folderName = createFolderName(newAlbum.name, newAlbum.id)
-    const folderPath = `/Marketing/Ninh/thuvienanh/${category}/${folderName}`
-    console.log(`📁 Creating Synology folder for new album: ${folderPath}`)
-    console.log(`   Category: "${category}", Album: "${newAlbum.name}" => Folder: "${folderName}"`)
+    // TEMPORARY: Skip Synology folder creation due to VPS IP being blocked
+    const ENABLE_SYNOLOGY_FOLDER_CREATION = process.env.ENABLE_SYNOLOGY_FOLDER_CREATION === 'true'
 
-    try {
-      const folderCreated = await synologyService.fileStation.createFolder(folderPath)
-      if (folderCreated) {
-        console.log(`✅ Synology folder created: ${folderPath}`)
-      } else {
-        console.warn(`⚠️ Failed to create Synology folder for album: ${newAlbum.id}`)
+    if (ENABLE_SYNOLOGY_FOLDER_CREATION) {
+      const category = newAlbum.category || 'other'
+      const folderName = createFolderName(newAlbum.name, newAlbum.id)
+      const folderPath = `/Marketing/Ninh/thuvienanh/${category}/${folderName}`
+      console.log(`📁 Creating Synology folder for new album: ${folderPath}`)
+      console.log(`   Category: "${category}", Album: "${newAlbum.name}" => Folder: "${folderName}"`)
+
+      try {
+        const folderCreated = await synologyService.fileStation.createFolder(folderPath)
+        if (folderCreated) {
+          console.log(`✅ Synology folder created: ${folderPath}`)
+        } else {
+          console.warn(`⚠️ Failed to create Synology folder for album: ${newAlbum.id}`)
+        }
+      } catch (error) {
+        console.error('❌ Error creating Synology folder:', error)
+        // Không fail request nếu tạo folder thất bại
       }
-    } catch (error) {
-      console.error('❌ Error creating Synology folder:', error)
-      // Không fail request nếu tạo folder thất bại
+    } else {
+      console.log(`ℹ️ Synology folder creation disabled. Album created in database only.`)
+      console.log(`   Manual folder creation required: /Marketing/Ninh/thuvienanh/${newAlbum.category}/${createFolderName(newAlbum.name, newAlbum.id)}`)
     }
 
     const response: ApiResponse<typeof newAlbum> = {
