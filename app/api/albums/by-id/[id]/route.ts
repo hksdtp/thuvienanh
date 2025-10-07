@@ -122,54 +122,76 @@ export async function PATCH(
   }
 }
 
-// DELETE /api/albums/[id] - Delete album (soft delete)
+// DELETE /api/albums/[id] - Delete album (hard delete)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params
-    const { searchParams } = new URL(request.url)
-    const hardDelete = searchParams.get('hard') === 'true'
 
-    if (hardDelete) {
-      // Hard delete - xóa hoàn toàn khỏi database
-      const deleted = await AlbumService.delete(id)
-      
-      if (!deleted) {
-        const response: ApiResponse<null> = {
-          success: false,
-          error: 'Album không tồn tại'
-        }
-        return NextResponse.json(response, { status: 404 })
-      }
-
+    // Get album info before deleting
+    const album = await AlbumService.getById(id)
+    if (!album) {
       const response: ApiResponse<null> = {
-        success: true,
-        message: 'Xóa album thành công'
+        success: false,
+        error: 'Album không tồn tại'
       }
-
-      return NextResponse.json(response)
-    } else {
-      // Soft delete - set is_active = false
-      const updatedAlbum = await AlbumService.update(id, { is_active: false })
-
-      if (!updatedAlbum) {
-        const response: ApiResponse<null> = {
-          success: false,
-          error: 'Album không tồn tại'
-        }
-        return NextResponse.json(response, { status: 404 })
-      }
-
-      const response: ApiResponse<typeof updatedAlbum> = {
-        success: true,
-        data: updatedAlbum,
-        message: 'Vô hiệu hóa album thành công'
-      }
-
-      return NextResponse.json(response)
+      return NextResponse.json(response, { status: 404 })
     }
+
+    console.log(`🗑️ Hard deleting album: ${album.name} (${id})`)
+
+    // Import FileStation service
+    const { SynologyFileStationService } = await import('@/lib/synology')
+    const { createFolderName } = await import('@/lib/utils')
+    const fileStation = new SynologyFileStationService()
+
+    // Authenticate
+    const authSuccess = await fileStation.authenticate()
+    if (!authSuccess) {
+      console.error('❌ FileStation authentication failed')
+    }
+
+    // Delete folder from Synology FileStation
+    const category = album.category || 'other'
+    const folderName = createFolderName(album.name, id)
+    const folderPath = `/Marketing/Ninh/thuvienanh/${category}/${folderName}`
+
+    if (authSuccess) {
+      console.log(`🗑️ Deleting Synology folder: ${folderPath}`)
+      try {
+        const folderDeleted = await fileStation.deleteFolder(folderPath)
+        if (folderDeleted) {
+          console.log(`✅ Synology folder deleted: ${folderPath}`)
+        } else {
+          console.log(`⚠️ Synology folder not found or already deleted: ${folderPath}`)
+        }
+      } catch (error) {
+        console.error(`❌ Error deleting Synology folder:`, error)
+        // Continue with database deletion even if Synology deletion fails
+      }
+    }
+
+    // Delete from database (CASCADE will delete album_images automatically)
+    const deleted = await AlbumService.delete(id)
+
+    if (!deleted) {
+      const response: ApiResponse<null> = {
+        success: false,
+        error: 'Không thể xóa album khỏi database'
+      }
+      return NextResponse.json(response, { status: 500 })
+    }
+
+    console.log(`✅ Album deleted from database: ${id}`)
+
+    const response: ApiResponse<null> = {
+      success: true,
+      message: 'Xóa album thành công'
+    }
+
+    return NextResponse.json(response)
   } catch (error) {
     console.error('Delete album API error:', error)
     

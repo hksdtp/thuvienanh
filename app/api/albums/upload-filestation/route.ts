@@ -6,12 +6,12 @@ import { createFolderName } from '@/lib/utils'
 interface AlbumImage {
   id: string
   album_id: string
-  image_id: string
+  image_id: string | null
   image_url: string
-  image_name: string
-  sort_order: number
+  caption?: string | null
+  display_order: number
   added_at: Date
-  added_by: string | null
+  added_by: string
 }
 
 /**
@@ -74,11 +74,12 @@ export async function POST(request: NextRequest) {
 
     // Destination path in FileStation
     // User có full quyền tại /Marketing/Ninh/thuvienanh
-    // Tạo subfolder cho mỗi album với tên dễ nhận biết
+    // Tạo subfolder theo category và album: /Marketing/Ninh/thuvienanh/{category}/{albumName}_{albumId}
+    const category = album.category || 'other'
     const folderName = createFolderName(album.name, albumId)
-    const destinationPath = `/Marketing/Ninh/thuvienanh/${folderName}`
+    const destinationPath = `/Marketing/Ninh/thuvienanh/${category}/${folderName}`
     console.log(`📁 Uploading to: ${destinationPath}`)
-    console.log(`   Album: "${album.name}" => Folder: "${folderName}"`)
+    console.log(`   Category: "${category}", Album: "${album.name}" => Folder: "${folderName}"`)
 
     // Get base URL from request
     const protocol = request.headers.get('x-forwarded-proto') || 'http'
@@ -110,13 +111,9 @@ export async function POST(request: NextRequest) {
           // Save to database
           const albumImage = await AlbumService.addImage(
             albumId,
-            imageId,
             imageUrl,
-            file.name,
-            {
-              thumbnailUrl: thumbnailUrl,
-              fileSize: file.size
-            }
+            file.name, // caption
+            imageId
           )
 
           uploadedImages.push(albumImage)

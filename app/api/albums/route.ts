@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Validate category if provided
-    const validCategories = ['fabric', 'collection', 'project', 'season', 'client', 'other']
+    const validCategories = ['fabric', 'accessory', 'event', 'collection', 'project', 'season', 'client', 'other']
     if (body.category && !validCategories.includes(body.category)) {
       const response: ApiResponse<null> = {
         success: false,

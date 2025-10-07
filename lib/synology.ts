@@ -385,6 +385,68 @@ export class SynologyFileStationService {
     }
   }
 
+  // List folders and files in a directory
+  async listFolder(folderPath: string): Promise<{
+    folders: Array<{ name: string; path: string; additional?: any }>
+    files: Array<{ name: string; path: string; additional?: any }>
+  }> {
+    try {
+      if (!this.sessionId || !this.workingUrl) {
+        const authSuccess = await this.authenticate()
+        if (!authSuccess) {
+          throw new Error('Authentication failed')
+        }
+      }
+
+      console.log(`📁 Listing folder: ${folderPath}`)
+
+      const response = await fetch(`${this.workingUrl}/webapi/entry.cgi`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          api: 'SYNO.FileStation.List',
+          version: '2',
+          method: 'list',
+          _sid: this.sessionId!,
+          folder_path: folderPath,
+          additional: '["size","time","type"]'
+        })
+      })
+
+      const result = await response.json()
+      console.log('📋 List folder response:', JSON.stringify(result, null, 2))
+
+      if (result.success && result.data?.files) {
+        const folders = result.data.files
+          .filter((item: any) => item.isdir)
+          .map((item: any) => ({
+            name: item.name,
+            path: item.path,
+            additional: item.additional
+          }))
+
+        const files = result.data.files
+          .filter((item: any) => !item.isdir)
+          .map((item: any) => ({
+            name: item.name,
+            path: item.path,
+            additional: item.additional
+          }))
+
+        console.log(`✅ Found ${folders.length} folders and ${files.length} files`)
+        return { folders, files }
+      } else {
+        console.error('❌ List folder error:', result.error)
+        return { folders: [], files: [] }
+      }
+    } catch (error) {
+      console.error('❌ Error listing folder:', error)
+      return { folders: [], files: [] }
+    }
+  }
+
   // Test connection
   async testConnection(): Promise<boolean> {
     try {

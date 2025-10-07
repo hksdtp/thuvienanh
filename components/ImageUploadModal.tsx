@@ -15,7 +15,8 @@ interface ImageUploadModalProps {
   onUploadSuccess?: (urls: string[]) => void
 }
 
-interface FileWithPreview extends File {
+interface FileWithPreview {
+  file: File
   id: string
   preview: string
   status: 'pending' | 'uploading' | 'success' | 'error'
@@ -80,7 +81,7 @@ export default function ImageUploadModal({
     }
 
     const filesWithPreview: FileWithPreview[] = validFiles.map(file => ({
-      ...file,
+      file: file,
       id: Math.random().toString(36).substring(7),
       preview: URL.createObjectURL(file),
       status: 'pending'
@@ -107,42 +108,79 @@ export default function ImageUploadModal({
 
     const uploadedUrls: string[] = []
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-      
+    // For albums, use batch upload to FileStation
+    if (entityType === 'album' && entityId) {
       try {
-        setFiles(prev => prev.map(f => 
-          f.id === file.id ? { ...f, status: 'uploading' } : f
-        ))
-
         const formData = new FormData()
-        formData.append('file', file)
-        if (entityId) formData.append('entityId', entityId)
-        if (category) formData.append('category', category)
+        formData.append('albumId', entityId)
 
-        const response = await fetch(`/api/upload/${entityType}`, {
+        files.forEach(fileItem => {
+          formData.append('files', fileItem.file)
+        })
+
+        setFiles(prev => prev.map(f => ({ ...f, status: 'uploading' })))
+
+        const response = await fetch('/api/albums/upload-filestation', {
           method: 'POST',
           body: formData
         })
 
         const result = await response.json()
 
-        if (result.success) {
-          setFiles(prev => prev.map(f => 
-            f.id === file.id ? { ...f, status: 'success', url: result.data.url } : f
-          ))
-          uploadedUrls.push(result.data.url)
+        if (result.success && result.data?.images) {
+          const urls = result.data.images.map((img: any) => img.image_url)
+          setFiles(prev => prev.map(f => ({ ...f, status: 'success' })))
+          uploadedUrls.push(...urls)
         } else {
           throw new Error(result.error || 'Upload failed')
         }
       } catch (error) {
         console.error('Upload error:', error)
-        setFiles(prev => prev.map(f => 
-          f.id === file.id ? { ...f, status: 'error', error: error instanceof Error ? error.message : 'Upload failed' } : f
-        ))
+        setFiles(prev => prev.map(f => ({
+          ...f,
+          status: 'error',
+          error: error instanceof Error ? error.message : 'Upload failed'
+        })))
       }
+    } else {
+      // For other entity types, upload one by one
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
 
-      setUploadProgress(((i + 1) / files.length) * 100)
+        try {
+          setFiles(prev => prev.map(f =>
+            f.id === file.id ? { ...f, status: 'uploading' } : f
+          ))
+
+          const formData = new FormData()
+          formData.append('file', file.file)
+          if (entityId) formData.append('entityId', entityId)
+          if (category) formData.append('category', category)
+
+          const response = await fetch(`/api/upload/${entityType}`, {
+            method: 'POST',
+            body: formData
+          })
+
+          const result = await response.json()
+
+          if (result.success) {
+            setFiles(prev => prev.map(f =>
+              f.id === file.id ? { ...f, status: 'success', url: result.data.url } : f
+            ))
+            uploadedUrls.push(result.data.url)
+          } else {
+            throw new Error(result.error || 'Upload failed')
+          }
+        } catch (error) {
+          console.error('Upload error:', error)
+          setFiles(prev => prev.map(f =>
+            f.id === file.id ? { ...f, status: 'error', error: error instanceof Error ? error.message : 'Upload failed' } : f
+          ))
+        }
+
+        setUploadProgress(((i + 1) / files.length) * 100)
+      }
     }
 
     setIsUploading(false)
@@ -234,7 +272,7 @@ export default function ImageUploadModal({
                     <div className="aspect-square relative rounded-lg overflow-hidden bg-ios-gray-50 border border-macos-border-light">
                       <img
                         src={file.preview}
-                        alt={file.name}
+                        alt={file.file.name}
                         className="w-full h-full object-cover"
                       />
                       
@@ -270,7 +308,7 @@ export default function ImageUploadModal({
 
                     {/* Filename */}
                     <p className="mt-2 text-xs text-macos-text-secondary truncate">
-                      {file.name}
+                      {file.file.name}
                     </p>
                   </div>
                 ))}

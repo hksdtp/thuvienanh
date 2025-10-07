@@ -86,22 +86,28 @@ export default function MainContentNew() {
 
   const quickLinks = [
     {
-      title: 'Thư Viện Vải',
-      icon: SparklesIcon,
+      title: 'Vải Mẫu',
+      icon: PhotoIcon,
       href: '/fabrics',
       count: stats.totalFabrics,
       color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
-      description: 'Vải mẫu & Bộ sưu tập'
+      bgColor: 'bg-blue-50'
     },
     {
-      title: 'Thư Viện Công Trình',
+      title: 'Bộ Sưu Tập',
+      icon: FolderIcon,
+      href: '/collections',
+      count: stats.totalCollections,
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50'
+    },
+    {
+      title: 'Công Trình',
       icon: BuildingOffice2Icon,
       href: '/projects',
       count: stats.totalProjects,
       color: 'text-green-600',
-      bgColor: 'bg-green-50',
-      description: 'Công trình & Phong cách'
+      bgColor: 'bg-green-50'
     },
   ]
 
@@ -120,130 +126,29 @@ export default function MainContentNew() {
         </div>
 
         {/* Quick Links - Clean Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {quickLinks.map((link) => {
             const Icon = link.icon
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className="group bg-white rounded-xl p-8 hover:shadow-lg transition-all duration-200 border border-macos-border-light"
+                className="group bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-200 border border-macos-border-light"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`${link.bgColor} p-4 rounded-xl group-hover:scale-110 transition-transform`}>
-                    <Icon className={`w-8 h-8 ${link.color}`} strokeWidth={1.8} />
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-macos-text-secondary mb-1">{link.title}</p>
+                    <p className="text-3xl font-semibold text-macos-text-primary">
+                      {link.count}
+                    </p>
                   </div>
-                  <p className="text-4xl font-semibold text-macos-text-primary">
-                    {link.count}
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-macos-text-primary mb-1">
-                    {link.title}
-                  </h3>
-                  <p className="text-sm text-macos-text-secondary">
-                    {link.description}
-                  </p>
+                  <div className={`${link.bgColor} p-3 rounded-xl group-hover:scale-110 transition-transform`}>
+                    <Icon className={`w-6 h-6 ${link.color}`} strokeWidth={2} />
+                  </div>
                 </div>
               </Link>
             )
           })}
-        </div>
-
-        {/* Quick Access Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* Thư Viện Vải */}
-          <div className="bg-white rounded-xl p-6 border border-macos-border-light">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-blue-50 p-2 rounded-lg">
-                  <SparklesIcon className="w-5 h-5 text-blue-600" strokeWidth={2} />
-                </div>
-                <h2 className="text-lg font-semibold text-macos-text-primary">
-                  Thư Viện Vải
-                </h2>
-              </div>
-              <Link
-                href="/fabrics"
-                className="text-sm text-ios-blue hover:text-ios-blue-dark font-medium transition-colors"
-              >
-                Xem tất cả →
-              </Link>
-            </div>
-            <div className="space-y-2">
-              <Link
-                href="/fabrics"
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-ios-gray-50 transition-colors group"
-              >
-                <div className="flex items-center gap-3">
-                  <PhotoIcon className="w-5 h-5 text-macos-text-secondary" strokeWidth={1.8} />
-                  <span className="text-sm text-macos-text-primary">Vải Mẫu</span>
-                </div>
-                <span className="text-xs text-macos-text-secondary group-hover:text-ios-blue transition-colors">
-                  {stats.totalFabrics} mẫu
-                </span>
-              </Link>
-              <Link
-                href="/collections"
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-ios-gray-50 transition-colors group"
-              >
-                <div className="flex items-center gap-3">
-                  <FolderIcon className="w-5 h-5 text-macos-text-secondary" strokeWidth={1.8} />
-                  <span className="text-sm text-macos-text-primary">Bộ Sưu Tập</span>
-                </div>
-                <span className="text-xs text-macos-text-secondary group-hover:text-ios-blue transition-colors">
-                  {stats.totalCollections} bộ
-                </span>
-              </Link>
-            </div>
-          </div>
-
-          {/* Thư Viện Công Trình */}
-          <div className="bg-white rounded-xl p-6 border border-macos-border-light">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-green-50 p-2 rounded-lg">
-                  <BuildingOffice2Icon className="w-5 h-5 text-green-600" strokeWidth={2} />
-                </div>
-                <h2 className="text-lg font-semibold text-macos-text-primary">
-                  Thư Viện Công Trình
-                </h2>
-              </div>
-              <Link
-                href="/projects"
-                className="text-sm text-ios-blue hover:text-ios-blue-dark font-medium transition-colors"
-              >
-                Xem tất cả →
-              </Link>
-            </div>
-            <div className="space-y-2">
-              <Link
-                href="/projects"
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-ios-gray-50 transition-colors group"
-              >
-                <div className="flex items-center gap-3">
-                  <BuildingOffice2Icon className="w-5 h-5 text-macos-text-secondary" strokeWidth={1.8} />
-                  <span className="text-sm text-macos-text-primary">Công Trình</span>
-                </div>
-                <span className="text-xs text-macos-text-secondary group-hover:text-ios-blue transition-colors">
-                  {stats.totalProjects} dự án
-                </span>
-              </Link>
-              <Link
-                href="/styles"
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-ios-gray-50 transition-colors group"
-              >
-                <div className="flex items-center gap-3">
-                  <SparklesIcon className="w-5 h-5 text-macos-text-secondary" strokeWidth={1.8} />
-                  <span className="text-sm text-macos-text-primary">Phong Cách</span>
-                </div>
-                <span className="text-xs text-macos-text-secondary group-hover:text-ios-blue transition-colors">
-                  Xem →
-                </span>
-              </Link>
-            </div>
-          </div>
         </div>
 
         {/* Latest Fabrics - Minimal Grid */}
@@ -252,7 +157,7 @@ export default function MainContentNew() {
             <h2 className="text-xl font-semibold text-macos-text-primary">
               Vải mới nhất
             </h2>
-            <Link
+            <Link 
               href="/fabrics"
               className="text-sm text-ios-blue hover:text-ios-blue-dark font-medium transition-colors"
             >

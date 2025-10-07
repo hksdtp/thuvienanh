@@ -283,7 +283,6 @@ export default function AlbumsCategoryPage({ params }: PageProps) {
             if (result.success && result.data) {
               setCreateModalOpen(false)
               fetchAlbums() // Refresh albums list
-              alert('Tạo album thành công!')
             } else {
               alert(`Lỗi: ${result.error}`)
             }

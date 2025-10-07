@@ -96,22 +96,16 @@ export interface Album {
   created_by: string
   is_active: boolean
   tags?: string[]
-  category?: 'fabric' | 'collection' | 'project' | 'season' | 'client' | 'other'
+  category?: 'fabric' | 'accessory' | 'event' | 'collection' | 'project' | 'season' | 'client' | 'other'
 }
 
 export interface AlbumImage {
   id: string
   album_id: string
-  image_id: string
+  image_id: string | null
   image_url: string
-  image_name: string
-  thumbnail_url?: string | null
-  synology_id?: number | null
-  folder_id?: number | null
-  file_size?: number | null
-  compressed_size?: number | null
-  compression_ratio?: number | null
-  sort_order: number
+  caption?: string | null
+  display_order: number
   added_at: Date
   added_by: string
 }

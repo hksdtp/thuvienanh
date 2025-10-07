@@ -1,22 +1,25 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { MagnifyingGlassIcon, FunnelIcon, PhotoIcon, PlusIcon } from '@heroicons/react/24/outline'
-import { Album, AlbumFilter, CreateAlbumForm, ApiResponse } from '@/types/database'
-import AlbumGrid from '@/components/AlbumGrid'
-import CreateAlbumModal from '@/components/CreateAlbumModal'
 
 export default function AlbumsPage() {
   const router = useRouter()
-  const [albums, setAlbums] = useState<Album[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filters, setFilters] = useState<AlbumFilter>({})
-  const [createModalOpen, setCreateModalOpen] = useState(false)
 
-  // Fetch albums
-  const fetchAlbums = async (newFilters?: AlbumFilter) => {
+  useEffect(() => {
+    router.replace('/albums/fabric')
+  }, [router])
+
+  return (
+    <div className="min-h-screen bg-macos-bg-secondary flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-ios-blue border-t-transparent"></div>
+    </div>
+  )
+}
+
+function OldAlbumsPage() {
+  const router = useRouter()
+  const fetchAlbums = async (newFilters?: any) => {
     setLoading(true)
     try {
       const params = new URLSearchParams()

@@ -26,14 +26,20 @@ export default function FabricsPage() {
         setLoading(true)
 
         // Fetch fabrics using API client
-        const fabricsData = await fabricsApi.getAll()
-        setFabrics(fabricsData)
+        const fabricsResponse = await fabricsApi.getAll() as ApiResponse<Fabric[]>
+        if (fabricsResponse.success && fabricsResponse.data) {
+          setFabrics(fabricsResponse.data)
+        }
 
         // Fetch collections for filter
-        const collectionsData = await collectionsApi.getAll()
-        setCollections(collectionsData)
+        const collectionsResponse = await collectionsApi.getAll() as ApiResponse<Collection[]>
+        if (collectionsResponse.success && collectionsResponse.data) {
+          setCollections(collectionsResponse.data)
+        }
       } catch (error) {
         console.error('Error fetching data:', error)
+        setFabrics([]) // Set empty array on error
+        setCollections([])
       } finally {
         setLoading(false)
       }

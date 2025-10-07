@@ -13,7 +13,7 @@ interface ImageLightboxProps {
   images: Array<{
     id: string
     image_url: string
-    image_name: string
+    caption?: string | null
   }>
   currentIndex: number
   isOpen: boolean
@@ -82,11 +82,12 @@ export default function ImageLightbox({
   const currentImage = images[index]
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center animate-fadeIn">
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors z-10"
+        className="absolute top-4 right-4 p-3 text-white hover:bg-white/20 rounded-full transition-all duration-200 z-10 hover:scale-110"
+        aria-label="Đóng"
       >
         <XMarkIcon className="w-6 h-6" />
       </button>
@@ -95,7 +96,8 @@ export default function ImageLightbox({
       {onDelete && (
         <button
           onClick={handleDelete}
-          className="absolute top-4 right-16 p-2 text-white hover:bg-red-600 rounded-lg transition-colors z-10"
+          className="absolute top-4 right-20 p-3 text-white hover:bg-red-600/80 rounded-full transition-all duration-200 z-10 hover:scale-110"
+          aria-label="Xóa ảnh"
         >
           <TrashIcon className="w-6 h-6" />
         </button>
@@ -105,7 +107,8 @@ export default function ImageLightbox({
       {images.length > 1 && (
         <button
           onClick={handlePrevious}
-          className="absolute left-4 p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors z-10"
+          className="absolute left-4 top-1/2 -translate-y-1/2 p-3 text-white hover:bg-white/20 rounded-full transition-all duration-200 z-10 hover:scale-110"
+          aria-label="Ảnh trước"
         >
           <ChevronLeftIcon className="w-8 h-8" />
         </button>
@@ -115,7 +118,8 @@ export default function ImageLightbox({
       {images.length > 1 && (
         <button
           onClick={handleNext}
-          className="absolute right-4 p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors z-10"
+          className="absolute right-4 top-1/2 -translate-y-1/2 p-3 text-white hover:bg-white/20 rounded-full transition-all duration-200 z-10 hover:scale-110"
+          aria-label="Ảnh tiếp theo"
         >
           <ChevronRightIcon className="w-8 h-8" />
         </button>
@@ -123,22 +127,24 @@ export default function ImageLightbox({
 
       {/* Image */}
       <div className="relative w-full h-full flex items-center justify-center p-16">
-        <div className="relative max-w-7xl max-h-full">
+        <div className="relative max-w-7xl max-h-full animate-scaleIn">
           <Image
             src={currentImage.image_url}
-            alt={currentImage.image_name}
+            alt={currentImage.caption || 'Image'}
             width={1920}
             height={1080}
-            className="object-contain max-h-[80vh]"
+            className="object-contain max-h-[80vh] rounded-lg shadow-2xl"
             priority
           />
         </div>
       </div>
 
       {/* Image info */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-center">
-        <p className="text-lg font-medium mb-1">{currentImage.image_name}</p>
-        <p className="text-sm text-gray-300">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-center bg-black/50 backdrop-blur-md px-6 py-3 rounded-full">
+        {currentImage.caption && (
+          <p className="text-base font-medium mb-1">{currentImage.caption}</p>
+        )}
+        <p className="text-sm text-gray-300 font-mono">
           {index + 1} / {images.length}
         </p>
       </div>
@@ -147,6 +153,7 @@ export default function ImageLightbox({
       <div
         className="absolute inset-0 -z-10"
         onClick={onClose}
+        aria-label="Đóng lightbox"
       />
     </div>
   )

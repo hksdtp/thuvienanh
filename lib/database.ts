@@ -426,14 +426,13 @@ export class AlbumService {
 
   static async delete(id: string): Promise<boolean> {
     try {
+      // Hard delete - CASCADE will automatically delete album_images
       const result = await query(
-        `UPDATE albums
-         SET is_active = false, updated_at = NOW()
-         WHERE id = $1 AND is_active = true`,
+        `DELETE FROM albums WHERE id = $1`,
         [id]
       )
 
-      console.log('✅ Album soft deleted:', id)
+      console.log('✅ Album hard deleted:', id)
       return result.rowCount ? result.rowCount > 0 : false
     } catch (error) {
       console.error('❌ AlbumService.delete error:', error)
@@ -444,10 +443,10 @@ export class AlbumService {
   static async getImages(albumId: string): Promise<AlbumImage[]> {
     try {
       const result = await query<AlbumImage>(
-        `SELECT id, album_id, image_id, image_url, image_name, sort_order, added_at, added_by
+        `SELECT id, album_id, image_id, image_url, caption, display_order, added_at, added_by
          FROM album_images
          WHERE album_id = $1
-         ORDER BY sort_order ASC, added_at DESC`,
+         ORDER BY display_order ASC, added_at DESC`,
         [albumId]
       )
 
@@ -463,57 +462,28 @@ export class AlbumService {
 
   static async addImage(
     albumId: string,
-    imageId: string,
     imageUrl: string,
-    imageName: string,
-    metadata?: {
-      thumbnailUrl?: string
-      synologyId?: number
-      folderId?: number
-      fileSize?: number
-      compressedSize?: number
-    }
+    caption?: string,
+    imageId?: string
   ): Promise<AlbumImage> {
     try {
-      // Get current max sort_order
+      // Get current max display_order
       const maxOrderResult = await query<{ max_order: number | null }>(
-        `SELECT MAX(sort_order) as max_order FROM album_images WHERE album_id = $1`,
+        `SELECT MAX(display_order) as max_order FROM album_images WHERE album_id = $1`,
         [albumId]
       )
       const nextOrder = (maxOrderResult.rows[0]?.max_order || 0) + 1
 
-      // Calculate compression ratio if both sizes provided
-      let compressionRatio = null
-      if (metadata?.fileSize && metadata?.compressedSize) {
-        compressionRatio = parseFloat(((metadata.fileSize - metadata.compressedSize) / metadata.fileSize * 100).toFixed(2))
-      }
-
-      // Insert new image with metadata
+      // Insert new image
       const result = await query<AlbumImage>(
-        `INSERT INTO album_images (
-          album_id, image_id, image_url, image_name, sort_order,
-          thumbnail_url, synology_id, folder_id,
-          file_size, compressed_size, compression_ratio
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-        RETURNING *`,
-        [
-          albumId,
-          imageId,
-          imageUrl,
-          imageName,
-          nextOrder,
-          metadata?.thumbnailUrl || null,
-          metadata?.synologyId || null,
-          metadata?.folderId || null,
-          metadata?.fileSize || null,
-          metadata?.compressedSize || null,
-          compressionRatio
-        ]
+        `INSERT INTO album_images (album_id, image_url, caption, image_id, display_order)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [albumId, imageUrl, caption || null, imageId || null, nextOrder]
       )
 
       const albumImage = result.rows[0]
-      console.log('✅ Image added to album with metadata:', albumImage.id)
+      console.log('✅ Image added to album:', albumImage.id)
 
       return {
         ...albumImage,
@@ -568,14 +538,26 @@ export class AlbumService {
   }
 
   static async setCoverImage(albumId: string, imageId: string, imageUrl: string): Promise<boolean> {
-    const album = albums.find(a => a.id === albumId)
-    if (!album) return false
+    try {
+      const result = await query(
+        `UPDATE albums
+         SET cover_image_id = $1, cover_image_url = $2, updated_at = NOW()
+         WHERE id = $3 AND is_active = true
+         RETURNING id`,
+        [imageId, imageUrl, albumId]
+      )
 
-    album.cover_image_id = imageId
-    album.cover_image_url = imageUrl
-    album.updated_at = new Date()
+      if (result.rows.length === 0) {
+        console.log('❌ Album not found or inactive')
+        return false
+      }
 
-    return true
+      console.log('✅ Cover image set for album:', result.rows[0].id)
+      return true
+    } catch (error) {
+      console.error('❌ AlbumService.setCoverImage error:', error)
+      throw error
+    }
   }
 }
 
