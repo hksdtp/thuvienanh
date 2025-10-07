@@ -71,11 +71,12 @@ export async function POST(request: NextRequest) {
         const imageUrl = `/uploads/albums/${albumId}/${filename}`
 
         // Add to database
+        // addImage signature: (albumId, imageUrl, caption?, imageId?)
         const albumImage = await AlbumService.addImage(
           albumId,
-          `${timestamp}-${randomStr}`, // image_id
           imageUrl,
-          file.name
+          file.name, // caption
+          `${timestamp}-${randomStr}` // image_id
         )
 
         uploadedImages.push(albumImage)

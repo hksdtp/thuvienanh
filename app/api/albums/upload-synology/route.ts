@@ -94,17 +94,12 @@ export async function POST(request: NextRequest) {
           const proxyUrl = `${baseUrl}/api/synology/image-proxy?id=${uploadResult.data.synologyId}&type=download`
           const thumbnailUrl = `${baseUrl}/api/synology/image-proxy?id=${uploadResult.data.synologyId}&type=thumbnail&size=m`
 
+          // addImage signature: (albumId, imageUrl, caption?, imageId?)
           const albumImage = await AlbumService.addImage(
             albumId,
-            imageId,
             proxyUrl,
-            file.name,
-            {
-              thumbnailUrl: thumbnailUrl,
-              synologyId: uploadResult.data.synologyId,
-              folderId: uploadResult.data.folderId,
-              fileSize: file.size
-            }
+            file.name, // caption
+            imageId
           )
 
           uploadedImages.push(albumImage)
