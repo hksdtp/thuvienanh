@@ -26,13 +26,13 @@ export default function FabricsPage() {
         setLoading(true)
 
         // Fetch fabrics using API client
-        const fabricsResponse = await fabricsApi.getAll() as ApiResponse<Fabric[]>
+        const fabricsResponse = await fabricsApi.getAll() as unknown as ApiResponse<Fabric[]>
         if (fabricsResponse.success && fabricsResponse.data) {
           setFabrics(fabricsResponse.data)
         }
 
         // Fetch collections for filter
-        const collectionsResponse = await collectionsApi.getAll() as ApiResponse<Collection[]>
+        const collectionsResponse = await collectionsApi.getAll() as unknown as ApiResponse<Collection[]>
         if (collectionsResponse.success && collectionsResponse.data) {
           setCollections(collectionsResponse.data)
         }
