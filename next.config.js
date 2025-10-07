@@ -28,6 +28,9 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
   },
   output: 'standalone',
+  experimental: {
+    serverComponentsExternalPackages: ['pg'],
+  },
 }
 
 module.exports = nextConfig
