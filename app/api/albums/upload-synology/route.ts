@@ -1,18 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { AlbumService } from '@/lib/database'
 import { synologyService } from '@/lib/synology'
-import { ApiResponse } from '@/types/database'
-
-interface AlbumImage {
-  id: string
-  album_id: string
-  image_id: string
-  image_url: string
-  image_name: string
-  sort_order: number
-  added_at: Date
-  added_by: string | null
-}
+import { ApiResponse, AlbumImage } from '@/types/database'
 
 // POST /api/albums/upload-synology - Upload images to Synology NAS
 export async function POST(request: NextRequest) {
