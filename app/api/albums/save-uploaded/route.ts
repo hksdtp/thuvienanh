@@ -51,15 +51,12 @@ export async function POST(request: NextRequest) {
         const thumbnailUrl = `${baseUrl}/api/synology/file-proxy?path=${encodeURIComponent(path)}&thumbnail=true`
 
         // Save to database using AlbumService
+        // addImage signature: (albumId, imageUrl, caption?, imageId?)
         const albumImage = await AlbumService.addImage(
           albumId,
-          imageId,
           imageUrl,
-          name,
-          {
-            thumbnailUrl: thumbnailUrl,
-            fileSize: size
-          }
+          name, // caption
+          imageId
         )
 
         savedImages.push(albumImage)
