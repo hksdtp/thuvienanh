@@ -49,6 +49,22 @@ export async function GET(request: NextRequest) {
         max: maxPrice ? parseFloat(maxPrice) : Infinity
       }
     }
+
+    // Parse MOQ range
+    const minMOQ = searchParams.get('min_moq')
+    const maxMOQ = searchParams.get('max_moq')
+    if (minMOQ || maxMOQ) {
+      filter.min_order_quantity = {
+        min: minMOQ ? parseInt(minMOQ) : 0,
+        max: maxMOQ ? parseInt(maxMOQ) : Infinity
+      }
+    }
+
+    // Parse created_after for "new" filter
+    const createdAfter = searchParams.get('created_after')
+    if (createdAfter) {
+      filter.created_after = createdAfter
+    }
     
     const fabrics = await FabricService.getAll(filter)
     

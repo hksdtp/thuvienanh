@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { MagnifyingGlassIcon, PhotoIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { Fabric, Collection, ApiResponse, FabricFilter } from '@/types/database'
 
@@ -12,12 +13,44 @@ import PageHeader from '@/components/PageHeader'
 import { fabricsApi, collectionsApi } from '@/lib/api-client'
 
 export default function FabricsPage() {
+  const searchParams = useSearchParams()
   const [fabrics, setFabrics] = useState<Fabric[]>([])
   const [collections, setCollections] = useState<Collection[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filters, setFilters] = useState<FabricFilter>({})
   const [uploadModalOpen, setUploadModalOpen] = useState(false)
+  const [pageTitle, setPageTitle] = useState('Thư Viện Vải')
+
+  // Handle URL parameters for predefined filters
+  useEffect(() => {
+    const filterParam = searchParams.get('filter')
+    if (filterParam) {
+      switch (filterParam) {
+        case 'moq':
+          setPageTitle('Vải Order theo MOQ')
+          setFilters({ min_order_quantity: { min: 2 } }) // MOQ >= 2
+          break
+        case 'new':
+          setPageTitle('Vải Mới')
+          // Filter for fabrics created in last 30 days
+          const thirtyDaysAgo = new Date()
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+          setFilters({ created_after: thirtyDaysAgo.toISOString() })
+          break
+        case 'clearance':
+          setPageTitle('Vải Thanh Lý')
+          setFilters({ tags: ['thanh lý', 'clearance', 'sale'] })
+          break
+        default:
+          setPageTitle('Thư Viện Vải')
+          setFilters({})
+      }
+    } else {
+      setPageTitle('Thư Viện Vải')
+      setFilters({})
+    }
+  }, [searchParams])
 
   // Fetch fabrics và collections
   useEffect(() => {
@@ -25,8 +58,8 @@ export default function FabricsPage() {
       try {
         setLoading(true)
 
-        // Fetch fabrics using API client
-        const fabricsResponse = await fabricsApi.getAll() as unknown as ApiResponse<Fabric[]>
+        // Fetch fabrics using API client with filters
+        const fabricsResponse = await fabricsApi.getAll(filters) as unknown as ApiResponse<Fabric[]>
         if (fabricsResponse.success && fabricsResponse.data) {
           setFabrics(fabricsResponse.data)
         }
@@ -46,7 +79,7 @@ export default function FabricsPage() {
     }
 
     fetchData()
-  }, [])
+  }, [filters])
 
   // Apply filters
   const fetchFilteredFabrics = async (newFilters: FabricFilter) => {
@@ -113,7 +146,7 @@ export default function FabricsPage() {
     <div className="min-h-screen bg-macos-bg-secondary">
       {/* Page Header */}
       <PageHeader
-        title="Vải Mẫu"
+        title={pageTitle}
         subtitle={`${fabrics.length} mẫu vải`}
         icon={<PhotoIcon className="w-8 h-8 text-ios-blue" strokeWidth={1.8} />}
         actions={

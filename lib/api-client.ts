@@ -25,7 +25,28 @@ export async function apiFetch<T>(
 
 // Fabrics API
 export const fabricsApi = {
-  getAll: () => apiFetch<any[]>('/api/fabrics'),
+  getAll: (filters?: any) => {
+    const params = new URLSearchParams()
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          if (key === 'min_order_quantity' && typeof value === 'object') {
+            if (value.min !== undefined) params.append('min_moq', value.min.toString())
+            if (value.max !== undefined) params.append('max_moq', value.max.toString())
+          } else if (key === 'price_range' && typeof value === 'object') {
+            if (value.min !== undefined) params.append('min_price', value.min.toString())
+            if (value.max !== undefined) params.append('max_price', value.max.toString())
+          } else if (Array.isArray(value)) {
+            params.append(key, value.join(','))
+          } else {
+            params.append(key, value.toString())
+          }
+        }
+      })
+    }
+    const queryString = params.toString()
+    return apiFetch<any[]>(`/api/fabrics${queryString ? `?${queryString}` : ''}`)
+  },
   getById: (id: string) => apiFetch<any>(`/api/fabrics/${id}`),
   create: (data: any) => apiFetch<any>('/api/fabrics', {
     method: 'POST',

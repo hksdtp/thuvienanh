@@ -338,10 +338,15 @@ export interface FabricFilter {
     min: number
     max: number
   }
+  min_order_quantity?: {
+    min: number
+    max: number
+  }
   stock_status?: 'in_stock' | 'low_stock' | 'out_of_stock'
   collection_id?: string
   search?: string
   tags?: string[]
+  created_after?: string
 }
 
 export interface CollectionFilter {

@@ -196,7 +196,30 @@ export class FabricService {
         .map(cf => cf.fabric_id)
       result = result.filter(f => fabricIds.includes(f.id))
     }
-    
+
+    if (filter?.min_order_quantity) {
+      result = result.filter(f => {
+        const moq = f.min_order_quantity || 1
+        return moq >= (filter.min_order_quantity!.min || 0) &&
+               moq <= (filter.min_order_quantity!.max || Infinity)
+      })
+    }
+
+    if (filter?.created_after) {
+      const afterDate = new Date(filter.created_after)
+      result = result.filter(f => f.created_at >= afterDate)
+    }
+
+    if (filter?.tags?.length) {
+      result = result.filter(f =>
+        filter.tags!.some(tag =>
+          f.tags.some(fabricTag =>
+            fabricTag.toLowerCase().includes(tag.toLowerCase())
+          )
+        )
+      )
+    }
+
     return result.sort((a, b) => b.updated_at.getTime() - a.updated_at.getTime())
   }
   
