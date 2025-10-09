@@ -49,10 +49,10 @@ const menuStructure = [
     groupName: 'Thư Viện Vải',
     icon: SparklesIcon,
     items: [
-      { name: 'Vải Order theo MOQ', href: '/fabrics?filter=moq', icon: ShoppingCartIcon },
-      { name: 'Vải Mới', href: '/fabrics?filter=new', icon: PhotoIcon },
+      { name: 'Vải Order theo MOQ', href: '/fabrics/moq', icon: ShoppingCartIcon },
+      { name: 'Vải Mới', href: '/fabrics/new', icon: PhotoIcon },
       { name: 'Bộ Sưu Tập', href: '/collections', icon: FolderIcon },
-      { name: 'Vải Thanh Lý', href: '/fabrics?filter=clearance', icon: TagIcon },
+      { name: 'Vải Thanh Lý', href: '/fabrics/clearance', icon: TagIcon },
       { name: 'Albums', href: '/albums/fabric', icon: RectangleStackIcon }
     ]
   },

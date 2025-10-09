@@ -1,0 +1,92 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e7]:
+        - img "TVA Logo" [ref=e8]
+        - generic [ref=e9]: TVA
+      - navigation [ref=e10]:
+        - link "Tổng quan" [ref=e11] [cursor=pointer]:
+          - /url: /
+          - img [ref=e12] [cursor=pointer]
+          - generic [ref=e14] [cursor=pointer]: Tổng quan
+        - link "Tìm kiếm" [ref=e15] [cursor=pointer]:
+          - /url: /search
+          - img [ref=e16] [cursor=pointer]
+          - generic [ref=e18] [cursor=pointer]: Tìm kiếm
+        - button "Thư Viện Vải" [ref=e20] [cursor=pointer]:
+          - generic [ref=e21] [cursor=pointer]:
+            - img [ref=e22] [cursor=pointer]
+            - generic [ref=e24] [cursor=pointer]: Thư Viện Vải
+          - img [ref=e25] [cursor=pointer]
+        - button "Phụ Kiện" [ref=e28] [cursor=pointer]:
+          - generic [ref=e29] [cursor=pointer]:
+            - img [ref=e30] [cursor=pointer]
+            - generic [ref=e32] [cursor=pointer]: Phụ Kiện
+          - img [ref=e33] [cursor=pointer]
+        - button "Thư Viện Công Trình" [ref=e36] [cursor=pointer]:
+          - generic [ref=e37] [cursor=pointer]:
+            - img [ref=e38] [cursor=pointer]
+            - generic [ref=e40] [cursor=pointer]: Thư Viện Công Trình
+          - img [ref=e41] [cursor=pointer]
+        - button "Sự Kiện Công Ty" [ref=e44] [cursor=pointer]:
+          - generic [ref=e45] [cursor=pointer]:
+            - img [ref=e46] [cursor=pointer]
+            - generic [ref=e48] [cursor=pointer]: Sự Kiện Công Ty
+          - img [ref=e49] [cursor=pointer]
+      - button "User Avatar Admin admin@tva.com" [ref=e52] [cursor=pointer]:
+        - img "User Avatar" [ref=e53] [cursor=pointer]
+        - generic [ref=e54] [cursor=pointer]:
+          - paragraph [ref=e55] [cursor=pointer]: Admin
+          - paragraph [ref=e56] [cursor=pointer]: admin@tva.com
+    - generic [ref=e57]:
+      - banner [ref=e58]:
+        - textbox "Tìm kiếm..." [ref=e62]
+      - main [ref=e63]:
+        - main [ref=e64]:
+          - generic [ref=e65]:
+            - generic [ref=e66]:
+              - heading "Chào mừng trở lại" [level=1] [ref=e67]
+              - paragraph [ref=e68]: Quản lý vải, bộ sưu tập và công trình của bạn
+            - generic [ref=e69]:
+              - link "Vải Mẫu 0" [ref=e70] [cursor=pointer]:
+                - /url: /fabrics
+                - generic [ref=e71] [cursor=pointer]:
+                  - generic [ref=e72] [cursor=pointer]:
+                    - paragraph [ref=e73] [cursor=pointer]: Vải Mẫu
+                    - paragraph [ref=e74] [cursor=pointer]: "0"
+                  - img [ref=e76] [cursor=pointer]
+              - link "Bộ Sưu Tập 0" [ref=e78] [cursor=pointer]:
+                - /url: /collections
+                - generic [ref=e79] [cursor=pointer]:
+                  - generic [ref=e80] [cursor=pointer]:
+                    - paragraph [ref=e81] [cursor=pointer]: Bộ Sưu Tập
+                    - paragraph [ref=e82] [cursor=pointer]: "0"
+                  - img [ref=e84] [cursor=pointer]
+              - link "Công Trình 0" [ref=e86] [cursor=pointer]:
+                - /url: /projects
+                - generic [ref=e87] [cursor=pointer]:
+                  - generic [ref=e88] [cursor=pointer]:
+                    - paragraph [ref=e89] [cursor=pointer]: Công Trình
+                    - paragraph [ref=e90] [cursor=pointer]: "0"
+                  - img [ref=e92] [cursor=pointer]
+            - generic [ref=e94]:
+              - generic [ref=e95]:
+                - heading "Vải mới nhất" [level=2] [ref=e96]
+                - link "Xem tất cả →" [ref=e97] [cursor=pointer]:
+                  - /url: /fabrics
+              - generic [ref=e98]:
+                - img [ref=e99]
+                - paragraph [ref=e101]: Chưa có vải nào
+            - generic [ref=e102]:
+              - generic [ref=e103]:
+                - heading "Bộ sưu tập nổi bật" [level=2] [ref=e104]
+                - link "Xem tất cả →" [ref=e105] [cursor=pointer]:
+                  - /url: /collections
+              - generic [ref=e106]:
+                - img [ref=e107]
+                - paragraph [ref=e109]: Chưa có bộ sưu tập nào
+  - alert [ref=e110]
+```

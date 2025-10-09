@@ -14,6 +14,8 @@ interface FabricUploadModalProps {
   onClose: () => void
   fabricId?: string
   fabricName?: string
+  category?: string
+  onSuccess?: () => void
   onUploadComplete?: (images: GalleryImage[]) => void
 }
 
@@ -22,6 +24,8 @@ export default function FabricUploadModal({
   onClose,
   fabricId,
   fabricName,
+  category,
+  onSuccess,
   onUploadComplete
 }: FabricUploadModalProps) {
   const [uploadedImages, setUploadedImages] = useState<GalleryImage[]>([])
