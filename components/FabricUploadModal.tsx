@@ -313,13 +313,18 @@ export default function FabricUploadModal({
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+              ...data,
+              category: 'fabric', // Always fabric category for FabricUploadModal
+              subcategory: category // Pass subcategory from props (moq, new, clearance, etc.)
+            })
           })
 
           const result = await response.json()
 
           if (result.success && result.data) {
             setSelectedAlbumId(result.data.id)
+            setCreateAlbumModalOpen(false)
             alert('Tạo album thành công!')
           } else {
             alert(`Lỗi: ${result.error}`)

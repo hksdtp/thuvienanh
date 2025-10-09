@@ -97,6 +97,7 @@ export interface Album {
   is_active: boolean
   tags?: string[]
   category?: 'fabric' | 'accessory' | 'event' | 'collection' | 'project' | 'season' | 'client' | 'other'
+  category_path?: string // Hierarchical path: e.g., "fabrics/moq", "fabrics/new", "events"
 }
 
 export interface AlbumImage {
@@ -216,6 +217,8 @@ export interface CreateAlbumForm {
   name: string
   description?: string
   category?: Album['category']
+  category_path?: string // Optional: will be auto-generated if not provided
+  subcategory?: string // Optional: for subcategories like 'moq', 'new', 'clearance'
   tags?: string[]
 }
 

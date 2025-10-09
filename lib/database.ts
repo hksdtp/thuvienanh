@@ -335,23 +335,51 @@ export class AlbumService {
 
   static async create(data: CreateAlbumForm): Promise<Album> {
     try {
+      // Auto-generate category_path if not provided
+      let categoryPath = data.category_path
+
+      if (!categoryPath) {
+        const category = data.category || 'other'
+        const subcategory = data.subcategory
+
+        // Generate hierarchical path based on category and subcategory
+        if (category === 'fabric') {
+          if (subcategory) {
+            // fabrics/moq, fabrics/new, fabrics/clearance
+            categoryPath = `fabrics/${subcategory}`
+          } else {
+            // fabrics/general (default for fabric category)
+            categoryPath = 'fabrics/general'
+          }
+        } else if (category === 'event') {
+          categoryPath = 'events'
+        } else if (category === 'collection') {
+          categoryPath = 'collections'
+        } else {
+          categoryPath = category
+        }
+      }
+
+      console.log(`📁 Creating album with category_path: ${categoryPath}`)
+
       const result = await query<Album>(
-        `INSERT INTO albums (name, description, category, tags, is_active)
-         VALUES ($1, $2, $3, $4, $5)
+        `INSERT INTO albums (name, description, category, category_path, tags, is_active)
+         VALUES ($1, $2, $3, $4, $5, $6)
          RETURNING id, name, description, cover_image_url, cover_image_id,
                    created_at, updated_at, created_by, is_active,
-                   tags, category`,
+                   tags, category, category_path`,
         [
           data.name,
           data.description || null,
           data.category || 'other',
+          categoryPath,
           data.tags || [],
           true
         ]
       )
 
       const album = result.rows[0]
-      console.log('✅ Album created in database:', album.id)
+      console.log('✅ Album created in database:', album.id, 'category_path:', album.category_path)
 
       return {
         ...album,

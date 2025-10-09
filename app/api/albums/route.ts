@@ -95,22 +95,24 @@ export async function POST(request: NextRequest) {
       name: body.name.trim(),
       description: body.description?.trim() || undefined,
       category: body.category || 'other',
+      subcategory: body.subcategory, // Support subcategories like 'moq', 'new', 'clearance'
+      category_path: body.category_path, // Optional: will be auto-generated if not provided
       tags: body.tags || []
     }
 
     const newAlbum = await AlbumService.create(albumData)
 
     // Tự động tạo folder trên Synology cho album mới
-    // Tổ chức theo hierarchy: /thuvienanh/{category}/{album-name}_{id}
-    // TEMPORARY: Skip Synology folder creation due to VPS IP being blocked
+    // Tổ chức theo hierarchy: /thuvienanh/{category_path}/{album-name}_{id}
+    // Example: /thuvienanh/fabrics/moq/album-name_uuid
     const ENABLE_SYNOLOGY_FOLDER_CREATION = process.env.ENABLE_SYNOLOGY_FOLDER_CREATION === 'true'
 
     if (ENABLE_SYNOLOGY_FOLDER_CREATION) {
-      const category = newAlbum.category || 'other'
+      const categoryPath = newAlbum.category_path || newAlbum.category || 'other'
       const folderName = createFolderName(newAlbum.name, newAlbum.id)
-      const folderPath = `/Marketing/Ninh/thuvienanh/${category}/${folderName}`
+      const folderPath = `/Marketing/Ninh/thuvienanh/${categoryPath}/${folderName}`
       console.log(`📁 Creating Synology folder for new album: ${folderPath}`)
-      console.log(`   Category: "${category}", Album: "${newAlbum.name}" => Folder: "${folderName}"`)
+      console.log(`   Category Path: "${categoryPath}", Album: "${newAlbum.name}" => Folder: "${folderName}"`)
 
       try {
         const folderCreated = await synologyService.fileStation.createFolder(folderPath)
@@ -124,8 +126,9 @@ export async function POST(request: NextRequest) {
         // Không fail request nếu tạo folder thất bại
       }
     } else {
+      const categoryPath = newAlbum.category_path || newAlbum.category || 'other'
       console.log(`ℹ️ Synology folder creation disabled. Album created in database only.`)
-      console.log(`   Manual folder creation required: /Marketing/Ninh/thuvienanh/${newAlbum.category}/${createFolderName(newAlbum.name, newAlbum.id)}`)
+      console.log(`   Manual folder creation required: /Marketing/Ninh/thuvienanh/${categoryPath}/${createFolderName(newAlbum.name, newAlbum.id)}`)
     }
 
     const response: ApiResponse<typeof newAlbum> = {
