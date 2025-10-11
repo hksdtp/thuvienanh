@@ -91,25 +91,28 @@ export function slugify(
 }
 
 /**
- * Tạo folder name từ album name và album ID
- * Format: {slug}_{shortId}
- * 
+ * Tạo folder name an toàn từ album name
+ * Giữ nguyên tên album, chỉ loại bỏ ký tự đặc biệt không an toàn
+ *
  * @param albumName - Tên album
- * @param albumId - UUID của album
+ * @param albumId - UUID của album (không sử dụng, giữ để tương thích)
  * @returns Tên folder an toàn cho file system
- * 
+ *
  * @example
  * createFolderName("Vải Hoa Xuân 2024", "9c9b28e6-ecea-425f-a3f0-dda1097c6a28")
- * // => "vai-hoa-xuan-2024_9c9b28e6"
+ * // => "Vải Hoa Xuân 2024"
+ * createFolderName("123", "9c9b28e6-ecea-425f-a3f0-dda1097c6a28")
+ * // => "123"
  */
 export function createFolderName(albumName: string, albumId: string): string {
-  const slug = slugify(albumName, { maxLength: 50 })
-  const shortId = albumId.split('-')[0] // Lấy 8 ký tự đầu của UUID
-  
-  // Nếu slug rỗng (tên toàn ký tự đặc biệt), dùng "album"
-  const safeName = slug || 'album'
-  
-  return `${safeName}_${shortId}`
+  // Giữ nguyên tên album, chỉ loại bỏ các ký tự không an toàn cho file system
+  // Loại bỏ: / \ : * ? " < > |
+  const safeName = albumName
+    .replace(/[\/\\:*?"<>|]/g, '') // Loại bỏ ký tự không hợp lệ
+    .trim()
+
+  // Nếu sau khi loại bỏ ký tự đặc biệt mà tên rỗng, dùng "album"
+  return safeName || 'album'
 }
 
 /**

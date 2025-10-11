@@ -105,7 +105,7 @@ export default function AlbumsCategoryPage({ params }: PageProps) {
   const handleDeleteAlbum = async (album: Album, e: React.MouseEvent) => {
     e.stopPropagation() // Prevent card click
 
-    const confirmed = confirm(`Bạn có chắc muốn xóa album "${album.name}"?\n\nChọn OK để vô hiệu hóa (soft delete) hoặc Cancel để hủy.`)
+    const confirmed = confirm(`Bạn có chắc muốn xóa album "${album.name}"?`)
     if (!confirmed) return
 
     try {
@@ -116,7 +116,11 @@ export default function AlbumsCategoryPage({ params }: PageProps) {
       const result = await response.json()
 
       if (result.success) {
-        await fetchAlbums() // Refresh list
+        console.log('Album deleted successfully')
+        // Add small delay to ensure DB cleanup is complete
+        setTimeout(() => {
+          fetchAlbums() // Refresh list
+        }, 500)
       } else {
         throw new Error(result.error || 'Failed to delete album')
       }
@@ -281,10 +285,15 @@ export default function AlbumsCategoryPage({ params }: PageProps) {
             const result = await response.json()
 
             if (result.success && result.data) {
+              console.log('Album created successfully:', result.data)
               setCreateModalOpen(false)
-              fetchAlbums() // Refresh albums list
+              // Add small delay before fetching to ensure DB is updated
+              setTimeout(() => {
+                fetchAlbums() // Refresh albums list
+              }, 500)
             } else {
-              alert(`Lỗi: ${result.error}`)
+              console.error('Create album error:', result)
+              alert(`Lỗi: ${result.error || 'Không thể tạo album'}`)
             }
           } catch (error) {
             console.error('Error creating album:', error)

@@ -1,0 +1,169 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database (Local for better performance)
+  postgres:
+    image: postgres:15-alpine
+    container_name: tva-postgres-prod
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Demo1234
+      POSTGRES_DB: Ninh96
+      POSTGRES_MAX_CONNECTIONS: 200
+      POSTGRES_SHARED_BUFFERS: 256MB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./sql/create_all_images_tables.sql:/docker-entrypoint-initdb.d/02-tables.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d Ninh96"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tva-network
+
+  # Next.js Production Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+    image: thuvienanh:production
+    container_name: tva-app-prod
+    restart: always
+    ports:
+      - "3000:4000"  # Internal port 4000 as per Dockerfile
+    environment:
+      # Node settings
+      NODE_ENV: production
+      NODE_OPTIONS: --max-old-space-size=2048
+      
+      # Database - Using local postgres container
+      DATABASE_URL: postgresql://postgres:Demo1234@postgres:5432/Ninh96
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Demo1234
+      POSTGRES_DB: Ninh96
+      
+      # Synology NAS Configuration
+      SYNOLOGY_HOST: 222.252.23.248
+      SYNOLOGY_PORT: 6868
+      SYNOLOGY_USERNAME: your_synology_username
+      SYNOLOGY_PASSWORD: your_synology_password
+      SYNOLOGY_BASE_URL: http://222.252.23.248:8888
+      SYNOLOGY_ALTERNATIVE_URL: http://222.252.23.248:6868
+      
+      # SMB Configuration
+      SMB_HOST: 222.252.23.248
+      SMB_PORT: 445
+      SMB_USERNAME: your_smb_username
+      SMB_PASSWORD: your_smb_password
+      SMB_SHARE: marketing
+      SMB_DOMAIN: WORKGROUP
+      
+      # API Configuration
+      ALLOWED_ORIGIN: "*"
+      # Don't set NEXT_PUBLIC_API_URL for relative paths
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      # Persist uploads
+      - uploads_data:/app/public/uploads
+      # Logs
+      - ./logs:/app/logs
+    networks:
+      - tva-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Nginx for better performance and caching
+  nginx:
+    image: nginx:alpine
+    container_name: tva-nginx-prod
+    restart: always
+    ports:
+      - "80:80"      # HTTP
+      - "443:443"    # HTTPS ready
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro  # For SSL certificates
+      - nginx_cache:/var/cache/nginx
+    depends_on:
+      - app
+    networks:
+      - tva-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Portainer for Docker management UI
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: tva-portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - //var/run/docker.sock:/var/run/docker.sock  # Windows format
+      - portainer_data:/data
+    networks:
+      - tva-network
+
+  # Backup service (runs daily at 2 AM)
+  backup:
+    image: postgres:15-alpine
+    container_name: tva-backup
+    restart: "no"
+    environment:
+      PGPASSWORD: Demo1234
+    volumes:
+      - ./backups:/backups
+    command: >
+      sh -c "
+      while true; do
+        sleep 86400;
+        pg_dump -h postgres -U postgres -d Ninh96 > /backups/backup_$$(date +%Y%m%d_%H%M%S).sql;
+        echo 'Backup completed at' $$(date);
+        find /backups -name '*.sql' -mtime +7 -delete;
+        echo 'Old backups cleaned';
+      done
+      "
+    depends_on:
+      - postgres
+    networks:
+      - tva-network
+
+volumes:
+  postgres_data:
+    driver: local
+  uploads_data:
+    driver: local
+  portainer_data:
+    driver: local
+  nginx_cache:
+    driver: local
+
+networks:
+  tva-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

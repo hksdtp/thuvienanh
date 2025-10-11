@@ -166,7 +166,7 @@ export default function EventAlbumsPage() {
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-6">
             <FolderIcon className="w-6 h-6 text-amber-600" />
-            <h2 className="text-2xl font-bold text-gray-900">Thư Viện Lưu Trữ</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Thư Viện Marketing</h2>
             <span className="px-3 py-1 bg-amber-100 text-amber-800 text-sm font-medium rounded-full">
               Chỉ xem
             </span>

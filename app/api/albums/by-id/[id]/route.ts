@@ -154,21 +154,40 @@ export async function DELETE(
     }
 
     // Delete folder from Synology FileStation
-    const category = album.category || 'other'
+    // Use the exact path format as when creating albums
+    const categoryPath = album.category_path || (album.category === 'fabric' ? 'fabrics/general' : album.category || 'other')
     const folderName = createFolderName(album.name, id)
-    const folderPath = `/Marketing/Ninh/thuvienanh/${category}/${folderName}`
+    
+    // Try both possible paths (with and without category subfolder)
+    const possiblePaths = [
+      `/Marketing/Ninh/thuvienanh/${categoryPath}/${folderName}`,
+      `/Marketing/Ninh/thuvienanh/${album.category}/${folderName}`,
+      `/Marketing/Ninh/thuvienanh/fabric/${album.name}`,  // Legacy path format
+    ]
 
     if (authSuccess) {
-      console.log(`🗑️ Deleting Synology folder: ${folderPath}`)
-      try {
-        const folderDeleted = await fileStation.deleteFolder(folderPath)
-        if (folderDeleted) {
-          console.log(`✅ Synology folder deleted: ${folderPath}`)
-        } else {
-          console.log(`⚠️ Synology folder not found or already deleted: ${folderPath}`)
+      let folderDeleted = false
+      
+      // Try to delete folder from all possible paths
+      for (const folderPath of possiblePaths) {
+        console.log(`🗑️ Trying to delete Synology folder: ${folderPath}`)
+        try {
+          const deleted = await fileStation.deleteFolder(folderPath)
+          if (deleted) {
+            console.log(`✅ Synology folder deleted: ${folderPath}`)
+            folderDeleted = true
+            break // Stop after successful deletion
+          } else {
+            console.log(`⚠️ Folder not found at: ${folderPath}`)
+          }
+        } catch (error) {
+          console.error(`❌ Error trying path ${folderPath}:`, error)
         }
-      } catch (error) {
-        console.error(`❌ Error deleting Synology folder:`, error)
+      }
+      
+      if (!folderDeleted) {
+        console.warn(`⚠️ Could not delete Synology folder for album ${album.name} (${id})`)
+        console.log(`   Tried paths:`, possiblePaths)
         // Continue with database deletion even if Synology deletion fails
       }
     }

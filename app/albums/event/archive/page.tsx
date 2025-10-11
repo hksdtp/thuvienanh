@@ -83,7 +83,7 @@ function ArchiveContent() {
     <div className="min-h-screen bg-gray-50">
       <PageHeader
         title={folderName}
-        subtitle="Thư viện lưu trữ - Chỉ xem"
+        subtitle="Thư viện marketing - Chỉ xem"
         icon={<FolderIcon className="w-8 h-8 text-amber-600" />}
       />
 

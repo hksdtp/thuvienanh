@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import AppLayout from '@/components/AppLayout'
+import PageTransition from '@/components/PageTransition'
+import SmoothScroll from '@/components/SmoothScroll'
 
 export const metadata: Metadata = {
   title: 'Thư Viện Ảnh VẢI',
@@ -14,10 +16,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      <body className="bg-gray-100 min-h-screen">
-        <AppLayout>
-          {children}
-        </AppLayout>
+      <body className="bg-gradient-to-br from-gray-50 via-white to-gray-100 min-h-screen">
+        <SmoothScroll>
+          <PageTransition>
+            <AppLayout>
+              {children}
+            </AppLayout>
+          </PageTransition>
+        </SmoothScroll>
       </body>
     </html>
   )

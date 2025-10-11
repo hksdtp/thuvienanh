@@ -1,0 +1,16 @@
+{
+  "name": "DeepSeek",
+  "type": "openai",
+  "baseUrl": "https://api.deepseek.com",
+  "apiKey": "sk-95a0e7fdd0b2437aa5ee8a2c60f1c1a9",
+  "models": [
+    {
+      "name": "deepseek-chat",
+      "displayName": "DeepSeek Chat"
+    },
+    {
+      "name": "deepseek-coder", 
+      "displayName": "DeepSeek Coder"
+    }
+  ]
+}

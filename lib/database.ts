@@ -363,26 +363,27 @@ export class AlbumService {
       console.log(`📁 Creating album with category_path: ${categoryPath}`)
 
       const result = await query<Album>(
-        `INSERT INTO albums (name, description, category, category_path, tags, is_active)
-         VALUES ($1, $2, $3, $4, $5, $6)
+        `INSERT INTO albums (name, description, category, tags, is_active)
+         VALUES ($1, $2, $3, $4, $5)
          RETURNING id, name, description, cover_image_url, cover_image_id,
                    created_at, updated_at, created_by, is_active,
-                   tags, category, category_path`,
+                   tags, category`,
         [
           data.name,
           data.description || null,
           data.category || 'other',
-          categoryPath,
           data.tags || [],
           true
         ]
       )
 
       const album = result.rows[0]
-      console.log('✅ Album created in database:', album.id, 'category_path:', album.category_path)
+      console.log('✅ Album created in database:', album.id, 'category:', album.category)
 
+      // Add category_path to the returned album object for compatibility
       return {
         ...album,
+        category_path: categoryPath,
         created_at: new Date(album.created_at),
         updated_at: new Date(album.updated_at)
       }

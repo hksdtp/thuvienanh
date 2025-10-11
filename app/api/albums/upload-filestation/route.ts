@@ -72,14 +72,23 @@ export async function POST(request: NextRequest) {
     const uploadedImages: AlbumImage[] = []
     const errors: string[] = []
 
-    // Destination path in FileStation
-    // User có full quyền tại /Marketing/Ninh/thuvienanh
-    // Tạo subfolder theo category và album: /Marketing/Ninh/thuvienanh/{category}/{albumName}_{albumId}
-    const category = album.category || 'other'
+    // Destination path in FileStation - use same logic as when creating album
+    // Use category_path if available, otherwise map category to path
+    let categoryPath = ''
+    if (album.category === 'fabric') {
+      categoryPath = 'fabrics/general' // Default for fabric category
+    } else if (album.category === 'event') {
+      categoryPath = 'events'
+    } else if (album.category === 'accessory') {
+      categoryPath = 'accessories'
+    } else {
+      categoryPath = album.category || 'other'
+    }
+    
     const folderName = createFolderName(album.name, albumId)
-    const destinationPath = `/Marketing/Ninh/thuvienanh/${category}/${folderName}`
+    const destinationPath = `/Marketing/Ninh/thuvienanh/${categoryPath}/${folderName}`
     console.log(`📁 Uploading to: ${destinationPath}`)
-    console.log(`   Category: "${category}", Album: "${album.name}" => Folder: "${folderName}"`)
+    console.log(`   Category: "${album.category}", Path: "${categoryPath}", Album: "${album.name}" => Folder: "${folderName}"`)
 
     // Get base URL from request
     const protocol = request.headers.get('x-forwarded-proto') || 'http'

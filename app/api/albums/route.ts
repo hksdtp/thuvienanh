@@ -115,14 +115,23 @@ export async function POST(request: NextRequest) {
       console.log(`   Category Path: "${categoryPath}", Album: "${newAlbum.name}" => Folder: "${folderName}"`)
 
       try {
-        const folderCreated = await synologyService.fileStation.createFolder(folderPath)
-        if (folderCreated) {
-          console.log(`✅ Synology folder created: ${folderPath}`)
+        // Ensure authentication before creating folder
+        const authSuccess = await synologyService.fileStation.authenticate()
+        if (!authSuccess) {
+          console.error('❌ Synology authentication failed when creating folder')
         } else {
-          console.warn(`⚠️ Failed to create Synology folder for album: ${newAlbum.id}`)
+          const folderCreated = await synologyService.fileStation.createFolder(folderPath)
+          if (folderCreated) {
+            console.log(`✅ Synology folder created: ${folderPath}`)
+          } else {
+            console.warn(`⚠️ Failed to create Synology folder for album: ${newAlbum.id}`)
+            console.warn(`   Attempted path: ${folderPath}`)
+          }
         }
       } catch (error) {
         console.error('❌ Error creating Synology folder:', error)
+        console.error(`   Album: ${newAlbum.name} (${newAlbum.id})`)
+        console.error(`   Path: ${folderPath}`)
         // Không fail request nếu tạo folder thất bại
       }
     } else {

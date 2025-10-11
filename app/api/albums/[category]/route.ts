@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server'
 import { Pool } from 'pg'
 
 const pool = new Pool({
-  host: process.env.DB_HOST || '222.252.23.248',
-  port: parseInt(process.env.DB_PORT || '5499'),
-  database: process.env.DB_NAME || 'Ninh96',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'Demo1234',
+  host: process.env.POSTGRES_HOST || '100.101.50.87',
+  port: parseInt(process.env.POSTGRES_PORT || '5432'),
+  database: process.env.POSTGRES_DB || 'tva',
+  user: process.env.POSTGRES_USER || 'postgres',
+  password: process.env.POSTGRES_PASSWORD || 'haininh1',
 })
 
 const VALID_CATEGORIES = ['fabric', 'accessory', 'event']
