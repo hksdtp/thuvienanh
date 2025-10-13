@@ -22,8 +22,7 @@ export default function FabricsNewPage() {
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
   
   const [filters, setFilters] = useState<FabricFilter>({
-    created_after: thirtyDaysAgo.toISOString(),
-    category: 'new' // Add category filter
+    created_after: thirtyDaysAgo.toISOString()
   })
   const [uploadModalOpen, setUploadModalOpen] = useState(false)
 
@@ -102,10 +101,17 @@ export default function FabricsNewPage() {
   const handleFilterChange = (newFilters: FabricFilter) => {
     setFilters({
       ...newFilters,
-      created_after: thirtyDaysAgo.toISOString(),
-      category: 'new'
+      created_after: thirtyDaysAgo.toISOString()
     })
     fetchFilteredFabrics(newFilters)
+  }
+
+  const handleClearFilters = () => {
+    const clearedFilters: FabricFilter = {
+      created_after: thirtyDaysAgo.toISOString()
+    }
+    setFilters(clearedFilters)
+    fetchFilteredFabrics(clearedFilters)
   }
 
   const handleSearch = (term: string) => {
@@ -165,7 +171,8 @@ export default function FabricsNewPage() {
           <FabricFilters
             filters={filters}
             collections={collections}
-            onFilterChange={handleFilterChange}
+            onFiltersChange={handleFilterChange}
+            onClearFilters={handleClearFilters}
           />
         </div>
 

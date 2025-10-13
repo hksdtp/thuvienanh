@@ -3,9 +3,12 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { BuildingOffice2Icon, PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import { Project, ApiResponse } from '@/types/database'
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { Project, ApiResponse, CreateProjectForm } from '@/types/database'
 import PageHeader from '@/components/PageHeader'
-import ProjectCard from '@/components/ProjectCard'
+import CreateProjectModal from '@/components/CreateProjectModal'
+import EditProjectModal from '@/components/EditProjectModal'
+import Image from 'next/image'
 
 export default function ProjectsPage() {
   const router = useRouter()
@@ -14,6 +17,9 @@ export default function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState<string>('all')
   const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [createModalOpen, setCreateModalOpen] = useState(false)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   useEffect(() => {
     fetchProjects()
@@ -34,6 +40,63 @@ export default function ProjectsPage() {
     }
   }
 
+  const handleEditProject = (project: Project, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSelectedProject(project)
+    setEditModalOpen(true)
+  }
+
+  const handleUpdateProject = async (data: { name: string; description?: string; project_type?: string; location?: string; client_name?: string; status?: string; tags?: string[] }) => {
+    if (!selectedProject) return
+
+    try {
+      const response = await fetch(`/api/projects/${selectedProject.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        await fetchProjects()
+        setEditModalOpen(false)
+        setSelectedProject(null)
+      } else {
+        throw new Error(result.error || 'Failed to update project')
+      }
+    } catch (error) {
+      console.error('Error updating project:', error)
+      throw error
+    }
+  }
+
+  const handleDeleteProject = async (project: Project, e: React.MouseEvent) => {
+    e.stopPropagation()
+
+    const confirmed = confirm(`Bạn có chắc muốn xóa công trình "${project.name}"?`)
+    if (!confirmed) return
+
+    try {
+      const response = await fetch(`/api/projects/${project.id}`, {
+        method: 'DELETE'
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setTimeout(() => {
+          fetchProjects()
+        }, 500)
+      } else {
+        throw new Error(result.error || 'Failed to delete project')
+      }
+    } catch (error) {
+      console.error('Error deleting project:', error)
+      alert('Có lỗi xảy ra khi xóa công trình')
+    }
+  }
+
   const filteredProjects = projects.filter(project => {
     const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesType = filterType === 'all' || project.project_type === filterType
@@ -48,7 +111,10 @@ export default function ProjectsPage() {
         subtitle={`${projects.length} công trình`}
         icon={<BuildingOffice2Icon className="w-8 h-8 text-ios-blue" strokeWidth={1.8} />}
         actions={
-          <button className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md">
+          <button
+            onClick={() => setCreateModalOpen(true)}
+            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md"
+          >
             <PlusIcon className="w-5 h-5" strokeWidth={2} />
             <span>Thêm công trình</span>
           </button>
@@ -82,6 +148,8 @@ export default function ProjectsPage() {
               <option value="office">Văn phòng</option>
               <option value="hotel">Khách sạn</option>
               <option value="restaurant">Nhà hàng</option>
+              <option value="retail">Bán lẻ</option>
+              <option value="hospitality">Khách sạn</option>
               <option value="other">Khác</option>
             </select>
 
@@ -95,6 +163,7 @@ export default function ProjectsPage() {
               <option value="in_progress">Đang thực hiện</option>
               <option value="completed">Hoàn thành</option>
               <option value="on_hold">Tạm dừng</option>
+              <option value="archived">Lưu trữ</option>
             </select>
 
             {(filterType !== 'all' || filterStatus !== 'all') && (
@@ -131,15 +200,104 @@ export default function ProjectsPage() {
             {filteredProjects.map((project, index) => (
               <div
                 key={project.id}
-                className="animate-slideUp"
+                className="animate-slideUp cursor-pointer"
                 style={{ animationDelay: `${index * 50}ms` }}
+                onClick={() => router.push(`/projects/${project.id}`)}
               >
-                <ProjectCard project={project} />
+                <div className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 border border-macos-border-light group">
+                  <div className="aspect-[4/3] relative overflow-hidden bg-ios-gray-50">
+                    {project.cover_image_url ? (
+                      <Image
+                        src={project.cover_image_url}
+                        alt={project.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <BuildingOffice2Icon className="w-12 h-12 text-ios-gray-300" strokeWidth={1.5} />
+                      </div>
+                    )}
+                    {/* Action buttons */}
+                    <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={(e) => handleEditProject(project, e)}
+                        className="p-2 rounded-lg bg-white/90 backdrop-blur-sm hover:bg-white shadow-sm transition-all"
+                        title="Chỉnh sửa"
+                      >
+                        <PencilIcon className="w-4 h-4 text-ios-blue" />
+                      </button>
+                      <button
+                        onClick={(e) => handleDeleteProject(project, e)}
+                        className="p-2 rounded-lg bg-white/90 backdrop-blur-sm hover:bg-white shadow-sm transition-all"
+                        title="Xóa"
+                      >
+                        <TrashIcon className="w-4 h-4 text-red-500" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-macos-text-primary truncate">
+                      {project.name}
+                    </h3>
+                    <p className="text-sm text-macos-text-secondary truncate mt-1">
+                      {project.location || 'Không có địa điểm'}
+                    </p>
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-macos-border-light">
+                      <span className="text-xs text-macos-text-secondary">
+                        {project.image_count || 0} ảnh
+                      </span>
+                      <span className="text-xs text-macos-text-secondary">
+                        {new Date(project.created_at).toLocaleDateString('vi-VN')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* Create Project Modal */}
+      <CreateProjectModal
+        isOpen={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onSubmit={async (data: CreateProjectForm) => {
+          try {
+            const response = await fetch('/api/projects', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            })
+
+            const result = await response.json()
+
+            if (result.success && result.data) {
+              setCreateModalOpen(false)
+              setTimeout(() => {
+                fetchProjects()
+              }, 500)
+            } else {
+              alert(`Lỗi: ${result.error || 'Không thể tạo công trình'}`)
+            }
+          } catch (error) {
+            console.error('Error creating project:', error)
+            alert('Có lỗi xảy ra khi tạo công trình')
+          }
+        }}
+      />
+
+      {/* Edit Project Modal */}
+      <EditProjectModal
+        isOpen={editModalOpen}
+        onClose={() => {
+          setEditModalOpen(false)
+          setSelectedProject(null)
+        }}
+        onSubmit={handleUpdateProject}
+        project={selectedProject}
+      />
     </div>
   )
 }

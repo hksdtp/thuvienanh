@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Return optimized image with proper headers
-    return new NextResponse(optimizedBuffer, {
+    return new NextResponse(optimizedBuffer as unknown as BodyInit, {
       headers: {
         'Content-Type': `image/${format}`,
         'Cache-Control': 'public, max-age=31536000, immutable',

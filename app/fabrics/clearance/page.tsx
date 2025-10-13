@@ -17,8 +17,7 @@ export default function FabricsClearancePage() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filters, setFilters] = useState<FabricFilter>({
-    tags: ['thanh lý', 'clearance', 'sale'],
-    category: 'clearance' // Add category filter
+    tags: ['thanh lý', 'clearance', 'sale']
   })
   const [uploadModalOpen, setUploadModalOpen] = useState(false)
 
@@ -94,10 +93,17 @@ export default function FabricsClearancePage() {
   const handleFilterChange = (newFilters: FabricFilter) => {
     setFilters({
       ...newFilters,
-      tags: ['thanh lý', 'clearance', 'sale'],
-      category: 'clearance'
+      tags: ['thanh lý', 'clearance', 'sale']
     })
     fetchFilteredFabrics(newFilters)
+  }
+
+  const handleClearFilters = () => {
+    const clearedFilters: FabricFilter = {
+      tags: ['thanh lý', 'clearance', 'sale']
+    }
+    setFilters(clearedFilters)
+    fetchFilteredFabrics(clearedFilters)
   }
 
   const handleSearch = (term: string) => {
@@ -157,7 +163,8 @@ export default function FabricsClearancePage() {
           <FabricFilters
             filters={filters}
             collections={collections}
-            onFilterChange={handleFilterChange}
+            onFiltersChange={handleFilterChange}
+            onClearFilters={handleClearFilters}
           />
         </div>
 

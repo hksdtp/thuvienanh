@@ -29,7 +29,7 @@ export default function FabricsPage() {
       switch (filterParam) {
         case 'moq':
           setPageTitle('Vải Order theo MOQ')
-          setFilters({ min_order_quantity: { min: 2 } }) // MOQ >= 2
+          setFilters({ min_order_quantity: { min: 2, max: 999999 } }) // MOQ >= 2
           break
         case 'new':
           setPageTitle('Vải Mới')

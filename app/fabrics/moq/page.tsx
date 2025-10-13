@@ -17,8 +17,7 @@ export default function FabricsMOQPage() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filters, setFilters] = useState<FabricFilter>({
-    min_order_quantity: { min: 2 }, // MOQ >= 2
-    category: 'moq' // Add category filter
+    min_order_quantity: { min: 2, max: 999999 } // MOQ >= 2
   })
   const [uploadModalOpen, setUploadModalOpen] = useState(false)
 
@@ -97,10 +96,17 @@ export default function FabricsMOQPage() {
   const handleFilterChange = (newFilters: FabricFilter) => {
     setFilters({
       ...newFilters,
-      min_order_quantity: { min: 2 },
-      category: 'moq'
+      min_order_quantity: { min: 2, max: 999999 }
     })
     fetchFilteredFabrics(newFilters)
+  }
+
+  const handleClearFilters = () => {
+    const clearedFilters: FabricFilter = {
+      min_order_quantity: { min: 2, max: 999999 }
+    }
+    setFilters(clearedFilters)
+    fetchFilteredFabrics(clearedFilters)
   }
 
   const handleSearch = (term: string) => {
@@ -160,7 +166,8 @@ export default function FabricsMOQPage() {
           <FabricFilters
             filters={filters}
             collections={collections}
-            onFilterChange={handleFilterChange}
+            onFiltersChange={handleFilterChange}
+            onClearFilters={handleClearFilters}
           />
         </div>
 
