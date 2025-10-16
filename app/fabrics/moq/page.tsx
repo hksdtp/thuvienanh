@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { MagnifyingGlassIcon, PhotoIcon, PlusIcon, ShoppingCartIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline'
-import { motion, AnimatePresence } from 'framer-motion'
+import { MagnifyingGlassIcon, PhotoIcon, PlusIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import { Fabric, Collection, ApiResponse, FabricFilter } from '@/types/database'
 
 import FabricCard from '@/components/FabricCard'
@@ -11,7 +10,6 @@ import FabricUploadModal from '@/components/FabricUploadModal'
 import { GalleryImage } from '@/components/ImageGallery'
 import PageHeader from '@/components/PageHeader'
 import { fabricsApi, collectionsApi } from '@/lib/api-client'
-import { t } from '@/lib/translations'
 
 export default function FabricsMOQPage() {
   const [fabrics, setFabrics] = useState<Fabric[]>([])
@@ -19,22 +17,9 @@ export default function FabricsMOQPage() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filters, setFilters] = useState<FabricFilter>({
-    min_order_quantity: { min: 2, max: 999999 }, // MOQ >= 2
-    category: 'moq' // Add category filter
+    min_order_quantity: { min: 2, max: 999999 } // MOQ >= 2
   })
   const [uploadModalOpen, setUploadModalOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-
-  // Mobile detection
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
 
   // Fetch fabrics và collections
   useEffect(() => {
@@ -111,20 +96,17 @@ export default function FabricsMOQPage() {
   const handleFilterChange = (newFilters: FabricFilter) => {
     setFilters({
       ...newFilters,
-      min_order_quantity: { min: 2, max: 999999 },
-      category: 'moq'
+      min_order_quantity: { min: 2, max: 999999 }
     })
     fetchFilteredFabrics(newFilters)
   }
 
-  const clearFilters = () => {
-    const defaultFilters: FabricFilter = {
-      min_order_quantity: { min: 2, max: 999999 },
-      category: 'moq'
+  const handleClearFilters = () => {
+    const clearedFilters: FabricFilter = {
+      min_order_quantity: { min: 2, max: 999999 }
     }
-    setFilters(defaultFilters)
-    setSearchTerm('')
-    fetchFilteredFabrics(defaultFilters)
+    setFilters(clearedFilters)
+    fetchFilteredFabrics(clearedFilters)
   }
 
   const handleSearch = (term: string) => {
@@ -150,167 +132,80 @@ export default function FabricsMOQPage() {
   return (
     <div className="min-h-screen bg-macos-bg-secondary">
       <PageHeader
-        title={t('fabric.moqTitle') || 'Vải Order theo MOQ'}
-        subtitle={`${filteredFabrics.length} ${t('fabric.items') || 'mẫu vải'}`}
+        title="Vải Order theo MOQ"
+        subtitle={`${filteredFabrics.length} loại vải có MOQ`}
         icon={<ShoppingCartIcon className="w-8 h-8 text-ios-blue" strokeWidth={1.8} />}
         actions={
-          <div className="flex items-center gap-3">
-            {/* Mobile Filter Button */}
-            {isMobile && (
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setMobileFiltersOpen(true)}
-                className="inline-flex items-center space-x-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-all"
-              >
-                <AdjustmentsHorizontalIcon className="w-5 h-5" strokeWidth={2} />
-                <span>{t('filters.filters') || 'Bộ lọc'}</span>
-              </motion.button>
-            )}
-
-            {/* Add Button */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setUploadModalOpen(true)}
-              className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md"
-            >
-              <PlusIcon className="w-5 h-5" strokeWidth={2} />
-              <span>{t('common.add') || 'Thêm mới'}</span>
-            </motion.button>
-          </div>
+          <button
+            onClick={() => setUploadModalOpen(true)}
+            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md"
+          >
+            <PlusIcon className="w-5 h-5" strokeWidth={2} />
+            <span>Thêm vải mới</span>
+          </button>
         }
       />
 
-      {/* Mobile Search Bar - Above everything on mobile */}
-      {isMobile && (
-        <div className="px-4 py-4 bg-white border-b border-gray-200">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.1 }}
-          >
-            <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-macos-text-tertiary" />
-              <input
-                type="text"
-                placeholder={t('placeholders.searchFabrics') || 'Tìm kiếm vải...'}
-                value={searchTerm}
-                onChange={(e) => handleSearch(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-macos-text-primary placeholder-macos-text-tertiary focus:outline-none focus:ring-2 focus:ring-ios-blue focus:border-transparent transition-all"
-              />
-            </div>
-          </motion.div>
-        </div>
-      )}
-
-      {/* Main Layout: Sidebar + Content */}
-      <div className="flex">
-        {/* Desktop Filters Sidebar */}
-        {!isMobile && (
-          <motion.div
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="w-64 bg-white border-r border-gray-200 flex-shrink-0 sticky top-0 self-start"
-          >
-            <FabricFilters
-              filters={filters}
-              collections={collections}
-              onFiltersChange={handleFilterChange}
-              onClearFilters={clearFilters}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search Bar */}
+        <div className="mb-6">
+          <div className="relative">
+            <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-macos-text-tertiary" />
+            <input
+              type="text"
+              placeholder="Tìm kiếm vải theo tên, mã, mô tả..."
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-white border border-macos-border-light rounded-lg text-sm text-macos-text-primary placeholder-macos-text-tertiary focus:outline-none focus:ring-2 focus:ring-ios-blue focus:border-transparent transition-all"
             />
-          </motion.div>
-        )}
-
-        {/* Mobile Filters Bottom Sheet */}
-        <AnimatePresence>
-          {isMobile && mobileFiltersOpen && (
-            <FabricFilters
-              filters={filters}
-              collections={collections}
-              onFiltersChange={handleFilterChange}
-              onClearFilters={clearFilters}
-              isMobile={true}
-              isOpen={mobileFiltersOpen}
-              onClose={() => setMobileFiltersOpen(false)}
-            />
-          )}
-        </AnimatePresence>
-
-        {/* Main Content Area */}
-        <div className="flex-1">
-          <div className="px-4 lg:px-8 py-6 lg:py-8">
-            {/* Desktop Search Bar */}
-            {!isMobile && (
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.1 }}
-                className="mb-6"
-              >
-                <div className="relative">
-                  <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-macos-text-tertiary" />
-                  <input
-                    type="text"
-                    placeholder={t('placeholders.searchFabrics') || 'Tìm kiếm vải theo tên, mã, mô tả...'}
-                    value={searchTerm}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 bg-white border border-macos-border-light rounded-lg text-sm text-macos-text-primary placeholder-macos-text-tertiary focus:outline-none focus:ring-2 focus:ring-ios-blue focus:border-transparent transition-all"
-                  />
-                </div>
-              </motion.div>
-            )}
-
-            {/* Fabrics Grid */}
-            {loading ? (
-              <div className="flex flex-col items-center justify-center py-16">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                  className="rounded-full h-10 w-10 border-2 border-cyan-500 border-t-transparent"
-                />
-                <span className="mt-3 text-gray-600 font-medium">{t('common.loading') || 'Đang tải...'}</span>
-              </div>
-            ) : filteredFabrics.length === 0 ? (
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="bg-white rounded-xl p-12 lg:p-16 text-center border border-macos-border-light"
-              >
-                <PhotoIcon className="w-16 h-16 text-ios-gray-400 mx-auto mb-4" strokeWidth={1.5} />
-                <h3 className="text-lg font-medium text-macos-text-primary mb-2">
-                  {t('messages.noFabrics') || 'Chưa có vải nào'}
-                </h3>
-                <p className="text-sm text-macos-text-secondary mb-6">
-                  {searchTerm
-                    ? (t('messages.noSearchResults') || 'Không tìm thấy vải phù hợp với từ khóa tìm kiếm')
-                    : 'Thêm vải đầu tiên vào danh mục MOQ'
-                  }
-                </p>
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setUploadModalOpen(true)}
-                  className="inline-flex items-center space-x-2 px-6 py-3 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all"
-                >
-                  <PlusIcon className="w-5 h-5" strokeWidth={2} />
-                  <span>{t('common.add') || 'Thêm mới'}</span>
-                </motion.button>
-              </motion.div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
-                {filteredFabrics.map((fabric, index) => (
-                  <motion.div
-                    key={fabric.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05, duration: 0.3 }}
-                  >
-                    <FabricCard fabric={fabric} />
-                  </motion.div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
+
+        {/* Filters */}
+        <div className="mb-6">
+          <FabricFilters
+            filters={filters}
+            collections={collections}
+            onFiltersChange={handleFilterChange}
+            onClearFilters={handleClearFilters}
+          />
+        </div>
+
+        {/* Fabrics Grid */}
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-ios-blue border-t-transparent"></div>
+          </div>
+        ) : filteredFabrics.length === 0 ? (
+          <div className="bg-white rounded-xl p-12 text-center border border-macos-border-light">
+            <PhotoIcon className="w-16 h-16 text-ios-gray-400 mx-auto mb-4" strokeWidth={1.5} />
+            <h3 className="text-lg font-medium text-macos-text-primary mb-2">
+              Chưa có vải nào
+            </h3>
+            <p className="text-sm text-macos-text-secondary mb-6">
+              {searchTerm ? 'Không tìm thấy vải phù hợp với từ khóa tìm kiếm' : 'Thêm vải đầu tiên vào danh mục MOQ'}
+            </p>
+            <button
+              onClick={() => setUploadModalOpen(true)}
+              className="inline-flex items-center space-x-2 px-6 py-3 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all"
+            >
+              <PlusIcon className="w-5 h-5" strokeWidth={2} />
+              <span>Thêm vải mới</span>
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredFabrics.map((fabric, index) => (
+              <div
+                key={fabric.id}
+                className="animate-slideUp"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <FabricCard fabric={fabric} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Upload Modal */}

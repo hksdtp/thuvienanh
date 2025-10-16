@@ -114,8 +114,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Determine subcategory path
-    const subPath = subcategory && (folderConfig.subcategories as Record<string, string>)[subcategory]
-      ? (folderConfig.subcategories as Record<string, string>)[subcategory]
+    const subPath = subcategory && (folderConfig.subcategories as any)[subcategory]
+      ? (folderConfig.subcategories as any)[subcategory]
       : folderConfig.subcategories.default
 
     // Generate folder path
