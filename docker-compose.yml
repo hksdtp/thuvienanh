@@ -49,13 +49,13 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
-      # Database - Remote Server
-      - DATABASE_URL=postgresql://postgres:Demo1234@222.252.23.248:5499/Ninh96
-      - POSTGRES_HOST=222.252.23.248
-      - POSTGRES_PORT=5499
+      # Database - Windows 10 PostgreSQL via Tailscale
+      - DATABASE_URL=postgresql://postgres:haininh1@100.101.50.87:5432/tva
+      - POSTGRES_HOST=100.101.50.87
+      - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=Demo1234
-      - POSTGRES_DB=Ninh96
+      - POSTGRES_PASSWORD=haininh1
+      - POSTGRES_DB=tva
       # Synology
       - SYNOLOGY_BASE_URL=http://222.252.23.248:8888
       - SYNOLOGY_ALTERNATIVE_URL=http://222.252.23.248:6868
@@ -69,7 +69,7 @@ services:
       - SMB_PASSWORD=Villad24@
       - SMB_PORT=445
     restart: unless-stopped
-    # Note: No dependency on local postgres since using remote database
+    # Note: No dependency on local postgres since using remote database via Tailscale
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4000/api/health"]
       interval: 30s

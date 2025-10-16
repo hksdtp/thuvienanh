@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SparklesIcon, TagIcon, ArchiveBoxIcon, PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { motion } from 'framer-motion'
 import PageHeader from '@/components/PageHeader'
 import Image from 'next/image'
+import { t } from '@/lib/translations'
 
 const VALID_CATEGORIES = {
   'phu-kien-trang-tri': {
@@ -52,8 +54,16 @@ export default function AccessoriesCategoryPage({ params }: PageProps) {
   const [accessories, setAccessories] = useState<Accessory[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [isMobile, setIsMobile] = useState(false)
 
   const categoryInfo = VALID_CATEGORIES[params.category as CategorySlug]
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     if (categoryInfo) {
@@ -104,55 +114,41 @@ export default function AccessoriesCategoryPage({ params }: PageProps) {
     <div className="min-h-screen bg-macos-bg-secondary">
       <PageHeader
         title={categoryInfo.title}
-        subtitle={`${accessories.length} sản phẩm`}
+        subtitle={`${accessories.length} ${t('accessories.items') || 'sản phẩm'}`}
         icon={<Icon className="w-8 h-8 text-ios-blue" strokeWidth={1.8} />}
         actions={
-          <button className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md">
+          <motion.button whileTap={{ scale: 0.95 }} className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md">
             <PlusIcon className="w-5 h-5" strokeWidth={2} />
-            <span>Thêm mới</span>
-          </button>
+            <span>{t('common.add') || 'Thêm mới'}</span>
+          </motion.button>
         }
       />
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="mb-6">
+      <div className="px-4 lg:px-8 py-6 lg:py-8">
+        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="mb-6">
           <div className="relative max-w-xl">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
               <MagnifyingGlassIcon className="h-5 w-5 text-ios-gray-500" strokeWidth={2} />
             </div>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Tìm kiếm phụ kiện..."
-              className="block w-full pl-10 pr-4 py-2.5 border border-ios-gray-300 rounded-lg text-sm bg-white placeholder-ios-gray-500 focus:outline-none focus:bg-white focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
-            />
+            <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder={t('placeholders.searchAccessories') || 'Tìm kiếm phụ kiện...'} className="block w-full pl-10 pr-4 py-2.5 border border-ios-gray-300 rounded-lg text-sm bg-white placeholder-ios-gray-500 focus:outline-none focus:bg-white focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all" />
           </div>
-        </div>
+        </motion.div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <div className="animate-spin rounded-full h-10 w-10 border-2 border-ios-blue border-t-transparent"></div>
-            <span className="ml-3 text-macos-text-secondary font-medium">Đang tải...</span>
+          <div className="flex flex-col items-center justify-center py-16">
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="rounded-full h-10 w-10 border-2 border-cyan-500 border-t-transparent" />
+            <span className="mt-3 text-gray-600 font-medium">{t('common.loading') || 'Đang tải...'}</span>
           </div>
         ) : filteredAccessories.length === 0 ? (
-          <div className="bg-white rounded-xl border border-macos-border-light p-16 text-center">
+          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-xl border border-macos-border-light p-12 lg:p-16 text-center">
             <Icon className="w-16 h-16 text-ios-gray-400 mx-auto mb-4" strokeWidth={1.5} />
-            <h3 className="text-lg font-semibold text-macos-text-primary mb-2">
-              Chưa có dữ liệu
-            </h3>
-            <p className="text-sm text-macos-text-secondary">
-              Bắt đầu bằng cách thêm {categoryInfo.title.toLowerCase()} mới
-            </p>
-          </div>
+            <h3 className="text-lg font-semibold text-macos-text-primary mb-2">{t('messages.noData') || 'Chưa có dữ liệu'}</h3>
+            <p className="text-sm text-macos-text-secondary">{searchTerm ? (t('messages.noSearchResults') || 'Không tìm thấy kết quả') : `Bắt đầu bằng cách thêm ${categoryInfo.title.toLowerCase()} mới`}</p>
+          </motion.div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 animate-fadeIn">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-6">
             {filteredAccessories.map((accessory, index) => (
-              <div
-                key={accessory.id}
-                className="animate-slideUp cursor-pointer"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
+              <motion.div key={accessory.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05, duration: 0.3 }} className="cursor-pointer">
                 <div className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 border border-macos-border-light group">
                   <div className="aspect-[3/4] relative overflow-hidden bg-ios-gray-50">
                     {accessory.image_url ? (
@@ -185,7 +181,7 @@ export default function AccessoriesCategoryPage({ params }: PageProps) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}

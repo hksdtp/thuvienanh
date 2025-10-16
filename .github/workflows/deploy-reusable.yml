@@ -1,0 +1,119 @@
+# Reusable Workflow - Có thể dùng cho nhiều dự án
+name: Reusable Deploy Workflow
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        description: 'Node.js version'
+        required: false
+        type: string
+        default: '20'
+      build_command:
+        description: 'Build command'
+        required: false
+        type: string
+        default: 'npm run build'
+      deploy_path:
+        description: 'Deployment path on Windows Server'
+        required: true
+        type: string
+      health_check_url:
+        description: 'Health check URL'
+        required: true
+        type: string
+      docker_compose_file:
+        description: 'Docker compose file name'
+        required: false
+        type: string
+        default: 'docker-compose.production.windows.yml'
+    secrets:
+      WINDOWS_HOST:
+        required: true
+      WINDOWS_USER:
+        required: true
+      WINDOWS_PASSWORD:
+        required: true
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      - name: 🏗️ Build application
+        run: ${{ inputs.build_command }}
+        env:
+          NODE_ENV: production
+          
+      - name: 📦 Create deployment package
+        run: |
+          tar czf deploy-package.tar.gz \
+            .next \
+            app \
+            components \
+            lib \
+            public \
+            types \
+            package.json \
+            package-lock.json \
+            next.config.ts \
+            tsconfig.json \
+            tailwind.config.ts \
+            postcss.config.mjs \
+            Dockerfile \
+            ${{ inputs.docker_compose_file }} \
+            deploy-windows.bat
+            
+      - name: 🚀 Upload to Windows Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.WINDOWS_HOST }}
+          username: ${{ secrets.WINDOWS_USER }}
+          password: ${{ secrets.WINDOWS_PASSWORD }}
+          source: "deploy-package.tar.gz"
+          target: "${{ inputs.deploy_path }}/"
+          
+      - name: 🎯 Deploy on Windows Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.WINDOWS_HOST }}
+          username: ${{ secrets.WINDOWS_USER }}
+          password: ${{ secrets.WINDOWS_PASSWORD }}
+          script: |
+            cd ${{ inputs.deploy_path }}
+            echo "Extracting deployment package..."
+            tar xzf deploy-package.tar.gz
+            echo "Running deploy script..."
+            deploy-windows.bat
+            echo "Cleaning up..."
+            del deploy-package.tar.gz
+            
+      - name: 🧪 Test deployment
+        run: |
+          echo "Waiting for server to start..."
+          sleep 10
+          echo "Testing health endpoint..."
+          curl -f ${{ inputs.health_check_url }} || exit 1
+          
+      - name: ✅ Deployment successful
+        if: success()
+        run: |
+          echo "========================================="
+          echo "✅ DEPLOYMENT SUCCESSFUL!"
+          echo "========================================="
+          echo "🌐 Website: ${{ inputs.health_check_url }}"
+          echo "========================================="
+

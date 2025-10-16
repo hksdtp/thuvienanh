@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { CalendarDaysIcon, PlusIcon, MagnifyingGlassIcon, FolderIcon, PhotoIcon } from '@heroicons/react/24/outline'
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { motion } from 'framer-motion'
 import PageHeader from '@/components/PageHeader'
 import CreateAlbumModal from '@/components/CreateAlbumModal'
 import EditAlbumModal from '@/components/EditAlbumModal'
 import { CreateAlbumForm, Album, ApiResponse } from '@/types/database'
 import Image from 'next/image'
+import { t } from '@/lib/translations'
 
 interface EventFolder {
   name: string
@@ -19,24 +21,20 @@ interface EventFolder {
 
 export default function EventAlbumsPage() {
   const router = useRouter()
-  
+
   // Archive folders (read-only from Synology)
   const [archiveFolders, setArchiveFolders] = useState<EventFolder[]>([])
   const [archiveLoading, setArchiveLoading] = useState(true)
-  
+
   // New albums (from database)
   const [albums, setAlbums] = useState<Album[]>([])
   const [albumsLoading, setAlbumsLoading] = useState(true)
-  
+
   const [searchTerm, setSearchTerm] = useState('')
   const [createModalOpen, setCreateModalOpen] = useState(false)
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(null)
-
-  useEffect(() => {
-    fetchArchiveFolders()
-    fetchAlbums()
-  }, [])
+  const [isMobile, setIsMobile] = useState(false)
 
   const fetchArchiveFolders = async () => {
     setArchiveLoading(true)
@@ -101,7 +99,7 @@ export default function EventAlbumsPage() {
 
   const handleDeleteAlbum = async (albumId: string, e: React.MouseEvent) => {
     e.stopPropagation()
-    
+
     if (!confirm('Bạn có chắc chắn muốn xóa album này? Tất cả ảnh trong album sẽ bị xóa khỏi Synology.')) {
       return
     }
@@ -124,6 +122,18 @@ export default function EventAlbumsPage() {
     }
   }
 
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  useEffect(() => {
+    fetchArchiveFolders()
+    fetchAlbums()
+  }, [])
+
   const filteredArchiveFolders = archiveFolders.filter(folder =>
     folder.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -135,8 +145,8 @@ export default function EventAlbumsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <PageHeader
-        title="Albums Sự Kiện"
-        subtitle="Thư viện ảnh sự kiện công ty"
+        title="Đối tác, khách hàng"
+        subtitle="Thư viện ảnh sự kiện đối tác và khách hàng"
         icon={<CalendarDaysIcon className="w-8 h-8 text-blue-600" />}
       />
 
@@ -153,13 +163,12 @@ export default function EventAlbumsPage() {
               className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          <button
-            onClick={() => setCreateModalOpen(true)}
+          <motion.button whileTap={{ scale: 0.95 }} onClick={() => setCreateModalOpen(true)}
             className="inline-flex items-center px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <PlusIcon className="w-5 h-5 mr-2" />
             Tạo Album Mới
-          </button>
+          </motion.button>
         </div>
 
         {/* SECTION 1: Archive Folders (Read-only) */}
@@ -173,7 +182,7 @@ export default function EventAlbumsPage() {
           </div>
 
           {archiveLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="bg-white rounded-lg shadow-sm p-4 animate-pulse">
                   <div className="aspect-video bg-gray-200 rounded-lg mb-3"></div>
@@ -188,7 +197,7 @@ export default function EventAlbumsPage() {
               <p className="text-gray-500">Không tìm thấy folder nào</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {filteredArchiveFolders.map((folder, index) => (
                 <div
                   key={folder.path}
@@ -245,7 +254,7 @@ export default function EventAlbumsPage() {
           </div>
 
           {albumsLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="bg-white rounded-lg shadow-sm p-4 animate-pulse">
                   <div className="aspect-video bg-gray-200 rounded-lg mb-3"></div>
@@ -258,16 +267,15 @@ export default function EventAlbumsPage() {
             <div className="text-center py-12 bg-white rounded-lg border-2 border-dashed border-gray-300">
               <PhotoIcon className="w-12 h-12 text-gray-400 mx-auto mb-3" />
               <p className="text-gray-500 mb-4">Chưa có album nào</p>
-              <button
-                onClick={() => setCreateModalOpen(true)}
+              <motion.button whileTap={{ scale: 0.95 }} onClick={() => setCreateModalOpen(true)}
                 className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <PlusIcon className="w-5 h-5 mr-2" />
                 Tạo Album Đầu Tiên
-              </button>
+              </motion.button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {filteredAlbums.map((album, index) => (
                 <div
                   key={album.id}
@@ -276,20 +284,18 @@ export default function EventAlbumsPage() {
                 >
                   {/* Action buttons */}
                   <div className="absolute top-2 right-2 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={(e) => handleEditAlbum(album, e)}
+                    <motion.button whileTap={{ scale: 0.95 }} onClick={(e) => handleEditAlbum(album, e)}
                       className="p-2 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors"
                       title="Chỉnh sửa"
                     >
                       <PencilIcon className="w-4 h-4 text-gray-700" />
-                    </button>
-                    <button
-                      onClick={(e) => handleDeleteAlbum(album.id, e)}
+                    </motion.button>
+                    <motion.button whileTap={{ scale: 0.95 }} onClick={(e) => handleDeleteAlbum(album.id, e)}
                       className="p-2 bg-white rounded-lg shadow-md hover:bg-red-50 transition-colors"
                       title="Xóa"
                     >
                       <TrashIcon className="w-4 h-4 text-red-600" />
-                    </button>
+                    </motion.button>
                   </div>
 
                   {/* Cover Image */}

@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+  # Next.js Production Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+    image: thuvienanh:production
+    container_name: thuvienanh-app
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      # Node settings
+      NODE_ENV: production
+      NODE_OPTIONS: --max-old-space-size=2048
+      NEXT_TELEMETRY_DISABLED: 1
+      
+      # Database - Using existing PostgreSQL on Windows host via Tailscale
+      DATABASE_URL: postgresql://postgres:haininh1@100.112.44.73:5432/tva
+      POSTGRES_HOST: 100.112.44.73
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: haininh1
+      POSTGRES_DB: tva
+      
+      # Synology NAS Configuration
+      SYNOLOGY_BASE_URL: http://222.252.23.248:8888
+      SYNOLOGY_ALTERNATIVE_URL: http://222.252.23.248:6868
+      SYNOLOGY_PHOTOS_URL: http://222.252.23.248:6868
+      SYNOLOGY_USERNAME: haininh
+      SYNOLOGY_PASSWORD: Villad24@
+      SYNOLOGY_SHARED_FOLDER: /Marketing/Ninh/thuvienanh
+      ENABLE_SYNOLOGY_FOLDER_CREATION: true
+      SYNOLOGY_HOST: 222.252.23.248
+      SYNOLOGY_PORT: 8888
+      
+      # SMB Configuration
+      SMB_HOST: 222.252.23.248
+      SMB_SHARE: marketing
+      SMB_DOMAIN: WORKGROUP
+      SMB_USERNAME: haininh
+      SMB_PASSWORD: Villad24@
+      SMB_PORT: 445
+      
+      # Application Configuration
+      UPLOAD_DIR: ./public/uploads
+      MAX_FILE_SIZE: 10485760
+      ALLOWED_ORIGIN: https://thuvienanh.incanto.my
+      NEXT_PUBLIC_API_URL: https://thuvienanh.incanto.my
+      
+      # Performance
+      ENABLE_GZIP: true
+      ENABLE_BROTLI: true
+      
+      # Logging
+      LOG_LEVEL: info
+      ENABLE_ACCESS_LOG: true
+      ENABLE_ERROR_LOG: true
+      
+    volumes:
+      # Persist uploads
+      - uploads_data:/app/public/uploads
+      # Logs
+      - ./logs:/app/logs
+      
+    networks:
+      - thuvienanh-network
+      
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+      
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+        
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # Portainer for Docker management UI (Optional)
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: thuvienanh-portainer
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    volumes:
+      - //var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - thuvienanh-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+volumes:
+  uploads_data:
+    driver: local
+  portainer_data:
+    driver: local
+
+networks:
+  thuvienanh-network:
+    driver: bridge
+    name: thuvienanh-network
+

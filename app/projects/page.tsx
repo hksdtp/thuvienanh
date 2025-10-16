@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { BuildingOffice2Icon, PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { motion } from 'framer-motion'
 import { Project, ApiResponse } from '@/types/database'
 import PageHeader from '@/components/PageHeader'
 import ProjectCard from '@/components/ProjectCard'
+import { t } from '@/lib/translations'
 
 export default function ProjectsPage() {
   const router = useRouter()
@@ -14,6 +16,14 @@ export default function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState<string>('all')
   const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     fetchProjects()
@@ -48,16 +58,16 @@ export default function ProjectsPage() {
         subtitle={`${projects.length} công trình`}
         icon={<BuildingOffice2Icon className="w-8 h-8 text-ios-blue" strokeWidth={1.8} />}
         actions={
-          <button className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md">
+          <motion.button whileTap={{ scale: 0.95 }} className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md">
             <PlusIcon className="w-5 h-5" strokeWidth={2} />
             <span>Thêm công trình</span>
-          </button>
+          </motion.button>
         }
       />
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="mb-6 space-y-4">
-          <div className="relative max-w-xl">
+      <div className="px-4 lg:px-8 py-6 lg:py-8">
+        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="mb-6">
+          <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
               <MagnifyingGlassIcon className="h-5 w-5 text-ios-gray-500" strokeWidth={2} />
             </div>
@@ -98,26 +108,25 @@ export default function ProjectsPage() {
             </select>
 
             {(filterType !== 'all' || filterStatus !== 'all') && (
-              <button
-                onClick={() => {
+              <motion.button whileTap={{ scale: 0.95 }} onClick={() => {
                   setFilterType('all')
                   setFilterStatus('all')
                 }}
                 className="px-4 py-2.5 text-sm text-ios-blue hover:text-ios-blue-dark font-medium transition-colors"
               >
                 Xóa bộ lọc
-              </button>
+              </motion.button>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <div className="animate-spin rounded-full h-10 w-10 border-2 border-ios-blue border-t-transparent"></div>
-            <span className="ml-3 text-macos-text-secondary font-medium">Đang tải...</span>
-          </div>
+          <div className="flex flex-col items-center justify-center py-16">
+          <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="rounded-full h-10 w-10 border-2 border-cyan-500 border-t-transparent" />
+          <span className="mt-3 text-gray-600 font-medium">{t('common.loading') || 'Đang tải...'}</span>
+        </div>
         ) : filteredProjects.length === 0 ? (
-          <div className="bg-white rounded-xl border border-macos-border-light p-16 text-center">
+          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white rounded-xl border border-macos-border-light p-16 text-center">
             <BuildingOffice2Icon className="w-16 h-16 text-ios-gray-400 mx-auto mb-4" strokeWidth={1.5} />
             <h3 className="text-lg font-semibold text-macos-text-primary mb-2">
               Chưa có công trình nào
@@ -125,17 +134,12 @@ export default function ProjectsPage() {
             <p className="text-sm text-macos-text-secondary">
               Bắt đầu bằng cách thêm công trình mới
             </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 animate-fadeIn">
+          </motion.div>) : (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 animate-fadeIn">
             {filteredProjects.map((project, index) => (
-              <div
-                key={project.id}
-                className="animate-slideUp"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
+              <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05, duration: 0.3 }}>
                 <ProjectCard project={project} />
-              </div>
+              </motion.div>
             ))}
           </div>
         )}

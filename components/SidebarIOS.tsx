@@ -65,8 +65,7 @@ const menuStructure = [
     items: [
       { name: 'Phụ kiện trang trí', href: '/accessories/phu-kien-trang-tri', icon: SparklesIcon },
       { name: 'Thanh phụ kiện', href: '/accessories/thanh-phu-kien', icon: TagIcon },
-      { name: 'Thanh lý', href: '/accessories/thanh-ly', icon: ArchiveBoxIcon },
-      { name: 'Albums Phụ kiện', href: '/albums/accessory', icon: RectangleStackIcon }
+      { name: 'Thanh lý', href: '/accessories/thanh-ly', icon: ArchiveBoxIcon }
     ]
   },
 
@@ -76,7 +75,7 @@ const menuStructure = [
     groupName: 'Thư Viện Công Trình',
     icon: BuildingOffice2Icon,
     items: [
-      { name: 'Khách hàng lẻ', href: '/projects/khach-hang-le', icon: UserGroupIcon },
+      { name: 'Nhà dân', href: '/projects/khach-hang-le', icon: UserGroupIcon },
       { name: 'Dự án', href: '/projects/du-an', icon: BuildingOfficeIcon },
       { name: 'Công trình tiêu biểu', href: '/projects/cong-trinh-tieu-bieu', icon: StarIcon },
       { name: 'Phong cách', href: '/styles', icon: PaintBrushIcon }
@@ -90,8 +89,7 @@ const menuStructure = [
     icon: CalendarDaysIcon,
     items: [
       { name: 'Sự Kiện Nội Bộ', href: '/events', icon: SparklesIcon },
-      { name: 'Albums Sự Kiện', href: '/albums/event', icon: RectangleStackIcon },
-      { name: 'File Station', href: '/synology-filestation', icon: FolderIcon }
+      { name: 'Đối tác, khách hàng', href: '/albums/event', icon: RectangleStackIcon }
     ]
   }
 ]

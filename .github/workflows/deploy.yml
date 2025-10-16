@@ -1,0 +1,112 @@
+name: Deploy to Windows Server
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Cho phép chạy manual từ GitHub UI
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout code
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      # Step 2: Setup Node.js
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      # Step 3: Install dependencies
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      # Step 4: Build Next.js app
+      - name: 🏗️ Build Next.js app
+        run: npm run build
+        env:
+          NODE_ENV: production
+          
+      # Step 5: Create deployment package
+      - name: 📦 Create deployment package
+        run: |
+          tar czf deploy-package.tar.gz \
+            .next \
+            app \
+            components \
+            lib \
+            public \
+            types \
+            package.json \
+            package-lock.json \
+            next.config.ts \
+            tsconfig.json \
+            tailwind.config.ts \
+            postcss.config.mjs \
+            Dockerfile \
+            docker-compose.production.windows.yml \
+            deploy-windows.bat
+            
+      # Step 6: Upload to Windows Server
+      - name: 🚀 Upload to Windows Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.WINDOWS_HOST }}
+          username: ${{ secrets.WINDOWS_USER }}
+          password: ${{ secrets.WINDOWS_PASSWORD }}
+          source: "deploy-package.tar.gz"
+          target: "C:/Users/Administrator/thuvienanh/"
+          
+      # Step 7: Deploy on Windows Server
+      - name: 🎯 Deploy on Windows Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.WINDOWS_HOST }}
+          username: ${{ secrets.WINDOWS_USER }}
+          password: ${{ secrets.WINDOWS_PASSWORD }}
+          script: |
+            cd C:\Users\Administrator\thuvienanh
+            echo "Extracting deployment package..."
+            tar xzf deploy-package.tar.gz
+            echo "Running deploy script..."
+            deploy-windows.bat
+            echo "Cleaning up..."
+            del deploy-package.tar.gz
+            
+      # Step 8: Test deployment
+      - name: 🧪 Test deployment
+        run: |
+          echo "Waiting for server to start..."
+          sleep 10
+          echo "Testing health endpoint..."
+          curl -f https://thuvienanh.ninh.app/api/health || exit 1
+          echo "Testing database connection..."
+          curl -f https://thuvienanh.ninh.app/api/health/db || exit 1
+          
+      # Step 9: Notify success
+      - name: ✅ Deployment successful
+        if: success()
+        run: |
+          echo "========================================="
+          echo "✅ DEPLOYMENT SUCCESSFUL!"
+          echo "========================================="
+          echo "🌐 Website: https://thuvienanh.ninh.app"
+          echo "📊 Health: https://thuvienanh.ninh.app/api/health/db"
+          echo "========================================="
+          
+      # Step 10: Notify failure
+      - name: ❌ Deployment failed
+        if: failure()
+        run: |
+          echo "========================================="
+          echo "❌ DEPLOYMENT FAILED!"
+          echo "========================================="
+          echo "Please check the logs above for details."
+          echo "========================================="
+

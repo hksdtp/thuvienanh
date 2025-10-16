@@ -27,8 +27,8 @@ const pageVariants = {
 }
 
 const pageTransition = {
-  type: 'tween',
-  ease: [0.32, 0.72, 0, 1], // iOS easing curve
+  type: 'tween' as const,
+  ease: [0.32, 0.72, 0, 1] as const, // iOS easing curve
   duration: 0.35,
 }
 

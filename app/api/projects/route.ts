@@ -7,14 +7,16 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
     const search = searchParams.get('search')
+    const type = searchParams.get('type')
     const project_type = searchParams.get('project_type')
     const status = searchParams.get('status')
     const location = searchParams.get('location')
+    const featured = searchParams.get('featured')
     const limit = parseInt(searchParams.get('limit') || '100')
     const offset = parseInt(searchParams.get('offset') || '0')
 
     let sql = `
-      SELECT 
+      SELECT
         id,
         name,
         description,
@@ -30,7 +32,8 @@ export async function GET(request: NextRequest) {
         created_by,
         is_active,
         tags,
-        status
+        status,
+        is_featured
       FROM projects
       WHERE is_active = true
     `
@@ -45,11 +48,23 @@ export async function GET(request: NextRequest) {
       paramIndex++
     }
 
+    // Type filter (shorthand for project_type)
+    if (type) {
+      sql += ` AND project_type = $${paramIndex}`
+      params.push(type)
+      paramIndex++
+    }
+
     // Project type filter
     if (project_type) {
       sql += ` AND project_type = $${paramIndex}`
       params.push(project_type)
       paramIndex++
+    }
+
+    // Featured filter
+    if (featured === 'true') {
+      sql += ` AND is_featured = true`
     }
 
     // Status filter
@@ -98,15 +113,18 @@ export async function POST(request: NextRequest) {
   try {
     const body: CreateProjectForm = await request.json()
 
-    const { 
-      name, 
-      description, 
-      project_type, 
-      location, 
-      client_name, 
+    const {
+      name,
+      description,
+      project_type,
+      location,
+      client_name,
       completion_date,
       tags,
-      status 
+      status,
+      is_featured,
+      cover_image_url,
+      images
     } = body
 
     // Validation
@@ -130,8 +148,10 @@ export async function POST(request: NextRequest) {
         completion_date,
         tags,
         status,
+        is_featured,
+        cover_image_url,
         created_by
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING *
     `
 
@@ -144,11 +164,31 @@ export async function POST(request: NextRequest) {
       completion_date || null,
       tags || [],
       status || 'planning',
+      is_featured || false,
+      cover_image_url || null,
       'system' // TODO: Replace with actual user ID from auth
     ]
 
     const result = await query(sql, params)
     const project = result.rows[0]
+
+    // Add images if provided
+    if (images && images.length > 0) {
+      for (let i = 0; i < images.length; i++) {
+        const img = images[i]
+        await query(
+          `INSERT INTO project_images (project_id, image_url, image_id, caption, display_order)
+           VALUES ($1, $2, $3, $4, $5)`,
+          [project.id, img.image_url, img.image_id, img.caption || null, i]
+        )
+      }
+
+      // Update image count
+      await query(
+        `UPDATE projects SET image_count = $1 WHERE id = $2`,
+        [images.length, project.id]
+      )
+    }
 
     const response: ApiResponse<Project> = {
       success: true,

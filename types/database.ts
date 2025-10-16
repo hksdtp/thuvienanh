@@ -251,6 +251,13 @@ export interface CreateProjectForm {
   completion_date?: Date
   tags?: string[]
   status?: Project['status']
+  is_featured?: boolean
+  cover_image_url?: string
+  images?: Array<{
+    image_url: string
+    image_id: string
+    caption?: string
+  }>
 }
 
 export interface UpdateProjectForm extends CreateProjectForm {
@@ -350,6 +357,7 @@ export interface FabricFilter {
   search?: string
   tags?: string[]
   created_after?: string
+  category?: string
 }
 
 export interface CollectionFilter {

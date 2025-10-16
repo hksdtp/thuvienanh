@@ -2,6 +2,37 @@
 
 Website quản lý thư viện ảnh vải chuyên nghiệp cho Marketing và Sales team.
 
+---
+
+## 🚀 Deploy to Windows 10 via Tailscale
+
+**NEW!** Hướng dẫn deploy ứng dụng lên Windows 10 sử dụng Docker qua mạng Tailscale.
+
+### **Quick Start:**
+```bash
+# One-click deploy
+./deploy-now.sh
+```
+
+### **Hướng dẫn chi tiết:**
+- 📖 **[START_HERE.md](START_HERE.md)** - Bắt đầu từ đây (6 bước đơn giản)
+- 🚀 **[QUICK_START_WINDOWS_DOCKER.md](QUICK_START_WINDOWS_DOCKER.md)** - Quick start 3 bước
+- 📚 **[DEPLOY_TO_WINDOWS_TAILSCALE.md](DEPLOY_TO_WINDOWS_TAILSCALE.md)** - Hướng dẫn đầy đủ
+- 🔐 **[SETUP_SSH_WINDOWS.md](SETUP_SSH_WINDOWS.md)** - Setup SSH cho remote deploy
+
+### **Scripts hỗ trợ:**
+- `./deploy-now.sh` - One-click deploy
+- `./check-windows-connection.sh` - Kiểm tra kết nối
+- `./sync-to-windows.sh` - Sync code từ Mac sang Windows
+- `./remote-deploy.sh` - Deploy menu từ xa
+
+### **Cấu hình hiện tại:**
+- 🖥️ **Windows 10:** `100.101.50.87` (Tailscale)
+- 💻 **Mac Dev:** `/Users/nihdev/Web/thuvienanh`
+- 🗄️ **PostgreSQL:** Windows at `D:\Ninh\pg\tva`
+
+---
+
 ## Tính năng chính
 
 - 📊 Dashboard tổng quan với thống kê

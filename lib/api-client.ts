@@ -31,11 +31,13 @@ export const fabricsApi = {
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           if (key === 'min_order_quantity' && typeof value === 'object') {
-            if (value.min !== undefined) params.append('min_moq', value.min.toString())
-            if (value.max !== undefined) params.append('max_moq', value.max.toString())
+            const moq = value as { min?: number; max?: number }
+            if (moq.min !== undefined) params.append('min_moq', moq.min.toString())
+            if (moq.max !== undefined) params.append('max_moq', moq.max.toString())
           } else if (key === 'price_range' && typeof value === 'object') {
-            if (value.min !== undefined) params.append('min_price', value.min.toString())
-            if (value.max !== undefined) params.append('max_price', value.max.toString())
+            const price = value as { min?: number; max?: number }
+            if (price.min !== undefined) params.append('min_price', price.min.toString())
+            if (price.max !== undefined) params.append('max_price', price.max.toString())
           } else if (Array.isArray(value)) {
             params.append(key, value.join(','))
           } else {

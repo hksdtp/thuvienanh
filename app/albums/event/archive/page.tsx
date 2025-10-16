@@ -46,7 +46,12 @@ function ArchiveContent() {
       const result: ApiResponse<EventImage[]> = await response.json()
       
       if (result.success && result.data) {
-        setImages(result.data)
+        // Proxy image URLs through our API to avoid Mixed Content errors
+        const imagesWithProxyUrls = result.data.map(img => ({
+          ...img,
+          url: `/api/proxy-image?url=${encodeURIComponent(img.url)}`
+        }))
+        setImages(imagesWithProxyUrls)
       }
     } catch (error) {
       console.error('Error fetching images:', error)

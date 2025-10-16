@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { MagnifyingGlassIcon, PhotoIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { motion, AnimatePresence } from 'framer-motion'
+import { MagnifyingGlassIcon, PhotoIcon, PlusIcon, AdjustmentsHorizontalIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import { Fabric, Collection, ApiResponse, FabricFilter } from '@/types/database'
 
 import FabricCard from '@/components/FabricCard'
@@ -11,6 +12,7 @@ import FabricUploadModal from '@/components/FabricUploadModal'
 import { GalleryImage } from '@/components/ImageGallery'
 import PageHeader from '@/components/PageHeader'
 import { fabricsApi, collectionsApi } from '@/lib/api-client'
+import { t } from '@/lib/translations'
 
 export default function FabricsPage() {
   const searchParams = useSearchParams()
@@ -20,7 +22,20 @@ export default function FabricsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filters, setFilters] = useState<FabricFilter>({})
   const [uploadModalOpen, setUploadModalOpen] = useState(false)
-  const [pageTitle, setPageTitle] = useState('Thư Viện Vải')
+  const [pageTitle, setPageTitle] = useState(t('fabric.title'))
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024)
+    }
+
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   // Handle URL parameters for predefined filters
   useEffect(() => {
@@ -29,7 +44,7 @@ export default function FabricsPage() {
       switch (filterParam) {
         case 'moq':
           setPageTitle('Vải Order theo MOQ')
-          setFilters({ min_order_quantity: { min: 2 } }) // MOQ >= 2
+          setFilters({ min_order_quantity: { min: 2, max: 999999 } }) // MOQ >= 2
           break
         case 'new':
           setPageTitle('Vải Mới')
@@ -143,85 +158,155 @@ export default function FabricsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-macos-bg-secondary">
-      {/* Page Header */}
-      <PageHeader
-        title={pageTitle}
-        subtitle={`${fabrics.length} mẫu vải`}
-        icon={<PhotoIcon className="w-8 h-8 text-ios-blue" strokeWidth={1.8} />}
-        actions={
-          <button
-            onClick={() => setUploadModalOpen(true)}
-            className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md"
-          >
-            <PlusIcon className="w-5 h-5" strokeWidth={2} />
-            <span>Thêm mới</span>
-          </button>
-        }
-      />
+    <div className="min-h-screen bg-gray-50">
+      {/* Top Header Bar */}
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="bg-white border-b border-gray-200 sticky top-0 z-30"
+      >
+        <div className="px-4 lg:px-6 py-4 flex items-center justify-between">
+          {/* Mobile Menu + Logo */}
+          <div className="flex items-center space-x-3">
+            {isMobile && (
+              <button
+                onClick={() => setMobileFiltersOpen(true)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+              >
+                <AdjustmentsHorizontalIcon className="w-6 h-6 text-gray-600" />
+              </button>
+            )}
+            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+            </div>
+            <h1 className="text-lg lg:text-xl font-semibold text-gray-900 hidden sm:block">
+              {t('fabric.title')}
+            </h1>
+          </div>
+
+          {/* Search and Actions */}
+          <div className="flex items-center space-x-2 lg:space-x-4">
+            <form onSubmit={handleSearch} className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder={t('placeholders.searchFabrics')}
+                className="w-40 sm:w-60 lg:w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm bg-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500 focus:ring-opacity-20 transition-all"
+              />
+            </form>
+            <button
+              onClick={() => setUploadModalOpen(true)}
+              className="inline-flex items-center space-x-2 px-3 lg:px-4 py-2 bg-cyan-500 text-white text-sm font-medium rounded-lg hover:bg-cyan-600 transition-colors active:scale-95"
+            >
+              <PlusIcon className="w-5 h-5" strokeWidth={2} />
+              <span className="hidden sm:inline">{t('common.addNew')}</span>
+            </button>
+            {/* User Avatar Placeholder */}
+            <div className="hidden lg:flex w-9 h-9 bg-gray-200 rounded-full items-center justify-center">
+              <span className="text-sm font-medium text-gray-600">U</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
 
       <div className="flex">
-        {/* Filters Sidebar */}
-        <div className="w-64 bg-white border-r border-macos-border-light flex-shrink-0 h-[calc(100vh-140px)] sticky top-[140px]">
-          <FabricFilters
-            collections={collections}
-            filters={filters}
-            onFiltersChange={handleFilterChange}
-            onClearFilters={clearFilters}
-          />
-        </div>
+        {/* Desktop Filters Sidebar */}
+        {!isMobile && (
+          <motion.div
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="w-64 bg-white border-r border-gray-200 flex-shrink-0 h-[calc(100vh-73px)] sticky top-[73px]"
+          >
+            <FabricFilters
+              collections={collections}
+              filters={filters}
+              onFiltersChange={handleFilterChange}
+              onClearFilters={clearFilters}
+            />
+          </motion.div>
+        )}
+
+        {/* Mobile Filters Bottom Sheet */}
+        <AnimatePresence>
+          {isMobile && mobileFiltersOpen && (
+            <FabricFilters
+              collections={collections}
+              filters={filters}
+              onFiltersChange={handleFilterChange}
+              onClearFilters={clearFilters}
+              isMobile={true}
+              isOpen={mobileFiltersOpen}
+              onClose={() => setMobileFiltersOpen(false)}
+            />
+          )}
+        </AnimatePresence>
 
         {/* Main Content */}
         <div className="flex-1">
-          <div className="max-w-7xl mx-auto px-6 py-8">
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="mb-6">
-              <div className="relative max-w-xl">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <MagnifyingGlassIcon className="h-5 w-5 text-ios-gray-500" strokeWidth={2} />
-                </div>
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Tìm kiếm vải..."
-                  className="block w-full pl-10 pr-4 py-2.5 border border-ios-gray-300 rounded-lg text-sm bg-white placeholder-ios-gray-500 focus:outline-none focus:bg-white focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
-                />
-              </div>
-            </form>
+          <div className="px-4 lg:px-8 py-6 lg:py-8">
+            {/* Section Header */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="mb-6 flex items-center justify-between"
+            >
+              <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">
+                {t('fabric.title')}
+              </h2>
+              <span className="text-sm text-gray-600">
+                {fabrics.length} {fabrics.length === 1 ? 'mẫu' : 'mẫu'}
+              </span>
+            </motion.div>
 
             {/* Content */}
             {loading ? (
-              <div className="flex items-center justify-center py-16">
-                <div className="animate-spin rounded-full h-10 w-10 border-2 border-ios-blue border-t-transparent"></div>
-                <span className="ml-3 text-macos-text-secondary font-medium">Đang tải...</span>
+              <div className="flex flex-col items-center justify-center py-16">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  className="rounded-full h-10 w-10 border-2 border-cyan-500 border-t-transparent"
+                />
+                <span className="mt-3 text-gray-600 font-medium">{t('common.loading')}</span>
               </div>
             ) : fabrics.length === 0 ? (
-              <div className="bg-white rounded-xl border border-macos-border-light p-16 text-center">
-                <PhotoIcon className="w-16 h-16 text-ios-gray-400 mx-auto mb-4" strokeWidth={1.5} />
-                <h3 className="text-lg font-semibold text-macos-text-primary mb-2">
-                  Không tìm thấy vải nào
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="bg-white rounded-xl border border-gray-200 p-12 lg:p-16 text-center"
+              >
+                <PhotoIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" strokeWidth={1.5} />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {t('messages.noFabrics')}
                 </h3>
-                <p className="text-sm text-macos-text-secondary mb-6">
-                  Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc
+                <p className="text-sm text-gray-600 mb-6">
+                  {t('messages.tryDifferent')}
                 </p>
                 <button
                   onClick={clearFilters}
-                  className="text-ios-blue hover:text-ios-blue-dark font-medium text-sm transition-colors"
+                  className="text-cyan-500 hover:text-cyan-600 font-medium text-sm transition-colors active:scale-95"
                 >
-                  Xóa tất cả bộ lọc
+                  {t('filters.clearFilters')}
                 </button>
-              </div>
+              </motion.div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 animate-fadeIn">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 lg:gap-6">
                 {fabrics.map((fabric, index) => (
-                  <div
+                  <motion.div
                     key={fabric.id}
-                    className="animate-slideUp"
-                    style={{ animationDelay: `${index * 50}ms` }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05, duration: 0.3 }}
                   >
                     <FabricCard fabric={fabric} />
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             )}
