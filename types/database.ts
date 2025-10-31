@@ -246,24 +246,17 @@ export interface AlbumFilter {
 export interface CreateProjectForm {
   name: string
   description?: string
-  project_type?: Project['project_type']
+  type?: string
   location?: string
-  client_name?: string
   completion_date?: Date
-  tags?: string[]
-  status?: Project['status']
   is_featured?: boolean
-  cover_image_url?: string
-  images?: Array<{
-    image_url: string
-    image_id: string
-    caption?: string
-  }>
+  cover_image?: string
+  images?: string[]
+  fabrics_used?: string[]
 }
 
 export interface UpdateProjectForm extends CreateProjectForm {
   id: string
-  cover_image_id?: string
 }
 
 export interface ProjectFilter {
