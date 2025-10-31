@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
     const {
       name,
       description,
-      project_type,
+      type,
       location,
       completion_date,
       is_featured,
@@ -149,7 +149,7 @@ export async function POST(request: NextRequest) {
     const params = [
       name.trim(),
       description?.trim() || null,
-      project_type || null,
+      type || null,
       location?.trim() || null,
       completion_date || null,
       is_featured || false,
