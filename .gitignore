@@ -23,11 +23,14 @@ yarn-debug.log*
 yarn-error.log*
 
 # Local env files
+.env
 .env*.local
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+*.env.backup
 
 # Vercel
 .vercel
@@ -38,3 +41,22 @@ next-env.d.ts
 
 # Other
 human-mcp
+
+# Backups
+backups/
+*.backup
+
+# Logs
+logs/
+*.log
+
+# PM2
+.pm2/
+pm2.log
+
+# Scripts (deployment specific)
+*.ps1
+*.sh
+
+# Database dumps
+*.sql

@@ -4,33 +4,30 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000",
-    "build": "next build",
+    "build": "next build && cp -r .next/static .next/standalone/.next/",
     "start": "node .next/standalone/server.js",
     "lint": "next lint",
-    "build:vercel": "cp next.config.vercel.js next.config.js && next build"
+    "build:vercel": "cp next.config.vercel.js next.config.js && next build",
+    "deploy": "./scripts/sync-to-ubuntu.sh",
+    "sync": "./scripts/sync-to-ubuntu.sh"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.0.18",
     "@marsaud/smb2": "^0.18.0",
     "@playwright/test": "^1.55.1",
-    "@react-spring/web": "^10.0.3",
     "@types/pg": "^8.15.5",
     "@types/uuid": "^10.0.0",
-    "browser-image-compression": "^2.0.2",
     "clsx": "^2.0.0",
-    "colorthief": "^2.6.0",
     "dotenv": "^17.2.3",
     "form-data": "^4.0.4",
-    "formdata-node": "^6.0.3",
     "framer-motion": "^12.23.24",
     "next": "14.0.4",
+    "node-fetch": "^2.7.0",
     "pg": "^8.16.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-intersection-observer": "^9.16.0",
     "sharp": "^0.34.4",
-    "synology": "^0.0.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

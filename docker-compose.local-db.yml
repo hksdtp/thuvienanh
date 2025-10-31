@@ -1,0 +1,143 @@
+version: '3.8'
+
+# Docker Compose for Production with LOCAL PostgreSQL
+# Sử dụng PostgreSQL đã cài trên Windows thay vì container
+
+services:
+  # Next.js Production Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+    image: thuvienanh:production
+    container_name: tva-app-prod
+    restart: always
+    ports:
+      - "4000:4000"  # Internal port
+    environment:
+      # Node settings
+      NODE_ENV: production
+      NODE_OPTIONS: --max-old-space-size=2048
+      
+      # Database - Using LOCAL PostgreSQL on Windows
+      # host.docker.internal points to Windows host
+      DATABASE_URL: postgresql://postgres:haininh1@host.docker.internal:5432/tva
+      POSTGRES_HOST: host.docker.internal
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: haininh1
+      POSTGRES_DB: tva
+      
+      # Synology NAS Configuration
+      SYNOLOGY_BASE_URL: http://222.252.23.248:8888
+      SYNOLOGY_ALTERNATIVE_URL: http://222.252.23.248:6868
+      SYNOLOGY_PHOTOS_URL: http://222.252.23.248:6868
+      SYNOLOGY_USERNAME: haininh
+      SYNOLOGY_PASSWORD: Villad24@
+      SYNOLOGY_SHARED_FOLDER: /Marketing/Ninh/thuvienanh
+      ENABLE_SYNOLOGY_FOLDER_CREATION: "true"
+      
+      # SMB Configuration
+      SMB_HOST: 222.252.23.248
+      SMB_PORT: 445
+      SMB_USERNAME: haininh
+      SMB_PASSWORD: Villad24@
+      SMB_SHARE: marketing
+      SMB_DOMAIN: WORKGROUP
+      
+      # API Configuration
+      ALLOWED_ORIGIN: "*"
+      PORT: 4000
+    volumes:
+      # Persist uploads
+      - uploads_data:/app/public/uploads
+      # Logs
+      - ./logs:/app/logs
+    networks:
+      - tva-network
+    extra_hosts:
+      # Allow container to access Windows host
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: tva-nginx-prod
+    restart: always
+    ports:
+      - "80:80"      # HTTP
+      - "443:443"    # HTTPS ready
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro  # For SSL certificates
+      - nginx_cache:/var/cache/nginx
+    depends_on:
+      - app
+    networks:
+      - tva-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Portainer for Docker Management
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: tva-portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - //var/run/docker.sock:/var/run/docker.sock  # Windows Docker socket
+      - portainer_data:/data
+    networks:
+      - tva-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Watchtower - Auto update containers (optional)
+  watchtower:
+    image: containrrr/watchtower
+    container_name: tva-watchtower
+    restart: always
+    volumes:
+      - //var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=86400  # Check daily
+      - WATCHTOWER_INCLUDE_STOPPED=true
+    networks:
+      - tva-network
+
+volumes:
+  uploads_data:
+    driver: local
+  portainer_data:
+    driver: local
+  nginx_cache:
+    driver: local
+
+networks:
+  tva-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+

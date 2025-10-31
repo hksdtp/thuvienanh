@@ -103,6 +103,19 @@ interface SynologyPhotosListResponse {
   }
 }
 
+// Global session cache to avoid re-authentication on every request
+let globalSessionCache: {
+  sessionId: string | null
+  workingUrl: string | null
+  expiresAt: number | null
+  authPromise: Promise<boolean> | null
+} = {
+  sessionId: null,
+  workingUrl: null,
+  expiresAt: null,
+  authPromise: null
+}
+
 export class SynologyFileStationService {
   private config: SynologyConfig
   private sessionId: string | null = null
@@ -114,6 +127,12 @@ export class SynologyFileStationService {
       alternativeUrl: process.env.SYNOLOGY_ALTERNATIVE_URL || 'http://222.252.23.248:6868',
       username: process.env.SYNOLOGY_USERNAME || 'haininh',
       password: process.env.SYNOLOGY_PASSWORD || 'Villad24@'
+    }
+
+    // Use cached session if available and not expired
+    if (globalSessionCache.sessionId && globalSessionCache.expiresAt && Date.now() < globalSessionCache.expiresAt) {
+      this.sessionId = globalSessionCache.sessionId
+      this.workingUrl = globalSessionCache.workingUrl
     }
   }
 
@@ -134,7 +153,12 @@ export class SynologyFileStationService {
   }
 
   // Get working base URL
-  private async getWorkingUrl(): Promise<string> {
+  private async findWorkingUrl(): Promise<string> {
+    // Use cached working URL if available
+    if (globalSessionCache.workingUrl) {
+      return globalSessionCache.workingUrl
+    }
+
     // Test primary URL first
     if (await this.testConnectionToUrl(this.config.baseUrl)) {
       return this.config.baseUrl
@@ -148,10 +172,49 @@ export class SynologyFileStationService {
     throw new Error('Cannot connect to any Synology URL')
   }
 
+  // Public getter for working URL
+  getWorkingUrl(): string | null {
+    // Return from global cache if available
+    return globalSessionCache.workingUrl || this.workingUrl
+  }
+
+  // Public getter for session ID
+  getSessionId(): string | null {
+    // Return from global cache if available
+    return globalSessionCache.sessionId || this.sessionId
+  }
+
   // Authenticate with File Station
   async authenticate(): Promise<boolean> {
+    // Check if we have a valid cached session
+    if (globalSessionCache.sessionId && globalSessionCache.expiresAt && Date.now() < globalSessionCache.expiresAt) {
+      this.sessionId = globalSessionCache.sessionId
+      this.workingUrl = globalSessionCache.workingUrl
+      console.log('✅ Using cached File Station session')
+      return true
+    }
+
+    // If there's already an authentication in progress, wait for it
+    if (globalSessionCache.authPromise) {
+      console.log('⏳ Waiting for ongoing authentication...')
+      return await globalSessionCache.authPromise
+    }
+
+    // Start new authentication
+    globalSessionCache.authPromise = this.performAuthentication()
+
     try {
-      const baseUrl = await this.getWorkingUrl()
+      const result = await globalSessionCache.authPromise
+      return result
+    } finally {
+      globalSessionCache.authPromise = null
+    }
+  }
+
+  // Perform actual authentication
+  private async performAuthentication(): Promise<boolean> {
+    try {
+      const baseUrl = await this.findWorkingUrl()
       this.workingUrl = baseUrl
 
       const response = await fetch(`${baseUrl}/webapi/auth.cgi`, {
@@ -161,7 +224,7 @@ export class SynologyFileStationService {
         },
         body: new URLSearchParams({
           api: 'SYNO.API.Auth',
-          version: '3',
+          version: '6',
           method: 'login',
           account: this.config.username,
           passwd: this.config.password,
@@ -174,7 +237,13 @@ export class SynologyFileStationService {
 
       if (data.success && data.data?.sid) {
         this.sessionId = data.data.sid
-        console.log('✅ File Station authentication successful')
+
+        // Cache session for 10 minutes
+        globalSessionCache.sessionId = data.data.sid
+        globalSessionCache.workingUrl = baseUrl
+        globalSessionCache.expiresAt = Date.now() + (10 * 60 * 1000) // 10 minutes
+
+        console.log('✅ File Station authentication successful (cached for 10 min)')
         return true
       } else {
         console.error('❌ File Station authentication failed:', data.error)
@@ -450,7 +519,7 @@ export class SynologyFileStationService {
   // Test connection
   async testConnection(): Promise<boolean> {
     try {
-      const baseUrl = await this.getWorkingUrl()
+      const baseUrl = await this.findWorkingUrl()
       return await this.testConnectionToUrl(baseUrl)
     } catch {
       return false
@@ -1027,7 +1096,9 @@ export class SynologyPhotosAPIService {
           version: '3',
           method: 'login',
           account: this.config.username,
-          passwd: this.config.password
+          passwd: this.config.password,
+          session: 'SynologyPhotos',
+          format: 'sid'
         })
       })
 

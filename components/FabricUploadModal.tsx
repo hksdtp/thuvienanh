@@ -2,12 +2,8 @@
 
 import { useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon, PhotoIcon } from '@heroicons/react/24/outline'
-import FileUpload, { UploadResult } from '@/components/FileUpload'
-import ImageGallery, { GalleryImage } from '@/components/ImageGallery'
-import AlbumSelector from '@/components/AlbumSelector'
-import CreateAlbumModal from '@/components/CreateAlbumModal'
-import { CreateAlbumForm, ApiResponse, Album } from '@/types/database'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import FabricCreateForm, { FabricFormData } from '@/components/FabricCreateForm'
 
 interface FabricUploadModalProps {
   isOpen: boolean
@@ -16,132 +12,74 @@ interface FabricUploadModalProps {
   fabricName?: string
   category?: string
   onSuccess?: () => void
-  onUploadComplete?: (images: GalleryImage[]) => void
 }
 
 export default function FabricUploadModal({
   isOpen,
   onClose,
-  fabricId,
-  fabricName,
   category,
-  onSuccess,
-  onUploadComplete
+  onSuccess
 }: FabricUploadModalProps) {
-  const [uploadedImages, setUploadedImages] = useState<GalleryImage[]>([])
-  const [isUploading, setIsUploading] = useState(false)
-  const [selectedAlbumId, setSelectedAlbumId] = useState<string | undefined>()
-  const [createAlbumModalOpen, setCreateAlbumModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Handle upload completion
-  const handleUploadComplete = (result: UploadResult) => {
-    console.log('Upload completed:', result)
-    
-    // Convert uploaded files to gallery images
-    const newImages: GalleryImage[] = result.success.map(file => ({
-      id: file.id,
-      url: file.url,
-      originalName: file.originalName,
-      fileName: file.fileName,
-      mimeType: file.mimeType,
-      size: file.size,
-      uploadedAt: file.uploadedAt,
-      alt: file.originalName
-    }))
-
-    // Add to gallery
-    setUploadedImages(prev => [...prev, ...newImages])
-    setIsUploading(false)
-
-    // Auto-add to selected album if specified
-    if (selectedAlbumId && newImages.length > 0) {
-      addImagesToAlbum(newImages, selectedAlbumId)
-    }
-
-    // Show success message
-    if (result.success.length > 0) {
-      console.log(`Upload thành công ${result.success.length} file(s)!`)
-    }
-
-    // Show errors if any
-    if (result.errors.length > 0) {
-      const errorMessages = result.errors.map(e => `${e.file}: ${e.error}`).join('\n')
-      console.error(`Có lỗi xảy ra:\n${errorMessages}`)
-    }
-
-    // Notify parent component
-    if (onUploadComplete) {
-      onUploadComplete([...uploadedImages, ...newImages])
-    }
-  }
-
-  // Add images to album
-  const addImagesToAlbum = async (images: GalleryImage[], albumId: string) => {
+  const handleSubmit = async (data: FabricFormData) => {
+    setIsSubmitting(true)
     try {
-      for (const image of images) {
-        await fetch(`/api/albums/${albumId}/images`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            imageId: image.id,
-            imageUrl: image.url,
-            imageName: image.originalName || image.alt || 'Untitled'
-          })
-        })
-      }
-      console.log(`Added ${images.length} images to album ${albumId}`)
-    } catch (error) {
-      console.error('Error adding images to album:', error)
-      alert('Upload thành công nhưng có lỗi khi thêm vào album')
-    }
-  }
+      console.log('📝 Submitting fabric data:', data)
 
-  // Handle upload start
-  const handleUploadStart = () => {
-    setIsUploading(true)
-  }
+      // Create FormData for file upload
+      const formData = new FormData()
+      formData.append('name', data.name)
+      formData.append('code', data.code)
+      formData.append('description', data.description)
+      formData.append('material', data.material)
+      formData.append('width', data.width.toString())
+      formData.append('weight', data.weight.toString())
+      formData.append('color', data.color)
+      formData.append('pattern', data.pattern)
+      formData.append('finish', data.finish)
+      formData.append('origin', data.origin)
+      formData.append('price_per_meter', data.price_per_meter.toString())
+      formData.append('stock_quantity', data.stock_quantity.toString())
+      formData.append('min_order_quantity', data.min_order_quantity.toString())
+      formData.append('tags', JSON.stringify(data.tags))
+      formData.append('search_keywords', data.search_keywords)
 
-  // Handle image delete
-  const handleImageDelete = async (imageId: string) => {
-    const image = uploadedImages.find(img => img.id === imageId)
-    if (!image) return
+      // Append all images
+      data.images.forEach((image) => {
+        formData.append('images', image)
+      })
 
-    try {
-      const response = await fetch(`/api/upload/delete?path=${encodeURIComponent(image.url)}`, {
-        method: 'DELETE'
+      // Submit to API
+      const response = await fetch('/api/fabrics', {
+        method: 'POST',
+        body: formData
       })
 
       const result = await response.json()
 
       if (result.success) {
-        setUploadedImages(prev => prev.filter(img => img.id !== imageId))
+        alert(`✅ Đã tạo vải mới: ${result.data.name}`)
+        onSuccess?.()
+        onClose()
       } else {
-        console.error(`Lỗi khi xóa ảnh: ${result.error}`)
+        alert(`❌ Lỗi: ${result.error}`)
       }
     } catch (error) {
-      console.error('Delete error:', error)
+      console.error('Error creating fabric:', error)
+      alert('❌ Lỗi khi tạo vải mới')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
-  // Handle save and close
-  const handleSaveAndClose = () => {
-    if (onUploadComplete && uploadedImages.length > 0) {
-      onUploadComplete(uploadedImages)
-    }
-    handleClose()
-  }
-
-  // Handle close
   const handleClose = () => {
-    setUploadedImages([])
-    setIsUploading(false)
-    onClose()
+    if (!isSubmitting) {
+      onClose()
+    }
   }
 
   return (
-    <>
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={handleClose}>
         <Transition.Child
@@ -167,133 +105,32 @@ export default function FabricUploadModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-5xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                      <PhotoIcon className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <Dialog.Title as="h3" className="text-lg font-semibold text-gray-900">
-                        Upload Hình Ảnh Vải
-                      </Dialog.Title>
-                      {fabricName && (
-                        <p className="text-sm text-gray-600">
-                          Cho vải: {fabricName}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleClose}
-                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-xl font-semibold text-gray-900"
                   >
-                    <XMarkIcon className="w-6 h-6" />
+                    Thêm vải mới {category && `- ${category}`}
+                  </Dialog.Title>
+                  <button
+                    type="button"
+                    className="rounded-lg p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors"
+                    onClick={handleClose}
+                    disabled={isSubmitting}
+                  >
+                    <XMarkIcon className="h-6 w-6" />
                   </button>
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Upload Section */}
-                    <div>
-                      <h4 className="text-md font-medium text-gray-900 mb-4">
-                        Chọn và Upload Files
-                      </h4>
-                      
-                      {/* Album Selector */}
-                      <AlbumSelector
-                        selectedAlbumId={selectedAlbumId}
-                        onAlbumSelect={setSelectedAlbumId}
-                        onCreateAlbum={() => setCreateAlbumModalOpen(true)}
-                        className="mb-4"
-                        disabled={isUploading}
-                      />
-
-                      <FileUpload
-                        category="fabrics"
-                        maxFiles={10}
-                        maxFileSize={10}
-                        onUploadComplete={handleUploadComplete}
-                        onUploadStart={handleUploadStart}
-                        selectedAlbumId={selectedAlbumId}
-                        disabled={isUploading}
-                        className="mb-4"
-                      />
-
-                      {/* Upload Stats */}
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="grid grid-cols-2 gap-4 text-center">
-                          <div>
-                            <div className="text-xl font-bold text-blue-600">
-                              {uploadedImages.length}
-                            </div>
-                            <div className="text-xs text-gray-500">Ảnh đã upload</div>
-                          </div>
-                          <div>
-                            <div className="text-xl font-bold text-green-600">
-                              {Math.round(uploadedImages.reduce((sum, img) => sum + img.size, 0) / 1024 / 1024 * 100) / 100}MB
-                            </div>
-                            <div className="text-xs text-gray-500">Tổng dung lượng</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Preview Section */}
-                    <div>
-                      <h4 className="text-md font-medium text-gray-900 mb-4">
-                        Preview ({uploadedImages.length} ảnh)
-                      </h4>
-                      
-                      <div className="border border-gray-200 rounded-lg p-4 min-h-[300px] max-h-[400px] overflow-y-auto">
-                        {uploadedImages.length > 0 ? (
-                          <ImageGallery
-                            images={uploadedImages}
-                            onDelete={handleImageDelete}
-                            allowDelete={true}
-                            allowReorder={false}
-                            columns={2}
-                          />
-                        ) : (
-                          <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                            <PhotoIcon className="w-12 h-12 mb-2" />
-                            <p className="text-sm">Chưa có ảnh nào được upload</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer */}
-                <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
-                  <div className="text-sm text-gray-600">
-                    {uploadedImages.length > 0 && (
-                      <span>
-                        {uploadedImages.length} ảnh sẵn sàng để lưu
-                      </span>
-                    )}
-                  </div>
-                  
-                  <div className="flex items-center space-x-3">
-                    <button
-                      onClick={handleClose}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
-                      disabled={isUploading}
-                    >
-                      Hủy
-                    </button>
-                    
-                    <button
-                      onClick={handleSaveAndClose}
-                      disabled={uploadedImages.length === 0 || isUploading}
-                      className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      {isUploading ? 'Đang upload...' : `Lưu ${uploadedImages.length} ảnh`}
-                    </button>
-                  </div>
+                <div className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+                  <FabricCreateForm
+                    onSubmit={handleSubmit}
+                    onCancel={handleClose}
+                    isSubmitting={isSubmitting}
+                  />
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -301,40 +138,6 @@ export default function FabricUploadModal({
         </div>
       </Dialog>
     </Transition>
-
-    {/* Create Album Modal */}
-    <CreateAlbumModal
-      isOpen={createAlbumModalOpen}
-      onClose={() => setCreateAlbumModalOpen(false)}
-      onSubmit={async (data) => {
-        try {
-          const response = await fetch('/api/albums', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              ...data,
-              category: 'fabric', // Always fabric category for FabricUploadModal
-              subcategory: category // Pass subcategory from props (moq, new, clearance, etc.)
-            })
-          })
-
-          const result = await response.json()
-
-          if (result.success && result.data) {
-            setSelectedAlbumId(result.data.id)
-            setCreateAlbumModalOpen(false)
-            alert('Tạo album thành công!')
-          } else {
-            alert(`Lỗi: ${result.error}`)
-          }
-        } catch (error) {
-          console.error('Error creating album:', error)
-          alert('Có lỗi xảy ra khi tạo album')
-        }
-      }}
-    />
-    </>
   )
 }
+

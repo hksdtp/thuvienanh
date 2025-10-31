@@ -36,11 +36,12 @@ export interface Fabric {
   // Hình ảnh và media
   primary_image_url?: string
   image_urls: string[]
-  
+  images?: FabricImage[] // Array of images from fabric_images table
+
   // Metadata
   created_at: Date
   updated_at: Date
-  created_by: string
+  created_by?: string
   is_active: boolean
   
   // SEO và tìm kiếm

@@ -2,15 +2,13 @@
 
 import { useState, useCallback } from 'react'
 import Image from 'next/image'
-import { 
-  TrashIcon, 
+import {
+  TrashIcon,
   MagnifyingGlassIcon,
-  XMarkIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
   EyeIcon
 } from '@heroicons/react/24/outline'
 import { HeartIcon } from '@heroicons/react/24/solid'
+import ImageLightbox from './ImageLightbox'
 
 export interface GalleryImage {
   id: string
@@ -81,35 +79,7 @@ export default function ImageGallery({
     }
   }, [onDelete])
 
-  // Lightbox navigation
-  const goToPrevious = useCallback(() => {
-    setCurrentImageIndex(prev => 
-      prev > 0 ? prev - 1 : images.length - 1
-    )
-  }, [images.length])
 
-  const goToNext = useCallback(() => {
-    setCurrentImageIndex(prev => 
-      prev < images.length - 1 ? prev + 1 : 0
-    )
-  }, [images.length])
-
-  // Handle keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!lightboxOpen) return
-    
-    switch (e.key) {
-      case 'ArrowLeft':
-        goToPrevious()
-        break
-      case 'ArrowRight':
-        goToNext()
-        break
-      case 'Escape':
-        setLightboxOpen(false)
-        break
-    }
-  }, [lightboxOpen, goToPrevious, goToNext])
 
   // Drag and drop handlers (for reordering)
   const handleDragStart = useCallback((e: React.DragEvent, image: GalleryImage) => {
@@ -161,7 +131,7 @@ export default function ImageGallery({
   const currentImage = images[currentImageIndex]
 
   return (
-    <div className={className} onKeyDown={handleKeyDown} tabIndex={0}>
+    <div className={className}>
       {/* Gallery Grid */}
       <div 
         className={`grid gap-4`}
@@ -244,61 +214,21 @@ export default function ImageGallery({
         ))}
       </div>
 
-      {/* Lightbox */}
-      {lightboxOpen && currentImage && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
-          {/* Close button */}
-          <button
-            onClick={() => setLightboxOpen(false)}
-            className="absolute top-4 right-4 z-10 p-2 text-white hover:text-gray-300 transition-colors"
-          >
-            <XMarkIcon className="w-8 h-8" />
-          </button>
-
-          {/* Navigation */}
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={goToPrevious}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-2 text-white hover:text-gray-300 transition-colors"
-              >
-                <ChevronLeftIcon className="w-8 h-8" />
-              </button>
-              
-              <button
-                onClick={goToNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-2 text-white hover:text-gray-300 transition-colors"
-              >
-                <ChevronRightIcon className="w-8 h-8" />
-              </button>
-            </>
-          )}
-
-          {/* Image */}
-          <div className="relative max-w-4xl max-h-[80vh] w-full h-full flex items-center justify-center p-4">
-            <Image
-              src={currentImage.url}
-              alt={currentImage.alt || currentImage.originalName}
-              width={800}
-              height={600}
-              className="max-w-full max-h-full object-contain"
-            />
-          </div>
-
-          {/* Image info */}
-          <div className="absolute bottom-4 left-4 right-4 text-center text-white">
-            <h3 className="text-lg font-medium mb-1">{currentImage.originalName}</h3>
-            <p className="text-sm text-gray-300">
-              {formatFileSize(currentImage.size)} • {currentImageIndex + 1} / {images.length}
-            </p>
-            {currentImage.width && currentImage.height && (
-              <p className="text-sm text-gray-300">
-                {currentImage.width} × {currentImage.height} pixels
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+      {/* ImageLightbox - Same as Projects/Albums */}
+      <ImageLightbox
+        images={images.map(img => ({
+          id: img.id,
+          image_url: img.url,
+          caption: img.alt || img.originalName
+        }))}
+        currentIndex={currentImageIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onDelete={allowDelete && onDelete ? (imageId) => {
+          onDelete(imageId)
+          setLightboxOpen(false)
+        } : undefined}
+      />
     </div>
   )
 }

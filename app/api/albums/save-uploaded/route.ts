@@ -30,11 +30,6 @@ export async function POST(request: NextRequest) {
 
     const savedImages = []
 
-    // Get base URL from request
-    const protocol = request.headers.get('x-forwarded-proto') || 'http'
-    const host = request.headers.get('host') || 'localhost:4000'
-    const baseUrl = `${protocol}://${host}`
-
     // Process each file
     for (const file of files) {
       try {
@@ -45,10 +40,9 @@ export async function POST(request: NextRequest) {
         const randomStr = Math.random().toString(36).substring(7)
         const imageId = `${timestamp}-${randomStr}`
 
-        // For FileStation uploads, use the file path as URL
-        // We'll need to create a proxy endpoint to serve these files
-        const imageUrl = `${baseUrl}/api/synology/file-proxy?path=${encodeURIComponent(path)}`
-        const thumbnailUrl = `${baseUrl}/api/synology/file-proxy?path=${encodeURIComponent(path)}&thumbnail=true`
+        // For FileStation uploads, use the file path as URL - use relative URLs to avoid Next.js Image Optimizer 503 errors
+        const imageUrl = `/api/synology/file-proxy?path=${encodeURIComponent(path)}`
+        const thumbnailUrl = `/api/synology/file-proxy?path=${encodeURIComponent(path)}&thumbnail=true`
 
         // Save to database using AlbumService
         // addImage signature: (albumId, imageUrl, caption?, imageId?)

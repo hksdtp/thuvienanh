@@ -24,6 +24,7 @@ import {
   StarIcon,
   PaintBrushIcon,
   ShoppingCartIcon,
+  ArrowUpTrayIcon,
 } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
@@ -77,6 +78,7 @@ const menuStructure = [
     items: [
       { name: 'Nhà dân', href: '/projects/khach-hang-le', icon: UserGroupIcon },
       { name: 'Dự án', href: '/projects/du-an', icon: BuildingOfficeIcon },
+      { name: 'Upload kỹ thuật', href: '/projects/create-wizard', icon: ArrowUpTrayIcon },
       { name: 'Công trình tiêu biểu', href: '/projects/cong-trinh-tieu-bieu', icon: StarIcon },
       { name: 'Phong cách', href: '/styles', icon: PaintBrushIcon }
     ]
@@ -118,7 +120,7 @@ export default function SidebarIOS({ open, setOpen }: SidebarIOSProps) {
       <div className="flex items-center justify-between h-16 px-5 border-b border-ios-gray-200 flex-shrink-0">
         <div className="flex items-center space-x-2">
           <img
-            src="http://222.252.23.248:6868/synofoto/api/v2/t/Thumbnail/get?id=5448&cache_key=%225448_1759473933%22&type=%22unit%22&size=%22xl%22"
+            src="/logo.svg"
             alt="TVA Logo"
             className="w-8 h-8 rounded-lg object-cover"
           />
@@ -186,8 +188,8 @@ export default function SidebarIOS({ open, setOpen }: SidebarIOSProps) {
                       </div>
                       <ChevronRightIcon
                         className={clsx(
-                          'w-4 h-4 text-ios-gray-500 transition-transform',
-                          groupOpen ? 'transform rotate-90' : ''
+                          'w-4 h-4 text-ios-gray-500 transition-transform transform',
+                          groupOpen ? 'rotate-90' : 'rotate-0'
                         )}
                         strokeWidth={2.5}
                       />
@@ -237,11 +239,9 @@ export default function SidebarIOS({ open, setOpen }: SidebarIOSProps) {
       {/* User section - Cleaner */}
       <div className="border-t border-ios-gray-200 p-4 flex-shrink-0">
         <button className="flex items-center space-x-3 w-full px-3 py-2.5 rounded-lg hover:bg-ios-gray-50 transition-all">
-          <img
-            src="http://222.252.23.248:6868/synofoto/api/v2/t/Thumbnail/get?id=5448&cache_key=%225448_1759473933%22&type=%22unit%22&size=%22xl%22"
-            alt="User Avatar"
-            className="w-9 h-9 rounded-full object-cover flex-shrink-0"
-          />
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+            <span className="text-white font-semibold text-sm">A</span>
+          </div>
           <div className="flex-1 text-left min-w-0">
             <p className="text-sm font-semibold text-ios-gray-900 truncate">Admin</p>
             <p className="text-xs text-ios-gray-600 truncate">admin@tva.com</p>

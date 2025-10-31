@@ -19,7 +19,8 @@ import {
   XMarkIcon,
   UserCircleIcon,
   ShoppingCartIcon,
-  TagIcon
+  TagIcon,
+  ArrowUpTrayIcon
 } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
@@ -63,6 +64,7 @@ const menuStructure = [
     items: [
       { name: 'Nhà Dân', href: '/projects?type=residential', icon: HomeIcon },
       { name: 'Dự Án', href: '/projects?type=commercial', icon: BuildingOfficeIcon },
+      { name: 'Upload kỹ thuật', href: '/projects/create-wizard', icon: ArrowUpTrayIcon },
       { name: 'Albums Ảnh Công Trình', href: '/albums?category=project', icon: RectangleStackIcon }
     ]
   },
@@ -72,7 +74,7 @@ const menuStructure = [
     type: 'group' as const,
     groupName: 'Sự Kiện Công Ty',
     icon: CalendarDaysIcon,
-    color: 'purple',
+    color: 'primary',
     items: [
       { name: 'Sự Kiện Nội Bộ', href: '/events', icon: SparklesIcon },
       { name: 'Albums Ảnh Sự Kiện', href: '/albums?category=event', icon: RectangleStackIcon }
@@ -97,7 +99,7 @@ export default function SidebarNew({ open, setOpen }: SidebarProps) {
     const colors: Record<string, { bg: string, text: string, hover: string }> = {
       blue: { bg: 'bg-blue-50', text: 'text-blue-700', hover: 'hover:bg-blue-100' },
       cyan: { bg: 'bg-cyan-50', text: 'text-cyan-700', hover: 'hover:bg-cyan-100' },
-      purple: { bg: 'bg-purple-50', text: 'text-purple-700', hover: 'hover:bg-purple-100' }
+      primary: { bg: 'bg-[#343F48]/5', text: 'text-[#343F48]', hover: 'hover:bg-[#343F48]/10' }
     }
     return colors[color] || colors.blue
   }
@@ -123,7 +125,7 @@ export default function SidebarNew({ open, setOpen }: SidebarProps) {
           {/* Header */}
           <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-[#343F48] rounded-lg flex items-center justify-center">
                 <SparklesIcon className="w-5 h-5 text-white" />
               </div>
               <span className="text-lg font-bold text-gray-900">TVA Fabric</span>

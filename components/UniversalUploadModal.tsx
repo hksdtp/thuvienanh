@@ -82,8 +82,8 @@ export default function UniversalUploadModal({
         alert(`File "${file.name}" không được hỗ trợ. Chỉ chấp nhận: ${acceptedFormats.join(', ')}`)
         return false
       }
-      if (file.size > 10 * 1024 * 1024) { // 10MB
-        alert(`File "${file.name}" quá lớn. Tối đa 10MB`)
+      if (file.size > 20 * 1024 * 1024) { // 20MB
+        alert(`File "${file.name}" quá lớn. Tối đa 20MB`)
         return false
       }
       return true

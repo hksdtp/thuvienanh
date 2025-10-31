@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { SynologyPhotosAPIService } from '@/lib/synology'
+import { SynologyFileStationService } from '@/lib/synology'
 
 /**
  * API proxy để load files từ Synology FileStation
@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     const thumbnail = searchParams.get('thumbnail') === 'true'
 
     if (!filePath) {
+      console.error('❌ Missing file path parameter')
       return NextResponse.json(
         { error: 'Missing file path' },
         { status: 400 }
@@ -19,14 +20,22 @@ export async function GET(request: NextRequest) {
 
     console.log(`📁 Proxying file request: ${filePath} (thumbnail: ${thumbnail})`)
 
-    // Initialize Synology service
-    const synology = new SynologyPhotosAPIService()
-    const authSuccess = await synology.authenticate()
+    // Initialize Synology FileStation service
+    const synology = new SynologyFileStationService()
+
+    // Add timeout for authentication (15s to allow for concurrent requests)
+    const authPromise = synology.authenticate()
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Authentication timeout')), 15000)
+    )
+
+    const authSuccess = await Promise.race([authPromise, timeoutPromise]) as boolean
 
     if (!authSuccess) {
+      console.error('❌ Failed to authenticate with Synology FileStation')
       return NextResponse.json(
-        { error: 'Failed to authenticate with Synology' },
-        { status: 500 }
+        { error: 'Failed to authenticate with Synology FileStation' },
+        { status: 503 }
       )
     }
 
@@ -34,9 +43,10 @@ export async function GET(request: NextRequest) {
     const sessionId = synology.getSessionId()
 
     if (!workingUrl || !sessionId) {
+      console.error('❌ Failed to get Synology FileStation session')
       return NextResponse.json(
-        { error: 'Failed to get Synology session' },
-        { status: 500 }
+        { error: 'Failed to get Synology FileStation session' },
+        { status: 503 }
       )
     }
 
@@ -57,15 +67,19 @@ export async function GET(request: NextRequest) {
 
     console.log(`🔗 Fetching from: ${apiUrl.replace(sessionId, '***')}`)
 
-    // Fetch file from Synology
-    const response = await fetch(apiUrl)
+    // Fetch file from Synology with timeout
+    const fetchPromise = fetch(apiUrl, {
+      signal: AbortSignal.timeout(30000) // 30 second timeout
+    })
+
+    const response = await fetchPromise
 
     if (!response.ok) {
       console.error(`❌ Synology returned status: ${response.status}`)
       const text = await response.text()
       console.error(`Response: ${text}`)
       return NextResponse.json(
-        { error: 'Failed to fetch file from Synology' },
+        { error: 'Failed to fetch file from Synology', details: text },
         { status: response.status }
       )
     }
@@ -77,17 +91,37 @@ export async function GET(request: NextRequest) {
     const blob = await response.blob()
     const buffer = await blob.arrayBuffer()
 
+    console.log(`✅ File proxy success: ${filePath} (${(buffer.byteLength / 1024).toFixed(2)} KB)`)
+
     return new NextResponse(buffer, {
       headers: {
         'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=31536000, immutable'
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Access-Control-Allow-Origin': '*',
       }
     })
   } catch (error) {
     console.error('❌ File proxy error:', error)
+
+    // More detailed error messages
+    let errorMessage = 'Internal server error'
+    let statusCode = 500
+
+    if (error instanceof Error) {
+      if (error.message.includes('timeout')) {
+        errorMessage = 'Request timeout - Synology server not responding'
+        statusCode = 504
+      } else if (error.message.includes('fetch')) {
+        errorMessage = 'Cannot connect to Synology server'
+        statusCode = 503
+      } else {
+        errorMessage = error.message
+      }
+    }
+
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: errorMessage, details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: statusCode }
     )
   }
 }

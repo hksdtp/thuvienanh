@@ -13,7 +13,7 @@ export const SUPPORTED_IMAGE_TYPES = [
   'image/gif'
 ] as const
 
-export const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+export const MAX_FILE_SIZE = 20 * 1024 * 1024 // 20MB
 export const MAX_FILES_PER_UPLOAD = 10
 
 export interface UploadedFile {

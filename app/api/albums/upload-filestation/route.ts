@@ -90,11 +90,6 @@ export async function POST(request: NextRequest) {
     console.log(`📁 Uploading to: ${destinationPath}`)
     console.log(`   Category: "${album.category}", Path: "${categoryPath}", Album: "${album.name}" => Folder: "${folderName}"`)
 
-    // Get base URL from request
-    const protocol = request.headers.get('x-forwarded-proto') || 'http'
-    const host = request.headers.get('host') || 'localhost:4000'
-    const baseUrl = `${protocol}://${host}`
-
     // Upload each file
     for (const file of files) {
       try {
@@ -113,9 +108,9 @@ export async function POST(request: NextRequest) {
           // Path: /Marketing/Ninh/thuvienanh/{albumId}/{filename}
           const filePath = `${destinationPath}/${file.name}`
 
-          // Create proxy URLs
-          const imageUrl = `${baseUrl}/api/synology/file-proxy?path=${encodeURIComponent(filePath)}`
-          const thumbnailUrl = `${baseUrl}/api/synology/file-proxy?path=${encodeURIComponent(filePath)}&thumbnail=true`
+          // Create proxy URLs - use relative URLs to avoid Next.js Image Optimizer 503 errors
+          const imageUrl = `/api/synology/file-proxy?path=${encodeURIComponent(filePath)}`
+          const thumbnailUrl = `/api/synology/file-proxy?path=${encodeURIComponent(filePath)}&thumbnail=true`
 
           // Save to database
           const albumImage = await AlbumService.addImage(

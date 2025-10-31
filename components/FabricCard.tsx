@@ -6,34 +6,48 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
   PhotoIcon,
-  XMarkIcon
+  XMarkIcon,
+  EyeIcon
 } from '@heroicons/react/24/outline'
 import { Fabric } from '@/types/database'
+import FabricDetailModal from './FabricDetailModal'
 
 interface FabricCardProps {
   fabric: Fabric
   showRemoveFromCollection?: boolean
   onRemoveFromCollection?: () => void
+  onUpdate?: () => void
+  onDelete?: () => void
+  priority?: boolean
 }
 
 export default function FabricCard({
   fabric,
   showRemoveFromCollection = false,
-  onRemoveFromCollection
+  onRemoveFromCollection,
+  onUpdate,
+  onDelete,
+  priority = false
 }: FabricCardProps) {
   const [imageError, setImageError] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setShowDetailModal(true)
+  }
 
   return (
-    <Link
-      href={`/fabrics/${fabric.id}`}
-      className="group block"
-    >
-      <motion.div
-        whileHover={{ y: -4 }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      >
+    <>
+      <div className="group block relative">
+        <motion.div
+          whileHover={{ y: -4 }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          onClick={handleCardClick}
+          className="cursor-pointer"
+        >
         {/* Remove button */}
         {showRemoveFromCollection && onRemoveFromCollection && (
           <motion.button
@@ -77,7 +91,9 @@ export default function FabricCard({
                 `}
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
-                loading="lazy"
+                loading={priority ? 'eager' : 'lazy'}
+                priority={priority}
+                quality={85}
               />
             </>
           ) : (
@@ -86,22 +102,34 @@ export default function FabricCard({
             </div>
           )}
 
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* Hover overlay with view icon */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 transform scale-0 group-hover:scale-100 transition-transform duration-300">
+              <EyeIcon className="w-6 h-6 text-blue-600" />
+            </div>
+          </div>
         </div>
 
         {/* Name */}
         <h3 className="text-xs lg:text-sm font-medium text-gray-900 text-center group-hover:text-cyan-600 transition-colors line-clamp-2 px-1">
           {fabric.name}
         </h3>
-
-        {/* Price (optional) */}
-        {fabric.price_per_meter && (
-          <p className="text-xs text-gray-600 text-center mt-1">
-            {fabric.price_per_meter.toLocaleString('vi-VN')}đ/m
-          </p>
-        )}
       </motion.div>
-    </Link>
+      </div>
+
+      {/* Detail Modal */}
+      <FabricDetailModal
+        isOpen={showDetailModal}
+        onClose={() => setShowDetailModal(false)}
+        fabricId={fabric.id}
+        onDelete={() => {
+          setShowDetailModal(false)
+          onDelete?.()
+        }}
+        onUpdate={() => {
+          onUpdate?.()
+        }}
+      />
+    </>
   )
 }

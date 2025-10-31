@@ -67,7 +67,7 @@ export default function AlbumCard({
     const categoryColors: Record<string, string> = {
       fabric: 'bg-blue-100 text-blue-800',
       collection: 'bg-green-100 text-green-800',
-      project: 'bg-purple-100 text-purple-800',
+      project: 'bg-[#343F48]/10 text-[#343F48]',
       season: 'bg-orange-100 text-orange-800',
       client: 'bg-pink-100 text-pink-800',
       other: 'bg-gray-100 text-gray-800'

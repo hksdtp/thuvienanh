@@ -1,0 +1,6331 @@
+---
+File Location: /Users/nihdev/Web/thuvienanh/Agents.md
+Last Updated: 2025-10-22
+Version: 3.3.0
+Maintainer: Nguyen Hai Ninh
+Developer: Nguyen Hai Ninh (haininh3496@gmail.com)
+Server: Ubuntu 24.04.3 LTS @ 100.115.191.19
+Storage: WD HDD 1TB @ /data (Primary)
+---
+
+# 🚨 CRITICAL: ALWAYS FOLLOW AGENTS.MD
+
+## **MANDATORY READING REQUIREMENT**
+
+**BEFORE STARTING ANY TASK, AI AGENT MUST:**
+
+1. ✅ **READ** this file (`Agents.md`) completely
+2. ✅ **CONFIRM** understanding of all rules and principles
+3. ✅ **VERIFY** compliance with UI/UX rules
+4. ✅ **CHECK** project-specific requirements
+
+### **Verification Checklist:**
+
+```markdown
+[ ] I have read Agents.md
+[ ] I understand the UI/UX non-modification rule
+[ ] I will ask before making UI changes
+[ ] I will follow the naming conventions
+[ ] I will use the automation scripts when applicable
+[ ] I will update PORT_REGISTRY.md for new projects
+```
+
+### **Consequences of Violation:**
+
+❌ **If agent proceeds without reading Agents.md:**
+
+1. **STOP immediately**
+2. **Read the file**
+3. **Restart the task from beginning**
+4. **Apologize to user**
+5. **Document the violation**
+
+### **Why This Rule Exists:**
+
+- 🎯 **Consistency:** All agents follow same standards
+- 🛡️ **Safety:** Prevents unauthorized UI changes
+- 📚 **Knowledge:** Ensures agent has full context
+- ⚡ **Efficiency:** Reduces errors and rework
+
+---
+
+# 🎯 PRIMARY GOAL: CODE LIKE A REAL HUMAN DEVELOPER
+
+## **CORE PRINCIPLES**
+
+When AI Agent works on any project using this Agents.md file, it **MUST ABSOLUTELY** ensure:
+
+**Code output MUST look like it was written entirely by Nguyen Hai Ninh (nihdev - Ninh Dev), NOT by AI.**
+
+---
+
+## **✅ MANDATORY REQUIREMENTS**
+
+### **1. Coding Style - Personal Programming Style**
+
+- ✅ **Incremental Development**: Code in small parts, commit multiple times over time (like humans code gradually, NOT entire project at once)
+- ✅ **Iterative Refinement**: Build basic → Test → Improve → Refactor (NOT perfect code first try - this is AI signature)
+- ✅ **Manual Git Control**: ABSOLUTELY NO auto-commit, let developer decide commit message, timing, and staging
+- ✅ **Thoughtful Comments**: Write comments in Vietnamese or English naturally, explain "why" not just "what"
+- ✅ **Personal Patterns**: Use consistent naming conventions, code structure, formatting style throughout project (learn from existing code)
+- ✅ **Natural Imperfections**: Allow reasonable "imperfections" (like refactor later, optimize later) - like real human work
+
+### **2. Design Approach - Design Methodology**
+
+- ✅ **Design-First Thinking**: Create mockups/sketches before coding UI (use Human MCP to generate visual mockups)
+- ✅ **Mathematical Precision**: All design values (spacing, colors, font sizes, border radius) have clear mathematical reasoning and documented
+- ✅ **Systematic Decisions**: Every design decision has documented reasoning, NOT arbitrary or "looks good"
+- ✅ **Organic Animations**: Animations must be natural with varied timing (20s, 25s, 30s), NOT uniform/robotic (all same speed)
+- ✅ **Attention to Detail**: Meticulous with every pixel, contrast ratio (WCAG AA/AAA), touch targets (44px minimum), accessibility
+
+### **3. Project Organization**
+
+- ✅ **Clean Workspace**: Cleanup regularly after each task completion, remove unused files/imports/dependencies
+- ✅ **Structured Folders**: Follow standard architecture (src/components, src/hooks, src/lib, etc.), logical file organization
+- ✅ **Consistent Naming**: File names (kebab-case), variable names (camelCase), function names (camelCase), component names (PascalCase) with clear convention
+- ✅ **No Garbage Files**: ABSOLUTELY NO auto-generated docs, backup files (.backup, .old, .temp), log files, cache files
+- ✅ **Professional .gitignore**: Properly configured to prevent garbage files, node_modules, .env, build artifacts
+- ✅ **Clean Root Directory**: Root ONLY contains essential config files, NO scattered scripts/tests/docs (see Section 3.1)
+
+#### **3.1. Root Directory Organization Rules** 🚨
+
+**ROOT DIRECTORY MUST ONLY CONTAIN:**
+
+1. **Essential Config Files** (KEEP in root):
+   - `package.json`, `package-lock.json` (NPM)
+   - `tsconfig.json`, `tsconfig.tsbuildinfo` (TypeScript)
+   - `next.config.js`, `next-env.d.ts`, `middleware.ts` (Next.js)
+   - `tailwind.config.js`, `postcss.config.js` (CSS)
+   - `playwright.config.ts`, `vitest.config.ts` (Testing)
+   - `ecosystem.config.js` (PM2)
+   - `Dockerfile`, `docker-compose*.yml` (Docker)
+   - `vercel.json`, `nixpacks.toml` (Deployment)
+   - `.env*`, `.gitignore`, `.eslintrc*`, `.prettierrc*`
+   - `README.md`, `Agents.md` (Documentation)
+
+2. **TUYỆT ĐỐI FORBIDDEN in root:**
+   - ❌ Script files (`*.sh`, `*.bat`, `*.ps1`) → Move to `scripts/`
+   - ❌ Test files (`test-*.js`, `*.spec.ts`, `*.test.ts`) → Move to `tests/` or `__tests__/`
+   - ❌ SQL files (`*.sql`) → Move to `database/` or `sql/` or `prisma/`
+   - ❌ Documentation files (`*.md` except README.md & Agents.md) → Move to `docs/`
+   - ❌ Deployment scripts (`deploy-*`, `setup-*`, `install-*`) → Move to `scripts/`
+   - ❌ Backup files (`*.backup`, `*.old`, `*.temp`) → Delete or move to `.cleanup-staging/`
+   - ❌ Log files (`*.log`) → Delete or move to `logs/`
+   - ❌ Archive files (`*.tar.gz`, `*.zip`) → Delete or move to `.cleanup-staging/`
+   - ❌ Test images/assets (`test-*.jpg`, `test-*.png`) → Move to `tests/` or `public/test/`
+
+3. **Folder Structure Standards:**
+   ```
+   project-root/
+   ├── app/                    # Next.js App Router (or src/app/)
+   ├── components/             # React components (or src/components/)
+   ├── lib/                    # Libraries (or src/lib/)
+   ├── types/                  # TypeScript types (or src/types/)
+   ├── scripts/                # ALL scripts (.sh, .bat, .ps1, deploy-*, setup-*, check-*)
+   ├── tests/                  # ALL test files (test-*.js, *.spec.ts, test images)
+   ├── docs/                   # ALL documentation (*.md except README.md)
+   ├── database/               # Database schemas, migrations, SQL files
+   ├── public/                 # Static assets
+   ├── .cleanup-staging/       # Temporary staging for uncertain files
+   └── [config files only]     # Essential configs listed above
+   ```
+
+4. **Enforcement Rules:**
+   - **BEFORE starting any task:** Scan root directory, move misplaced files
+   - **AFTER completing any task:** Verify root is clean (max 25 config files)
+   - **NEVER create new files in root** unless it's an essential config
+   - **ALWAYS ask user** before moving/deleting files if uncertain
+
+5. **Quick Cleanup Command:**
+   ```bash
+   # Scan for misplaced files in root
+   find . -maxdepth 1 -type f ! -name ".*" | grep -E "\.(sh|bat|ps1|sql|spec\.ts|test\.ts)$"
+
+   # Count files in root (should be ≤25)
+   find . -maxdepth 1 -type f ! -name ".*" | wc -l
+   ```
+
+### **4. Development Workflow - Development Workflow**
+
+- ✅ **Step-by-Step Approach**: Break down work into small, manageable phases (15-90 minutes per phase)
+- ✅ **Test After Every Change**: Run `npm run build`, `npm run test`, `npm run lint` after each change, fix errors immediately, maintain green test suite
+- ✅ **Backup Before Risky Changes**: Git commit with message "Backup before [operation]" before major refactoring or destructive operations
+- ✅ **Dry-Run First**: Preview changes with `--dry` flag before khi executing destructive operations (cleanup, delete, etc.)
+- ✅ **Frontend-First**: Build UI with mock data first, test UI/UX thoroughly, connect backend later (visual feedback loop)
+
+### **5. Code Quality - Code Quality**
+
+- ✅ **Type Safety**: Full TypeScript with strict mode enabled, NOT use `any` types (use `unknown` or proper types)
+- ✅ **Error Handling**: Proper try-catch blocks, meaningful error messages, handle edge cases explicitly
+- ✅ **Performance**: Optimized rendering (React.memo, useMemo, useCallback), lazy loading, code splitting, <2s initial load
+- ✅ **Accessibility**: WCAG AA/AAA compliant, keyboard navigation, ARIA labels, focus indicators, 4.5:1 contrast minimum
+- ✅ **Security**: No hardcoded secrets/API keys, proper input validation (Zod), sanitization, environment variables
+
+### **6. Post-Task Cleanup - Post-Task Cleanup** 🧹
+
+**AFTER EACH TASK COMPLETION, MUST:**
+
+1. **Scan Root Directory** (PRIORITY #1):
+
+   ```bash
+   # Count files in root (should be ≤25 config files)
+   find . -maxdepth 1 -type f ! -name ".*" | wc -l
+
+   # Find misplaced scripts/tests/docs in root
+   find . -maxdepth 1 -type f \( -name "*.sh" -o -name "*.bat" -o -name "*.ps1" -o -name "test-*" -o -name "*.spec.ts" -o -name "*.sql" \)
+   ```
+
+   **Action:** Move misplaced files to appropriate folders (see Section 3.1)
+
+2. **Scan for Garbage Files**:
+
+   ```bash
+   # Find garbage files
+   find . -name "*.backup" -o -name "*.old" -o -name "*.temp" -o -name "*.log" -o -name ".DS_Store"
+   ```
+
+   **Action:** Delete or move to `.cleanup-staging/`
+
+3. **Remove Unused Imports**:
+   - Check and remove unused imports in all modified files
+   - Use ESLint to detect unused variables/imports
+
+4. **Remove Unused Dependencies**:
+
+   ```bash
+   # Check unused dependencies
+   npx depcheck
+   ```
+
+   **Action:** Uninstall unused packages with `npm uninstall <package>`
+
+5. **Clean Build Artifacts**:
+
+   ```bash
+   # Remove build artifacts if rebuild needed
+   rm -rf .next dist build
+   ```
+
+6. **Organize Files**:
+   - Ensure all files in correct folders (components trong src/components, utils trong src/utils, etc.)
+   - NO misplaced files in root or wrong folders
+   - Verify root directory chỉ có essential config files (≤25 files)
+
+7. **Handle Uncertain Files** (QUAN TRỌNG):
+   - **If UNSURE whether to delete file:**
+
+     ```bash
+     # Tạo thư mục tạm để lưu files không chắc chắn
+     mkdir -p .cleanup-staging
+     mv uncertain-file.js .cleanup-staging/
+     ```
+
+   - **Lưu vào `.cleanup-staging/` folder for later review**
+   - **NOT delete directly if unsure**
+   - **Ask user before deleting important files**
+
+8. **Verify Build After Cleanup**:
+
+   ```bash
+   # ALWAYS verify project still works after cleanup
+   npm run build
+   npm run dev
+   ```
+
+   **Action:** If build fails, rollback changes immediately
+
+7. **Verify Project Integrity**:
+
+   ```bash
+   # Verify project vẫn hoạt động after cleanup
+   npm run build
+   npm run test
+   npm run lint
+   ```
+
+8. **Final Verification Checklist**:
+   - [ ] Root directory has ≤25 config files only
+   - [ ] No scripts/tests/docs in root
+   - [ ] No garbage files (*.backup, *.old, *.temp, *.log, .DS_Store)
+   - [ ] All files in correct folders (scripts/, tests/, docs/, database/)
+   - [ ] Build successful (`npm run build`)
+   - [ ] Dev server running (`npm run dev`)
+   - [ ] No unused imports/dependencies
+
+**CRITICAL RULES:**
+
+- ❌ NO deleting files in: `src/`, `public/`, `prisma/`, `.env`, `package.json`, `tsconfig.json`, config files
+- ❌ NO deleting files if unsure → Move to `.cleanup-staging/` instead
+- ❌ NO cleanup affecting structure, design, functionality of project
+- ✅ ALWAYS verify project works normally after cleanup (build + test + lint)
+- ✅ ALWAYS backup (git commit) before cleanup if many files to delete
+
+---
+
+## **❌ ABSOLUTELY AVOID (AI Patterns)**
+
+### **Code Patterns:**
+- ❌ **Perfect Code First Try**: NOT perfect code first try (unrealistic, AI signature)
+- ❌ **Auto-Generated Comments**: KHÔNG có comments dạng "This function does X" or "Returns Y" (obvious, redundant)
+- ❌ **Over-Engineering**: KHÔNG implement features chưa cần thiết, KHÔNG premature optimization
+- ❌ **Inconsistent Style**: KHÔNG thay đổi style giữa các files (học style từ existing code)
+- ❌ **Generic Variable Names**: NOT use `data`, `result`, `temp`, `item`, `value` (too generic - use descriptive names)
+- ❌ **All-at-Once Commits**: KHÔNG commit toàn bộ project một lúc (unrealistic - commit incrementally)
+- ❌ **Robotic Patterns**: KHÔNG có code patterns quá perfect/mechanical/uniform (varied timing, natural imperfections)
+- ❌ **Leaving Garbage Files**: KHÔNG để lại *.backup, *.old, *.temp, *.log files in project
+
+### **AI Response Patterns (CRITICAL):** 🚨
+
+- ❌ **Markdown Summary Responses**: TUYỆT ĐỐI NO markdown summary responses with headers/tables/emojis
+- ❌ **Unsolicited Documentation**: KHÔNG tạo documentation files (*.md) unless user explicitly requests
+- ❌ **Over-Formatted Responses**: NO excessive emojis (✅❌🎯📊🚀), headers (###), tables, boxes
+- ❌ **Verbose Explanations**: NO verbose explanations of what was done - user can read code/logs
+- ❌ **Celebration Messages**: NOT use "TUYỆT VỜI!", "HOÀN TẤT!", "THÀNH CÔNG!" - just report facts
+- ❌ **Scope Creep in Responses**: NO doing/saying more than user requested
+
+### **Correct AI Response Style:**
+
+✅ **DO:**
+- Brief, factual responses (2-5 lines max unless explaining complex issues)
+- Use code snippets in `<augment_code_snippet>` tags when showing code
+- Ask clarifying questions when uncertain
+- Report errors/issues directly without sugar-coating
+- Use task management tools for complex work
+
+✅ **EXAMPLE - Good Response:**
+```
+Moved 28 scripts to scripts/, 11 tests to tests/. Root now has 22 files (was 63).
+Build successful. Dev server running on :4000.
+```
+
+❌ **EXAMPLE - Bad Response:**
+```
+# ✅ CLEANUP ROOT DIRECTORY HOÀN TẤT!
+
+## 🎉 KẾT QUẢ CUỐI CÙNG:
+
+### 📊 THỐNG KÊ:
+| Metric | Trước | Sau | Cải thiện |
+|--------|-------|-----|-----------|
+| Files in root | 63 | 22 | ⬇️ 65% giảm |
+...
+(50 more lines of unnecessary formatting)
+```
+
+---
+
+## **🎯 PERSONALITY TRAITS (Đặc Điểm Cá Nhân)**
+
+Code phải thể hiện Nguyen Hai Ninh là người:
+
+1. **Cẩn Thận (Careful)**:
+   - Backup (git commit) before major changes
+   - Dry-run before destructive operations
+   - Test thoroughly before deployment
+   - Review code before commit
+
+2. **Tỉ Mỉ (Meticulous)**:
+   - Mathematical precision in design values (13px × 1.15 ≈ 15px)
+   - Consistent spacing (8pt grid), alignment, typography
+   - Proper error handling for edge cases
+   - Detailed comments explaining complex logic
+
+3. **Gọn Gàng (Organized)**:
+   - Clean folder structure (src/components, src/hooks, etc.)
+   - No unused files/imports/dependencies
+   - Consistent naming conventions across project
+   - Well-organized code blocks with clear separation
+
+4. **Sạch Sẽ (Clean)**:
+   - No commented-out code left behind
+   - No console.logs in production code
+   - No TODO comments left unresolved
+   - Properly formatted code (Prettier)
+   - No garbage files (*.backup,*.temp, *.log)
+
+5. **Thông Minh (Smart)**:
+   - Efficient algorithms (O(n) over O(n²) when possible)
+   - Reusable components (DRY principle)
+   - Performance optimizations (memoization, lazy loading)
+   - Clever solutions to complex problems
+
+6. **Khoa Học (Scientific)**:
+   - Every decision has documented reasoning
+   - Mathematical approach to design (golden ratio, Fibonacci, 8pt grid)
+   - Systematic problem-solving (analyze → design → implement → test)
+   - Data-driven optimizations (measure before optimize)
+
+---
+
+## **📋 VERIFICATION CHECKLIST**
+
+Trước khi hoàn thành bất kỳ task nào, AI Agent PHẢI verify:
+
+```markdown
+[ ] Code được viết incremental (nhiều small commits over time, KHÔNG 1 big commit)
+[ ] Có iterative refinement visible (basic → improved → optimized versions)
+[ ] Comments tự nhiên, giải thích "why" không chỉ "what"
+[ ] Naming conventions nhất quán xuyên suốt project
+[ ] Design values có mathematical reasoning documented
+[ ] Animations natural with varied timing (20s, 25s, 30s - KHÔNG uniform)
+[ ] Workspace clean, no garbage files (*.backup, *.old, *.temp, *.log)
+[ ] Uncertain files moved to .cleanup-staging/ (KHÔNG xóa nếu không chắc)
+[ ] Tests pass (npm run test), no errors
+[ ] Build successful (npm run build), no warnings
+[ ] Lint clean (npm run lint), no errors
+[ ] TypeScript strict mode, no `any` types
+[ ] Accessibility compliant (WCAG AA minimum, 4.5:1 contrast)
+[ ] Performance optimized (<2s initial load, 60fps animations)
+[ ] Security best practices applied (no hardcoded secrets, proper validation)
+[ ] Git history realistic (multiple commits over time, meaningful messages)
+[ ] Code style consistent with existing codebase
+[ ] Personality traits reflected (cẩn thận, tỉ mỉ, gọn gàng, sạch sẽ, thông minh, khoa học)
+[ ] Post-task cleanup completed (unused imports removed, garbage files cleaned)
+```
+
+---
+
+## **🚨 CRITICAL RULE**
+
+**Nếu code output trông như được generate bởi AI (too perfect, too generic, too mechanical, too uniform), PHẢI refactor để trông natural hơn, human-like hơn.**
+
+**Mục tiêu cuối cùng: Khi một senior developer/code reviewer nhìn vào project, họ PHẢI nghĩ rằng đây là project được code hoàn toàn bởi Nguyen Hai Ninh (một developer cẩn thận, tỉ mỉ, gọn gàng, sạch sẽ, thông minh, khoa học), KHÔNG PHẢI bởi AI.**
+
+**Dấu hiệu code bởi AI cần tránh:**
+
+- All commits cùng 1 lúc
+- All animations cùng timing
+- All variables named perfectly
+- All comments too formal/generic
+- No iterative refinement visible
+- Too perfect, no natural imperfections
+- Garbage files left behind (*.backup,*.temp, etc.)
+
+**Dấu hiệu code bởi human (mục tiêu):**
+
+- Commits spread over time
+- Varied animation timings
+- Some variables refactored later
+- Natural, conversational comments
+- Visible iteration (v1 → v2 → v3)
+- Some imperfections, then improved
+- Clean workspace, no garbage files
+
+---
+
+# 📦 PROJECT CREATION AUTOMATION
+
+## **Overview**
+
+Automated script for creating new expense tracker projects with complete infrastructure setup.
+
+**Features:**
+
+- ✅ Auto-select available port
+- ✅ Create project structure
+- ✅ Setup PostgreSQL database
+- ✅ Deploy to Ubuntu Server
+- ✅ Configure PM2 process
+- ✅ Setup Cloudflare Tunnel
+- ✅ Update PORT_REGISTRY.md
+
+## **Script Location**
+
+```bash
+/Users/nihdev/Web/1/create-new-project.sh
+```
+
+## **Usage**
+
+### **Quick Start:**
+
+```bash
+cd /Users/nihdev/Web/1
+./create-new-project.sh
+```
+
+### **Interactive Prompts:**
+
+The script will ask for:
+
+1. **Project name** (e.g., `expense-tracker-user3`)
+2. **User name** (e.g., `User 3`)
+3. **Domain** (e.g., `user3.ninh.app`)
+4. **Port** (auto-suggested or manual)
+5. **Google Sheets ID**
+
+### **Example Session:**
+
+```
+============================================
+Project Information
+============================================
+Enter project name: expense-tracker-john
+Enter user name: John Doe
+Enter domain: john.ninh.app
+Enter port (press Enter for auto-select: 3002): 
+Enter Google Sheets ID: 1AbC...XyZ
+
+============================================
+Project Configuration
+============================================
+Project Name:     expense-tracker-john
+User Name:        John Doe
+Domain:           john.ninh.app
+Port:             3002
+PM2 Name:         expense-tracker-john
+Database:         expense_tracker_john_db
+Google Sheets:    1AbC...XyZ
+Synology Folder:  /Marketing/John_Doe/expense-tracker
+Local Path:       /Users/nihdev/Web/John_Doe/expense-tracker-john
+Server Path:      /data/Ninh/projects/expense-tracker-john
+
+Continue with this configuration? (y/n): y
+```
+
+## **What the Script Does**
+
+### **Step 1: Requirements Check**
+
+- ✅ Verify SSH access to Ubuntu Server
+- ✅ Check PORT_REGISTRY.md exists
+- ✅ Verify template project exists
+
+### **Step 2: Port Management**
+
+- 📊 Read PORT_REGISTRY.md
+- 🔍 Find next available port (3000, 3001, 3002, ...)
+- ✅ Suggest port to user
+
+### **Step 3: Project Creation**
+
+- 📁 Create local project directory
+- 📋 Copy template files from chitieuninh project
+- ⚙️ Generate `.env.production` with correct values
+- 🔧 Create `ecosystem.config.js` for PM2
+- 📝 Update `drizzle.config.ts` with database name
+
+### **Step 4: Database Setup**
+
+- 🗄️ Create PostgreSQL database on server
+- 📊 Push database schema using Drizzle
+- ✅ Verify tables created
+
+### **Step 5: Deployment**
+
+- 📤 Sync files to Ubuntu Server
+- 📦 Install npm dependencies
+- 🏗️ Build Next.js application
+- 🚀 Start PM2 process
+- 💾 Save PM2 process list
+
+### **Step 6: Cloudflare Tunnel**
+
+- 🌐 Create DNS record
+- 📝 Generate config snippet
+- ⚠️ Prompt user to update config manually
+
+### **Step 7: PORT_REGISTRY Update**
+
+- 📝 Add new project entry
+- ✅ Mark port as used
+- 📤 Sync to server
+
+## **Post-Deployment Steps**
+
+After script completes, manually:
+
+1. **Update Cloudflare Tunnel config:**
+
+   ```bash
+   ssh nihdev@100.115.191.19
+   sudo nano /etc/cloudflared/config.yml
+   # Add:
+   #   - hostname: john.ninh.app
+   #     service: http://localhost:3002
+   sudo systemctl restart cloudflared
+   ```
+
+2. **Create Synology folder:**
+   - Login to Synology: <http://192.168.1.58:5000>
+   - Navigate to `/Marketing/John_Doe/`
+   - Create folder: `expense-tracker/receipts/`
+
+3. **Share Google Sheet:**
+   - Open Google Sheet
+   - Share with: `nihreport@qlct-455215.iam.gserviceaccount.com`
+   - Permission: Editor
+
+4. **Test deployment:**
+
+   ```bash
+   curl -I https://john.ninh.app
+   # Should return: HTTP/2 200
+   ```
+
+## **Troubleshooting**
+
+### **Script fails at database creation:**
+
+```bash
+# Manual fix:
+ssh nihdev@100.115.191.19
+docker exec -it postgresql-16 psql -U nihdev -d postgres
+CREATE DATABASE expense_tracker_john_db;
+\q
+```
+
+### **PM2 process won't start:**
+
+```bash
+# Check logs:
+ssh nihdev@100.115.191.19
+pm2 logs expense-tracker-john --lines 50
+
+# Common issues:
+# - Port already in use
+# - Missing dependencies
+# - Build errors
+```
+
+### **Domain not accessible:**
+
+```bash
+# Check Cloudflare Tunnel:
+ssh nihdev@100.115.191.19
+sudo systemctl status cloudflared
+sudo journalctl -u cloudflared -n 50
+
+# Check DNS:
+dig john.ninh.app
+```
+
+## **Script Customization**
+
+### **Change Template Project:**
+
+Edit line 18 in script:
+
+```bash
+TEMPLATE_PROJECT="/Users/nihdev/Web/your-template-project"
+```
+
+### **Change Server:**
+
+Edit lines 14-16:
+
+```bash
+UBUNTU_SERVER="your.server.ip"
+UBUNTU_USER="your-username"
+SUDO_PASS="your-password"
+```
+
+### **Change Port Range:**
+
+Edit `get_next_available_port()` function:
+
+```bash
+local port=5000  # Start from 5000 instead of 3000
+```
+
+---
+
+# 📋 PORT MANAGEMENT SYSTEM
+
+## **PORT_REGISTRY.md**
+
+Central registry for tracking port usage across all projects.
+
+**Location:** `/Users/nihdev/Web/1/PORT_REGISTRY.md`
+
+### **Format:**
+
+```markdown
+| Port | Project | PM2 Name | Domain | User | Status |
+|------|---------|----------|--------|------|--------|
+| 3000 | chitieuninh | chitieuninh | bangke.ninh.app | Ninh | ✅ Active |
+| 3001 | expense-tracker-nvn | expense-tracker-nvn | nvn.ninh.app | Năm | ✅ Active |
+| 3002 | - | - | - | - | 🟢 Available |
+```
+
+### **Rules:**
+
+1. ✅ **Always check** PORT_REGISTRY.md before creating new project
+2. ✅ **Update immediately** after deploying new project
+3. ✅ **Sync to server** after every update
+4. ✅ **Mark as inactive** when project is removed
+
+### **Commands:**
+
+```bash
+# View registry
+cat /Users/nihdev/Web/1/PORT_REGISTRY.md
+
+# Check available ports
+grep "🟢 Available" /Users/nihdev/Web/1/PORT_REGISTRY.md
+
+# Sync to server
+scp /Users/nihdev/Web/1/PORT_REGISTRY.md nihdev@100.115.191.19:/data/Ninh/projects/
+```
+
+---
+
+# 🔄 AUTO-RESTART SYSTEM
+
+## **PM2 Startup Configuration**
+
+Ensures all projects auto-restart after server reboot.
+
+### **Setup (Already Done):**
+
+```bash
+# On Ubuntu Server:
+sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u nihdev --hp /home/nihdev
+pm2 save
+```
+
+### **Verification:**
+
+```bash
+# Check PM2 service
+sudo systemctl status pm2-nihdev
+
+# Test auto-restart
+pm2 kill
+pm2 resurrect
+pm2 status
+```
+
+### **How It Works:**
+
+```
+Server Boot
+    ↓
+systemd starts pm2-nihdev.service
+    ↓
+PM2 reads /home/nihdev/.pm2/dump.pm2
+    ↓
+PM2 resurrects all saved processes
+    ↓
+Apps start on configured ports
+    ↓
+Cloudflare Tunnel routes traffic
+    ↓
+✅ All apps online
+```
+
+---
+
+# 📚 NAMING CONVENTIONS
+
+## **Project Names:**
+
+```
+expense-tracker-{user-slug}
+
+Examples:
+- expense-tracker-ninh
+- expense-tracker-nvn
+- expense-tracker-john-doe
+```
+
+## **PM2 Process Names:**
+
+```
+Same as project name
+
+Examples:
+- chitieuninh (legacy)
+- expense-tracker-nvn
+- expense-tracker-john-doe
+```
+
+## **Database Names:**
+
+```
+{project_name_with_underscores}_db
+
+Examples:
+- chitieuninh_db
+- expense_tracker_nvn_db
+- expense_tracker_john_doe_db
+```
+
+## **Domains:**
+
+```
+{user-slug}.ninh.app
+
+Examples:
+- bangke.ninh.app (legacy)
+- nvn.ninh.app
+- john.ninh.app
+```
+
+## **Synology Folders:**
+
+```
+/Marketing/{User Name}/DuAnCuaToi/{project-folder}/
+
+Examples:
+- /Marketing/Ninh/DuAnCuaToi/chitieuninh/
+- /Marketing/Ninh/DuAnCuaToi/taskgd/
+- /Marketing/NVN/DuAnCuaToi/expense-tracker/
+- /Marketing/John_Doe/DuAnCuaToi/expense-tracker/
+```
+
+**Structure:**
+
+- `/Marketing/Ninh/` - Root folder for user Ninh
+- `/Marketing/Ninh/DuAnCuaToi/` - Projects container folder (all projects go here)
+- `/Marketing/Ninh/DuAnCuaToi/{project-folder}/` - Each project has its own folder with subfolders:
+  - `source/` - Source code, configuration files
+  - `uploads/` - User uploaded files (images, videos, documents, attachments)
+  - `database/` - Database backups, exports
+  - `logs/` - Application logs, error logs
+  - `docs/` - Project documentation, guides
+
+**Example for TASKGD:**
+
+```
+/Marketing/Ninh/DuAnCuaToi/taskgd/
+├── source/          # Source code (optional, usually on server)
+├── uploads/         # User uploaded files (images, PDFs, etc.)
+├── database/        # Database backups
+├── logs/            # Application logs
+└── docs/            # Documentation
+```
+
+**Naming Convention:**
+
+- User folders: Proper case (e.g., `Ninh`, `John_Doe`, `NVN`)
+- Container folder: `DuAnCuaToi` (fixed name for all users)
+- Project folders: Lowercase (e.g., `chitieuninh`, `taskgd`)
+- Subfolder names: Lowercase (e.g., `uploads`, `database`, `logs`)
+- Full NFS path for uploads: `/volume1/Marketing/{User Name}/DuAnCuaToi/{project-folder}/uploads/`
+
+---
+
+# 🖥️ SERVER PATHS & STORAGE CONFIGURATION
+
+## **Ubuntu Server Information**
+
+**Server Details:**
+
+- IP: `100.115.191.19`
+- OS: Ubuntu 24.04.3 LTS (Noble Numbat)
+- User: `nihdev`
+- Kernel: 6.8.0-85-generic
+
+## **Storage Configuration (Updated: 2025-10-21)**
+
+### **Primary Storage: WD HDD 1TB**
+
+- Device: `/dev/sdb2`
+- Mount: `/data`
+- Size: 932 GB
+- Used: 5.6 GB (1%)
+- Free: 926 GB (99%)
+- **Status:** ✅ **PRIMARY STORAGE FOR ALL PROJECTS**
+
+### **System Storage: Kingston SSD 224GB**
+
+- Device: `/dev/sda`
+- Mount: `/` (root)
+- Size: 100 GB allocated
+- Used: 14 GB
+- Free: 80 GB
+- **Status:** ✅ **SYSTEM DRIVE (Ubuntu Server)**
+
+### **Removable Storage: Crucial SSD 240GB**
+
+- Device: `/dev/sdc2`
+- Mount: `/media/nihdev/SSD`
+- Size: 224 GB
+- **Status:** ⚠️ **CAN BE REMOVED** (data migrated to HDD)
+
+## **Project Paths on Ubuntu Server**
+
+### **Main Projects Directory:**
+
+```
+/data/Ninh/projects/
+├── chitieuninh/              # Port 3000, PM2: chitieuninh
+├── expense-tracker-nvn/      # Port 3001, PM2: expense-tracker-nvn
+├── taskgd/                   # Port 3003, PM2: taskgd-api
+└── vps-manager/              # Port 3004, PM2: vps-manager
+```
+
+### **Secondary Projects Directory:**
+
+```
+/data/2.Ninh/Web/
+├── incanto_test_webapp/
+├── NVN/
+├── TVA/
+└── v0-bcct-moi/
+```
+
+### **Backups Directory:**
+
+```
+/data/backups/
+├── projects/                 # Project tar.gz backups
+├── postgresql/               # Database backups
+├── pm2/                      # PM2 configs
+├── env-files/                # Environment files
+└── images/                   # Docker images
+```
+
+### **Scripts & Utilities:**
+
+```
+/data/Ninh/
+├── scripts/                  # Automation scripts
+├── logs/                     # Application logs
+├── postgresql/               # PostgreSQL data
+└── postgresql-docker/        # PostgreSQL Docker configs
+```
+
+### **Symbolic Links (for backward compatibility):**
+
+```
+/home/nihdev/
+├── newsale → /data/SSD-Backup-20251021-122132/newsale
+└── PostgreSQL → /data/SSD-Backup-20251021-122132/PostgreSQL
+```
+
+## **Path Mapping: Mac ↔ Ubuntu Server**
+
+| Mac Local | Ubuntu Server | Description |
+|-----------|---------------|-------------|
+| `/Users/nihdev/Web/1/` | `/data/Ninh/projects/` | Main workspace |
+| `/Users/nihdev/Web/chitieuninh/` | `/data/Ninh/projects/chitieuninh/` | Chitieuninh project |
+| `/Users/nihdev/Web/TASKGD/` | `/data/Ninh/projects/taskgd/` | TASKGD project |
+| `/Users/nihdev/Web/thuvienanh/Agents.md` | `/data/Ninh/projects/Agents.md` | This file (synced) |
+| `/Users/nihdev/Web/1/PORT_REGISTRY.md` | `/data/Ninh/projects/PORT_REGISTRY.md` | Port registry |
+
+## **Sync Commands**
+
+### **Sync Project from Mac to Server:**
+
+```bash
+rsync -avz --exclude 'node_modules' --exclude '.next' --exclude '.git' \
+  /Users/nihdev/Web/{project-name}/ \
+  nihdev@100.115.191.19:/data/Ninh/projects/{project-name}/
+```
+
+### **Sync Project from Server to Mac:**
+
+```bash
+rsync -avz --exclude 'node_modules' --exclude '.next' --exclude '.git' \
+  nihdev@100.115.191.19:/data/Ninh/projects/{project-name}/ \
+  /Users/nihdev/Web/{project-name}/
+```
+
+### **Sync Agents.md:**
+
+```bash
+# Mac → Server
+scp "/Users/nihdev/Web/thuvienanh/Agents.md" \
+  nihdev@100.115.191.19:/data/Ninh/projects/Agents.md
+
+# Server → Mac
+scp nihdev@100.115.191.19:/data/Ninh/projects/Agents.md \
+  "/Users/nihdev/Web/thuvienanh/Agents.md"
+```
+
+## **Important Notes**
+
+1. **All projects run from `/data`** (WD HDD 1TB)
+2. **Crucial SSD can be removed** after unmounting
+3. **Kingston SSD** runs Ubuntu (DO NOT REMOVE)
+4. **Symbolic links** maintain backward compatibility
+5. **926 GB free space** available on HDD
+
+---
+
+# 💾 SYNOLOGY STORAGE SYSTEM
+
+<a name="synology-overview"></a>
+
+## **Overview**
+
+All project files (uploads, database backups, logs) are stored on Synology NAS for centralized storage, automatic backups, and easy management.
+
+**Synology NAS:**
+
+- IP: `192.168.1.58`
+- Port: `5000`
+- Web UI: <http://192.168.1.58:5000>
+- NFS Server: Enabled
+
+<a name="synology-folder-structure"></a>
+
+## **Folder Structure**
+
+Each project has a dedicated folder under `/Marketing/Ninh/DuAnCuaToi/` with the following subfolders:
+
+```
+/volume1/Marketing/Ninh/DuAnCuaToi/{project-folder}/
+├── source/          # Source code (optional, usually on server)
+├── uploads/         # User uploaded files (images, videos, PDFs, documents, attachments)
+├── database/        # Database backups, SQL dumps, exports
+├── logs/            # Application logs, error logs, access logs
+└── docs/            # Project documentation, guides, manuals
+```
+
+**Full Hierarchy:**
+
+```
+/volume1/Marketing/
+└── Ninh/                           # User folder
+    └── DuAnCuaToi/                 # Projects container
+        ├── chitieuninh/            # Project 1
+        │   ├── uploads/
+        │   ├── database/
+        │   ├── logs/
+        │   └── docs/
+        ├── taskgd/                 # Project 2 (TASKGD)
+        │   ├── uploads/
+        │   ├── database/
+        │   ├── logs/
+        │   └── docs/
+        └── {other-projects}/       # Future projects
+```
+
+**Example for TASKGD:**
+
+```
+/volume1/Marketing/Ninh/DuAnCuaToi/taskgd/
+├── source/          # (optional)
+├── uploads/         # Task attachments, user uploads
+├── database/        # taskgd_db backups
+├── logs/            # PM2 logs, error logs
+└── docs/            # API docs, user guides
+```
+
+**Naming Rules:**
+
+- User folder: Proper case (e.g., `Ninh`, `John_Doe`, `NVN`)
+- Container folder: `DuAnCuaToi` (fixed name, same for all users)
+- Project folder: Lowercase (e.g., `chitieuninh`, `taskgd`, `expense-tracker`)
+- Subfolders: Lowercase (e.g., `uploads`, `database`, `logs`, `docs`)
+
+<a name="synology-nfs-mount-setup"></a>
+
+## **NFS Mount Setup**
+
+**Prerequisites:**
+
+1. Create project folder on Synology
+2. Enable NFS sharing for the folder
+3. Set NFS permissions for Ubuntu server IP
+
+**Step-by-Step:**
+
+### **1. Create Synology Folders**
+
+Login to Synology (<http://192.168.1.58:5000>):
+
+```
+File Station → Marketing → Ninh → DuAnCuaToi → Create Folder: {project-folder}
+Inside {project-folder}, create:
+  - uploads/
+  - database/
+  - logs/
+  - docs/
+```
+
+**For TASKGD:**
+
+```
+File Station → Marketing → Ninh → DuAnCuaToi → Create Folder: taskgd
+Inside taskgd, create:
+  - uploads/
+  - database/
+  - logs/
+  - docs/
+```
+
+### **2. Enable NFS Sharing**
+
+```
+Control Panel → Shared Folder → Select folder → Edit
+→ NFS Permissions → Create
+  - Server: 100.115.191.19
+  - Privilege: Read/Write
+  - Squash: Map all users to admin
+  - Enable asynchronous
+  - Allow connections from non-privileged ports
+→ OK
+```
+
+### **3. Mount NFS on Ubuntu Server**
+
+```bash
+# Install NFS client (one-time setup)
+ssh nihdev@100.115.191.19
+sudo apt update
+sudo apt install nfs-common -y
+
+# Create mount point
+sudo mkdir -p /mnt/synology/{project-name}-uploads
+
+# Test mount (temporary)
+sudo mount -t nfs 192.168.1.58:/volume1/Marketing/Ninh/DuAnCuaToi/{project-folder}/uploads /mnt/synology/{project-name}-uploads
+
+# Verify mount
+df -h | grep synology
+ls -la /mnt/synology/{project-name}-uploads/
+
+# If successful, add to /etc/fstab for auto-mount on boot
+echo "192.168.1.58:/volume1/Marketing/Ninh/DuAnCuaToi/{project-folder}/uploads /mnt/synology/{project-name}-uploads nfs defaults 0 0" | sudo tee -a /etc/fstab
+
+# Test fstab
+sudo mount -a
+df -h | grep synology
+```
+
+### **4. Create Symlink in Project Directory**
+
+```bash
+cd /data/Ninh/projects/{project-name}
+
+# Remove local uploads folder (if exists)
+rm -rf uploads
+
+# Create symlink to Synology mount
+ln -s /mnt/synology/{project-name}-uploads uploads
+
+# Verify symlink
+ls -la uploads
+# Should show: uploads -> /mnt/synology/{project-name}-uploads
+
+# Test write
+touch uploads/test.txt
+# Verify on Synology: /Marketing/Ninh/{project-folder}/uploads/test.txt should exist
+```
+
+**Example for TASKGD:**
+
+```bash
+# On Synology: Create /Marketing/Ninh/DuAnCuaToi/taskgd/uploads/ and enable NFS
+
+# On Ubuntu Server:
+sudo mkdir -p /mnt/synology/taskgd-uploads
+sudo mount -t nfs 192.168.1.58:/volume1/Marketing/Ninh/DuAnCuaToi/taskgd/uploads /mnt/synology/taskgd-uploads
+echo "192.168.1.58:/volume1/Marketing/Ninh/DuAnCuaToi/taskgd/uploads /mnt/synology/taskgd-uploads nfs defaults 0 0" | sudo tee -a /etc/fstab
+cd /data/Ninh/projects/taskgd
+rm -rf uploads
+ln -s /mnt/synology/taskgd-uploads uploads
+touch uploads/test.txt
+```
+
+<a name="synology-configuration"></a>
+
+## **Configuration**
+
+**Environment Variables (.env.production):**
+
+```bash
+# File Upload (Synology)
+SYNOLOGY_HOST=192.168.1.58
+SYNOLOGY_PORT=5000
+SYNOLOGY_PATH=/Marketing/Ninh/DuAnCuaToi/{project-folder}/uploads
+```
+
+**Example for TASKGD:**
+
+```bash
+SYNOLOGY_HOST=192.168.1.58
+SYNOLOGY_PORT=5000
+SYNOLOGY_PATH=/Marketing/Ninh/DuAnCuaToi/taskgd/uploads
+```
+
+**Application Code:**
+
+No code changes needed! The symlink makes Synology storage transparent to the application:
+
+```typescript
+// Application writes to local path
+const uploadsDir = path.join(__dirname, '../uploads');
+
+// But files are actually stored on Synology via symlink:
+// /data/Ninh/projects/taskgd/uploads -> /mnt/synology/taskgd-uploads
+// /mnt/synology/taskgd-uploads -> 192.168.1.58:/volume1/Marketing/Ninh/DuAnCuaToi/taskgd/uploads
+```
+
+**Benefits:**
+
+- ✅ Centralized storage on Synology NAS
+- ✅ Automatic Synology snapshots (backup)
+- ✅ Easy file management via Synology UI
+- ✅ No code changes required (transparent via symlink)
+- ✅ Accessible from multiple servers (if needed)
+- ✅ Better disk space management
+
+**Troubleshooting:**
+
+```bash
+# Check if NFS is mounted
+df -h | grep synology
+
+# Check symlink
+ls -la /data/Ninh/projects/{project-name}/uploads
+
+# Remount if needed
+sudo umount /mnt/synology/{project-name}-uploads
+sudo mount -a
+
+# Check NFS server
+showmount -e 192.168.1.58
+
+# Check permissions
+ls -la /mnt/synology/{project-name}-uploads/
+```
+
+---
+
+<a name="synology-hybrid-approach"></a>
+
+## **Hybrid Storage Approach (Recommended)**
+
+For production applications, the **Hybrid Approach** combines the best of both local and network storage:
+
+### **Architecture:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    HYBRID STORAGE STRATEGY                   │
+└─────────────────────────────────────────────────────────────┘
+
+┌──────────────────────┐         ┌──────────────────────────┐
+│   UBUNTU SERVER      │         │   SYNOLOGY NAS           │
+│   (Primary Storage)  │◄────────┤   (Backup Storage)       │
+│                      │  Rsync  │                          │
+│  /data/Ninh/projects/│  Every  │  /Marketing/Ninh/        │
+│  ├── taskgd/         │  Hour   │  DuAnCuaToi/             │
+│  │   ├── uploads/    │────────►│  ├── taskgd/             │
+│  │   ├── database/   │         │  │   ├── uploads/        │
+│  │   └── logs/       │         │  │   ├── database/       │
+│  └── ...             │         │  │   └── logs/           │
+└──────────────────────┘         └──────────────────────────┘
+        ▲                                    │
+        │                                    │
+        │         ┌──────────────────────────┘
+        │         │  Manual restore if needed
+        │         ▼
+        └─── Fast local access
+```
+
+### **How It Works:**
+
+1. **Primary Storage: Ubuntu Server**
+   - Application reads/writes directly to local disk
+   - Best performance (no network latency)
+   - Simple, stable, fast
+
+2. **Backup Storage: Synology NAS**
+   - Automatic rsync every hour (or real-time)
+   - Synology snapshots for point-in-time recovery
+   - Easy file management via Web UI
+
+3. **Benefits:**
+   - ✅ **Performance:** Local disk speed (~0ms latency)
+   - ✅ **Reliability:** Automatic backup to Synology
+   - ✅ **Recovery:** Restore from Synology if needed
+   - ✅ **Independence:** App works even if Synology is down
+   - ✅ **Management:** Easy file browsing via Synology UI
+   - ✅ **Scalability:** Can switch to full NFS later if needed
+
+### **Setup: Hourly Rsync Backup**
+
+**Step 1: Create backup script**
+
+```bash
+# Create scripts directory
+mkdir -p /data/Ninh/scripts
+
+# Create backup script
+cat > /data/Ninh/scripts/backup-to-synology.sh << 'EOF'
+#!/bin/bash
+# ============================================================================
+# SYNOLOGY BACKUP SCRIPT - HYBRID APPROACH
+# ============================================================================
+# Purpose: Backup projects from Ubuntu server to Synology NAS
+# Schedule: Runs every hour via cron
+# ============================================================================
+
+set -e
+
+# Configuration
+SYNOLOGY_USER="nihdev"
+SYNOLOGY_IP="192.168.1.58"
+SYNOLOGY_BASE="/volume1/Marketing/Ninh/DuAnCuaToi"
+LOCAL_BASE="/data/Ninh/projects"
+LOG_FILE="/var/log/synology-backup.log"
+
+# Projects to backup
+PROJECTS=(
+    "taskgd"
+    "chitieuninh"
+    "expense-tracker-nvn"
+    "vps-manager"
+)
+
+# Log function
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "${LOG_FILE}"
+}
+
+log "=========================================="
+log "Starting Synology backup..."
+log "=========================================="
+
+# Backup each project
+for PROJECT in "${PROJECTS[@]}"; do
+    if [ -d "${LOCAL_BASE}/${PROJECT}" ]; then
+        log "Backing up ${PROJECT}..."
+
+        # Rsync to Synology
+        rsync -avz --delete \
+            --exclude 'node_modules' \
+            --exclude '.git' \
+            --exclude '*.log' \
+            --exclude '.env.local' \
+            "${LOCAL_BASE}/${PROJECT}/" \
+            "${SYNOLOGY_USER}@${SYNOLOGY_IP}:${SYNOLOGY_BASE}/${PROJECT}/" \
+            2>&1 | tee -a "${LOG_FILE}"
+
+        if [ ${PIPESTATUS[0]} -eq 0 ]; then
+            log "✅ ${PROJECT} backup completed"
+        else
+            log "❌ ${PROJECT} backup failed"
+        fi
+    else
+        log "⚠️  ${PROJECT} directory not found, skipping..."
+    fi
+done
+
+log "=========================================="
+log "Backup completed at $(date)"
+log "=========================================="
+EOF
+
+# Make executable
+chmod +x /data/Ninh/scripts/backup-to-synology.sh
+```
+
+**Step 2: Setup SSH key for passwordless rsync**
+
+```bash
+# Generate SSH key (if not exists)
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""
+
+# Copy to Synology
+ssh-copy-id nihdev@192.168.1.58
+
+# Test connection
+ssh nihdev@192.168.1.58 "echo 'SSH connection OK'"
+```
+
+**Step 3: Setup cron job**
+
+```bash
+# Edit crontab
+crontab -e
+
+# Add this line (backup every hour at minute 0)
+0 * * * * /data/Ninh/scripts/backup-to-synology.sh >> /var/log/synology-backup.log 2>&1
+
+# Or backup every 30 minutes
+*/30 * * * * /data/Ninh/scripts/backup-to-synology.sh >> /var/log/synology-backup.log 2>&1
+```
+
+**Step 4: Test backup**
+
+```bash
+# Run backup manually
+/data/Ninh/scripts/backup-to-synology.sh
+
+# Check log
+tail -f /var/log/synology-backup.log
+
+# Verify on Synology
+ssh nihdev@192.168.1.58 "ls -la /volume1/Marketing/Ninh/DuAnCuaToi/taskgd/"
+```
+
+### **Setup: Real-time Sync (Advanced)**
+
+For critical applications that need real-time backup:
+
+```bash
+# Install lsyncd
+sudo apt update
+sudo apt install lsyncd -y
+
+# Create config directory
+sudo mkdir -p /etc/lsyncd
+
+# Configure lsyncd
+sudo tee /etc/lsyncd/lsyncd.conf.lua << 'EOF'
+settings {
+    logfile = "/var/log/lsyncd/lsyncd.log",
+    statusFile = "/var/log/lsyncd/lsyncd.status",
+    statusInterval = 20,
+    nodaemon = false,
+}
+
+-- Sync taskgd
+sync {
+    default.rsync,
+    source = "/data/Ninh/projects/taskgd/",
+    target = "nihdev@192.168.1.58:/volume1/Marketing/Ninh/DuAnCuaToi/taskgd/",
+    delay = 5,
+    rsync = {
+        archive = true,
+        compress = true,
+        verbose = false,
+        _extra = {
+            "--exclude=node_modules",
+            "--exclude=.git",
+            "--exclude=*.log",
+        }
+    }
+}
+
+-- Add more projects as needed
+-- sync {
+--     default.rsync,
+--     source = "/data/Ninh/projects/chitieuninh/",
+--     target = "nihdev@192.168.1.58:/volume1/Marketing/Ninh/DuAnCuaToi/chitieuninh/",
+--     delay = 5,
+--     rsync = { archive = true, compress = true }
+-- }
+EOF
+
+# Create log directory
+sudo mkdir -p /var/log/lsyncd
+
+# Enable and start lsyncd
+sudo systemctl enable lsyncd
+sudo systemctl start lsyncd
+
+# Check status
+sudo systemctl status lsyncd
+
+# Monitor real-time sync
+sudo tail -f /var/log/lsyncd/lsyncd.log
+```
+
+### **Comparison: Rsync vs Lsyncd**
+
+| Feature | Hourly Rsync | Real-time Lsyncd |
+|---------|--------------|------------------|
+| **Sync Frequency** | Every hour | Immediate (5s delay) |
+| **CPU Usage** | Low (periodic) | Medium (continuous) |
+| **Backup Delay** | Up to 1 hour | ~5 seconds |
+| **Complexity** | Simple | Moderate |
+| **Best For** | Most projects | Critical data |
+| **Resource Usage** | Minimal | Higher |
+
+**Recommendation:**
+
+- **Hourly Rsync:** For most projects (taskgd, chitieuninh, etc.)
+- **Real-time Lsyncd:** Only for critical data (database backups, important uploads)
+
+### **Recovery Procedure**
+
+If Ubuntu server fails, restore from Synology:
+
+```bash
+# 1. SSH to new/recovered server
+ssh nihdev@100.115.191.19
+
+# 2. Create project directory
+mkdir -p /data/Ninh/projects
+
+# 3. Restore from Synology
+rsync -avz --progress \
+    nihdev@192.168.1.58:/volume1/Marketing/Ninh/DuAnCuaToi/taskgd/ \
+    /data/Ninh/projects/taskgd/
+
+# 4. Verify files
+ls -la /data/Ninh/projects/taskgd/
+
+# 5. Restart application
+cd /data/Ninh/projects/taskgd
+pm2 restart taskgd-api
+```
+
+### **Monitoring**
+
+**Check backup status:**
+
+```bash
+# View recent backups
+tail -100 /var/log/synology-backup.log
+
+# Check last backup time
+grep "Backup completed" /var/log/synology-backup.log | tail -1
+
+# Check for errors
+grep "❌" /var/log/synology-backup.log | tail -10
+
+# Compare file counts
+echo "Local files:"
+find /data/Ninh/projects/taskgd/uploads -type f | wc -l
+echo "Synology files:"
+ssh nihdev@192.168.1.58 "find /volume1/Marketing/Ninh/DuAnCuaToi/taskgd/uploads -type f | wc -l"
+```
+
+**Setup monitoring alert (optional):**
+
+```bash
+# Create monitoring script
+cat > /data/Ninh/scripts/check-backup-status.sh << 'EOF'
+#!/bin/bash
+LOG_FILE="/var/log/synology-backup.log"
+LAST_BACKUP=$(grep "Backup completed" "${LOG_FILE}" | tail -1 | awk '{print $1, $2}')
+LAST_BACKUP_TIMESTAMP=$(date -d "${LAST_BACKUP}" +%s 2>/dev/null || echo 0)
+CURRENT_TIMESTAMP=$(date +%s)
+HOURS_SINCE_BACKUP=$(( (CURRENT_TIMESTAMP - LAST_BACKUP_TIMESTAMP) / 3600 ))
+
+if [ ${HOURS_SINCE_BACKUP} -gt 2 ]; then
+    echo "⚠️  WARNING: Last backup was ${HOURS_SINCE_BACKUP} hours ago!"
+    # Send notification (email, Slack, etc.)
+else
+    echo "✅ Backup is up to date (${HOURS_SINCE_BACKUP} hours ago)"
+fi
+EOF
+
+chmod +x /data/Ninh/scripts/check-backup-status.sh
+
+# Run daily check
+crontab -e
+# Add: 0 9 * * * /data/Ninh/scripts/check-backup-status.sh
+```
+
+# 🎯 QUICK REFERENCE
+
+## **Create New Project:**
+
+```bash
+/Users/nihdev/Web/1/create-new-project.sh
+```
+
+## **Check Port Availability:**
+
+```bash
+grep "🟢 Available" /Users/nihdev/Web/1/PORT_REGISTRY.md
+```
+
+## **Deploy Updates:**
+
+```bash
+# Sync files
+rsync -avz --exclude 'node_modules' --exclude '.next' --exclude '.git' \
+  ./ nihdev@100.115.191.19:/data/Ninh/projects/{project-name}/
+
+# Rebuild and restart
+ssh nihdev@100.115.191.19 'cd /data/Ninh/projects/{project-name} && npm install && npm run build && pm2 restart {pm2-name}'
+```
+
+## **Check PM2 Status:**
+
+```bash
+ssh nihdev@100.115.191.19 'pm2 status'
+```
+
+## **View Logs:**
+
+```bash
+ssh nihdev@100.115.191.19 'pm2 logs {pm2-name} --lines 50'
+```
+
+## **Restart Cloudflare Tunnel:**
+
+```bash
+ssh nihdev@100.115.191.19 'echo "haininh1" | sudo -S systemctl restart cloudflared'
+```
+
+---
+
+# AGENTS.md
+
+> A comprehensive guide for AI coding agents working with this project. This file contains all context, configurations, templates, and workflows needed for effective AI-assisted development.
+
+---
+
+## Table of Contents
+
+- [🚨 CRITICAL: ALWAYS FOLLOW AGENTS.MD](#-critical-always-follow-agentsmd)
+  - [**MANDATORY READING REQUIREMENT**](#mandatory-reading-requirement)
+    - [**Verification Checklist:**](#verification-checklist)
+    - [**Consequences of Violation:**](#consequences-of-violation)
+    - [**Why This Rule Exists:**](#why-this-rule-exists)
+- [🎯 PRIMARY GOAL: CODE LIKE A REAL HUMAN DEVELOPER](#-primary-goal-code-like-a-real-human-developer)
+  - [**CORE PRINCIPLES**](#core-principles)
+  - [**✅ MANDATORY REQUIREMENTS**](#-mandatory-requirements)
+    - [**1. Coding Style - Personal Programming Style**](#1-coding-style---personal-programming-style)
+    - [**2. Design Approach - Design Methodology**](#2-design-approach---design-methodology)
+    - [**3. Project Organization**](#3-project-organization)
+      - [**3.1. Root Directory Organization Rules** 🚨](#31-root-directory-organization-rules-)
+    - [**4. Development Workflow - Development Workflow**](#4-development-workflow---quy-trình-phát-triển)
+    - [**5. Code Quality - Code Quality**](#5-code-quality---chất-lượng-code)
+    - [**6. Post-Task Cleanup - Post-Task Cleanup** 🧹](#6-post-task-cleanup---dọn-dẹp-after-mỗi-task-)
+  - [**❌ ABSOLUTELY AVOID (AI Patterns)**](#-tuyệt-đối-tránh-ai-patterns)
+    - [**Code Patterns:**](#code-patterns)
+    - [**AI Response Patterns (CRITICAL):** 🚨](#ai-response-patterns-critical-)
+    - [**Correct AI Response Style:**](#correct-ai-response-style)
+  - [**🎯 PERSONALITY TRAITS (Đặc Điểm Cá Nhân)**](#-personality-traits-đặc-điểm-cá-nhân)
+  - [**📋 VERIFICATION CHECKLIST**](#-verification-checklist)
+  - [**🚨 CRITICAL RULE**](#-critical-rule)
+- [📦 PROJECT CREATION AUTOMATION](#-project-creation-automation)
+  - [**Overview**](#overview)
+  - [**Script Location**](#script-location)
+  - [**Usage**](#usage)
+    - [**Quick Start:**](#quick-start)
+    - [**Interactive Prompts:**](#interactive-prompts)
+    - [**Example Session:**](#example-session)
+  - [**What the Script Does**](#what-the-script-does)
+    - [**Step 1: Requirements Check**](#step-1-requirements-check)
+    - [**Step 2: Port Management**](#step-2-port-management)
+    - [**Step 3: Project Creation**](#step-3-project-creation)
+    - [**Step 4: Database Setup**](#step-4-database-setup)
+    - [**Step 5: Deployment**](#step-5-deployment)
+    - [**Step 6: Cloudflare Tunnel**](#step-6-cloudflare-tunnel)
+    - [**Step 7: PORT\_REGISTRY Update**](#step-7-port_registry-update)
+  - [**Post-Deployment Steps**](#post-deployment-steps)
+  - [**Troubleshooting**](#troubleshooting)
+    - [**Script fails at database creation:**](#script-fails-at-database-creation)
+    - [**PM2 process won't start:**](#pm2-process-wont-start)
+    - [**Domain not accessible:**](#domain-not-accessible)
+  - [**Script Customization**](#script-customization)
+    - [**Change Template Project:**](#change-template-project)
+    - [**Change Server:**](#change-server)
+    - [**Change Port Range:**](#change-port-range)
+- [📋 PORT MANAGEMENT SYSTEM](#-port-management-system)
+  - [**PORT\_REGISTRY.md**](#port_registrymd)
+    - [**Format:**](#format)
+    - [**Rules:**](#rules)
+    - [**Commands:**](#commands)
+- [🔄 AUTO-RESTART SYSTEM](#-auto-restart-system)
+  - [**PM2 Startup Configuration**](#pm2-startup-configuration)
+    - [**Setup (Already Done):**](#setup-already-done)
+    - [**Verification:**](#verification)
+    - [**How It Works:**](#how-it-works)
+- [📚 NAMING CONVENTIONS](#-naming-conventions)
+  - [**Project Names:**](#project-names)
+  - [**PM2 Process Names:**](#pm2-process-names)
+  - [**Database Names:**](#database-names)
+  - [**Domains:**](#domains)
+  - [**Synology Folders:**](#synology-folders)
+- [🖥️ SERVER PATHS \& STORAGE CONFIGURATION](#️-server-paths--storage-configuration)
+  - [**Ubuntu Server Information**](#ubuntu-server-information)
+  - [**Storage Configuration (Updated: 2025-10-21)**](#storage-configuration-updated-2025-10-21)
+    - [**Primary Storage: WD HDD 1TB**](#primary-storage-wd-hdd-1tb)
+    - [**System Storage: Kingston SSD 224GB**](#system-storage-kingston-ssd-224gb)
+    - [**Removable Storage: Crucial SSD 240GB**](#removable-storage-crucial-ssd-240gb)
+  - [**Project Paths on Ubuntu Server**](#project-paths-on-ubuntu-server)
+    - [**Main Projects Directory:**](#main-projects-directory)
+    - [**Secondary Projects Directory:**](#secondary-projects-directory)
+    - [**Backups Directory:**](#backups-directory)
+    - [**Scripts \& Utilities:**](#scripts--utilities)
+    - [**Symbolic Links (for backward compatibility):**](#symbolic-links-for-backward-compatibility)
+  - [**Path Mapping: Mac ↔ Ubuntu Server**](#path-mapping-mac--ubuntu-server)
+  - [**Sync Commands**](#sync-commands)
+    - [**Sync Project from Mac to Server:**](#sync-project-from-mac-to-server)
+    - [**Sync Project from Server to Mac:**](#sync-project-from-server-to-mac)
+    - [**Sync Agents.md:**](#sync-agentsmd)
+  - [**Important Notes**](#important-notes)
+- [💾 SYNOLOGY STORAGE SYSTEM](#-synology-storage-system)
+  - [**Overview**](#overview-1)
+  - [**Folder Structure**](#folder-structure)
+  - [**NFS Mount Setup**](#nfs-mount-setup)
+    - [**1. Create Synology Folders**](#1-create-synology-folders)
+    - [**2. Enable NFS Sharing**](#2-enable-nfs-sharing)
+    - [**3. Mount NFS on Ubuntu Server**](#3-mount-nfs-on-ubuntu-server)
+    - [**4. Create Symlink in Project Directory**](#4-create-symlink-in-project-directory)
+  - [**Configuration**](#configuration)
+  - [**Hybrid Storage Approach (Recommended)**](#hybrid-storage-approach-recommended)
+    - [**Architecture:**](#architecture)
+    - [**How It Works:**](#how-it-works-1)
+    - [**Setup: Hourly Rsync Backup**](#setup-hourly-rsync-backup)
+    - [**Setup: Real-time Sync (Advanced)**](#setup-real-time-sync-advanced)
+    - [**Comparison: Rsync vs Lsyncd**](#comparison-rsync-vs-lsyncd)
+    - [**Recovery Procedure**](#recovery-procedure)
+    - [**Monitoring**](#monitoring)
+- [🎯 QUICK REFERENCE](#-quick-reference)
+  - [**Create New Project:**](#create-new-project)
+  - [**Check Port Availability:**](#check-port-availability)
+  - [**Deploy Updates:**](#deploy-updates)
+  - [**Check PM2 Status:**](#check-pm2-status)
+  - [**View Logs:**](#view-logs)
+  - [**Restart Cloudflare Tunnel:**](#restart-cloudflare-tunnel)
+- [AGENTS.md](#agentsmd)
+  - [Table of Contents](#table-of-contents)
+  - [Agent System Overview](#agent-system-overview)
+    - [Purpose](#purpose)
+    - [Benefits](#benefits)
+    - [Core Principles](#core-principles-1)
+      - [🚨 NGUYÊN TẮC QUAN TRỌNG VỀ GIAO DIỆN (UI/UX)](#-nguyên-tắc-quan-trọng-về-giao-diện-uiux)
+  - [Quick Start (5 Minutes)](#quick-start-5-minutes)
+    - [Step 1: Run Setup Script](#step-1-run-setup-script)
+    - [Step 2: Restart VSCode](#step-2-restart-vscode)
+    - [Step 3: Activate Serena Project](#step-3-activate-serena-project)
+    - [Step 4: Test Agent System](#step-4-test-agent-system)
+    - [Quick Usage Examples](#quick-usage-examples)
+  - [Configuration](#configuration-1)
+    - [augment-agents.json](#augment-agentsjson)
+    - [augment-templates.json](#augment-templatesjson)
+    - [.vscode/settings.json](#vscodesettingsjson)
+  - [Templates Library](#templates-library)
+    - [1. Component Template](#1-component-template)
+    - [2. Page Template](#2-page-template)
+    - [3. API Route Template](#3-api-route-template)
+    - [4. Hook Template](#4-hook-template)
+    - [5. Service Template](#5-service-template)
+  - [Prompt Library](#prompt-library)
+    - [Component Creation Prompts](#component-creation-prompts)
+    - [Page Creation Prompts](#page-creation-prompts)
+    - [API Creation Prompts](#api-creation-prompts)
+    - [Testing Prompts](#testing-prompts)
+    - [Optimization Prompts](#optimization-prompts)
+    - [Cleanup \& Refactoring Prompts](#cleanup--refactoring-prompts)
+    - [Workflow Prompts](#workflow-prompts)
+  - [Best Practices from agents.md](#best-practices-from-agentsmd)
+    - [1. Keep It Focused](#1-keep-it-focused)
+    - [2. Be Specific and Actionable](#2-be-specific-and-actionable)
+    - [3. Include Testing Instructions](#3-include-testing-instructions)
+    - [4. PR and Commit Guidelines](#4-pr-and-commit-guidelines)
+    - [5. Monorepo Support](#5-monorepo-support)
+    - [6. Security Considerations](#6-security-considerations)
+    - [7. Development Environment Tips](#7-development-environment-tips)
+  - [Usage Examples](#usage-examples)
+    - [Example 1: Complete Login Feature](#example-1-complete-login-feature)
+    - [Example 2: Dashboard with Analytics](#example-2-dashboard-with-analytics)
+    - [Example 3: CRUD API for Products](#example-3-crud-api-for-products)
+    - [Example 4: Reusable Data Table Component](#example-4-reusable-data-table-component)
+    - [Example 5: Image Upload with Preview](#example-5-image-upload-with-preview)
+  - [Apple Design System Specs](#apple-design-system-specs)
+    - [Typography](#typography)
+    - [Colors](#colors)
+    - [Spacing](#spacing)
+    - [Border Radius](#border-radius)
+    - [Shadows](#shadows)
+    - [Animations](#animations)
+    - [Responsive Breakpoints](#responsive-breakpoints)
+    - [Touch Targets](#touch-targets)
+    - [Accessibility](#accessibility)
+  - [Troubleshooting](#troubleshooting-1)
+    - [Common Issues](#common-issues)
+  - [MCP Servers Integration](#mcp-servers-integration)
+    - [Serena MCP (Coding Tools)](#serena-mcp-coding-tools)
+    - [Human MCP (AI Tools)](#human-mcp-ai-tools)
+    - [Combining MCP Servers](#combining-mcp-servers)
+  - [Project Cleanup System](#project-cleanup-system)
+    - [Overview](#overview-2)
+    - [Garbage Patterns](#garbage-patterns)
+      - [Auto-Generated Documentation](#auto-generated-documentation)
+      - [Backup \& Temporary Files](#backup--temporary-files)
+      - [Log \& Cache Files](#log--cache-files)
+      - [System Files](#system-files)
+      - [Old Test Files](#old-test-files)
+    - [Protected Patterns](#protected-patterns)
+      - [Essential Configuration](#essential-configuration)
+      - [Source Code \& Assets](#source-code--assets)
+      - [Important Documentation](#important-documentation)
+      - [System Directories](#system-directories)
+    - [Cleanup Workflow](#cleanup-workflow)
+      - [Phase 1: Scan \& Analysis](#phase-1-scan--analysis)
+      - [Phase 2: Garbage Cleanup](#phase-2-garbage-cleanup)
+      - [Phase 3: Structure Optimization](#phase-3-structure-optimization)
+      - [Phase 4: Verification \& Reporting](#phase-4-verification--reporting)
+    - [Usage Guide](#usage-guide)
+      - [Quick Commands](#quick-commands)
+      - [Augment Commands \& Keybindings](#augment-commands--keybindings)
+    - [Quick Cleanup Script](#quick-cleanup-script)
+    - [Best Practices](#best-practices)
+      - [1. Always Run Dry-Run First](#1-always-run-dry-run-first)
+      - [2. Backup Important Files](#2-backup-important-files)
+      - [3. Review Scan Results](#3-review-scan-results)
+      - [4. Run Cleanup Regularly](#4-run-cleanup-regularly)
+      - [5. Configure .gitignore](#5-configure-gitignore)
+      - [6. Customize Patterns](#6-customize-patterns)
+      - [7. Test After Cleanup](#7-test-after-cleanup)
+    - [Troubleshooting](#troubleshooting-2)
+      - [Issue: Important file was deleted](#issue-important-file-was-deleted)
+      - [Issue: Cleanup is too slow](#issue-cleanup-is-too-slow)
+      - [Issue: False positives in scan](#issue-false-positives-in-scan)
+      - [Issue: Cleanup fails with errors](#issue-cleanup-fails-with-errors)
+  - [Development Workflow for Low-Code/AI-Assisted Projects](#development-workflow-for-low-codeai-assisted-projects)
+    - [Frontend-First vs Backend-First Analysis](#frontend-first-vs-backend-first-analysis)
+      - [Comparison Table](#comparison-table)
+      - [Recommendation: **Frontend-First for AI-Assisted Development**](#recommendation-frontend-first-for-ai-assisted-development)
+    - [Standard Project Structure](#standard-project-structure)
+    - [Tech Stack Recommendations](#tech-stack-recommendations)
+    - [Step-by-Step Development Workflow](#step-by-step-development-workflow)
+      - [Workflow Diagram](#workflow-diagram)
+      - [Phase 1: Project Initialization (15 minutes)](#phase-1-project-initialization-15-minutes)
+      - [Phase 2: UI Design \& Mockups (30 minutes)](#phase-2-ui-design--mockups-30-minutes)
+      - [Phase 3: Build UI Components (60 minutes)](#phase-3-build-ui-components-60-minutes)
+      - [Phase 4: Create Pages with Mock Data (45 minutes)](#phase-4-create-pages-with-mock-data-45-minutes)
+      - [Phase 5: Test UI/UX (30 minutes)](#phase-5-test-uiux-30-minutes)
+      - [Phase 6: Backend Setup (60 minutes)](#phase-6-backend-setup-60-minutes)
+      - [Phase 7: Create API Routes (90 minutes)](#phase-7-create-api-routes-90-minutes)
+      - [Phase 8: Connect Frontend to Backend (60 minutes)](#phase-8-connect-frontend-to-backend-60-minutes)
+      - [Phase 9: Add Authentication (45 minutes)](#phase-9-add-authentication-45-minutes)
+      - [Phase 10: Testing \& Optimization (90 minutes)](#phase-10-testing--optimization-90-minutes)
+      - [Phase 11: Deployment (30 minutes)](#phase-11-deployment-30-minutes)
+    - [Total Estimated Time](#total-estimated-time)
+    - [Best Practices for AI-Assisted Development](#best-practices-for-ai-assisted-development)
+      - [1. Writing Effective Prompts](#1-writing-effective-prompts)
+      - [2. Verifying AI-Generated Code](#2-verifying-ai-generated-code)
+      - [3. Iterating and Refining](#3-iterating-and-refining)
+      - [4. Common Pitfalls to Avoid](#4-common-pitfalls-to-avoid)
+    - [Conclusion](#conclusion)
+  - [Quick Reference](#quick-reference)
+    - [Essential Commands](#essential-commands)
+    - [Most Used Prompts](#most-used-prompts)
+    - [File Structure Quick Reference](#file-structure-quick-reference)
+    - [Support \& Resources](#support--resources)
+- [🎨 LIQUID GLASS DESIGN SYSTEM (COMPREHENSIVE)](#-liquid-glass-design-system-comprehensive)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [🎨 Kiến Trúc Thiết Kế](#-kiến-trúc-thiết-kế)
+    - [**3-Layer Architecture**](#3-layer-architecture)
+      - [**Layer 1: Background Layer (z-index: 0)**](#layer-1-background-layer-z-index-0)
+      - [**Layer 2: Surface Layer (z-index: 1-9)**](#layer-2-surface-layer-z-index-1-9)
+      - [**Layer 3: Content Layer (z-index: 10-50)**](#layer-3-content-layer-z-index-10-50)
+  - [🌈 Hệ Thống Màu Sắc](#-hệ-thống-màu-sắc)
+    - [**Background Gradients**](#background-gradients)
+    - [**Blur Orbs**](#blur-orbs)
+    - [**Glass Surfaces**](#glass-surfaces)
+      - [**Level 1: 30% Opacity (Main Containers)**](#level-1-30-opacity-main-containers)
+      - [**Level 2: 20% Opacity (Overlays)**](#level-2-20-opacity-overlays)
+      - [**Level 3: 70% Opacity (Cards)**](#level-3-70-opacity-cards)
+      - [**Level 4: 90% Opacity (Buttons)**](#level-4-90-opacity-buttons)
+    - [**iOS Blue #007AFF**](#ios-blue-007aff)
+    - [**Semantic Colors**](#semantic-colors)
+      - [**Priority Colors**](#priority-colors)
+      - [**Status Colors**](#status-colors)
+    - [**Text Hierarchy**](#text-hierarchy)
+  - [📝 Typography System](#-typography-system)
+    - [**Font Stack**](#font-stack)
+    - [**Font Sizes**](#font-sizes)
+    - [**Font Weights**](#font-weights)
+    - [**Line Height**](#line-height)
+  - [📏 Spacing System (8pt Grid)](#-spacing-system-8pt-grid)
+    - [**Base Unit: 4px**](#base-unit-4px)
+    - [**Padding System**](#padding-system)
+    - [**Gap System**](#gap-system)
+    - [**Touch Targets: 44px Minimum**](#touch-targets-44px-minimum)
+  - [🔘 Border Radius](#-border-radius)
+    - [**Primary: 20px (1.25rem)**](#primary-20px-125rem)
+    - [**Squircle Aesthetic**](#squircle-aesthetic)
+    - [**Radius-to-Size Ratios**](#radius-to-size-ratios)
+  - [🌓 Shadow System](#-shadow-system)
+    - [**5% Opacity - Why So Subtle?**](#5-opacity---why-so-subtle)
+    - [**Colored Shadows (Blue Glow)**](#colored-shadows-blue-glow)
+  - [🎭 Backdrop Blur](#-backdrop-blur)
+    - [**4 Levels**](#4-levels)
+  - [🎬 Animation System](#-animation-system)
+    - [**150ms Duration (iOS Standard)**](#150ms-duration-ios-standard)
+    - [**Scale Animations**](#scale-animations)
+  - [📱 Mobile-First Patterns](#-mobile-first-patterns)
+    - [**448px Container (iPhone 14 Pro Max)**](#448px-container-iphone-14-pro-max)
+  - [�� Interaction Patterns](#-interaction-patterns)
+    - [**Tap Targets**](#tap-targets)
+  - [🎨 Design Philosophy](#-design-philosophy)
+    - [**5 Core Principles**](#5-core-principles)
+  - [📊 Technical Specs](#-technical-specs)
+    - [**Performance Budget**](#performance-budget)
+    - [**Browser Support**](#browser-support)
+    - [**Accessibility**](#accessibility-1)
+
+---
+
+## Agent System Overview
+
+### Purpose
+
+This Agent System enables **automated, efficient, and professional** development with AI coding assistants (Augment, Cursor, Copilot, etc.). It provides:
+
+- 🚀 **Full Automation** - Create components, pages, APIs with simple prompts
+- 🎨 **Apple Design System** - All UI follows Apple Human Interface Guidelines
+- 🔧 **Clean Code** - High code quality, TypeScript strict mode
+- 🧹 **Auto Cleanup** - Automatic workspace organization
+- 🔌 **MCP Integration** - Serena (coding tools) + Human MCP (AI tools)
+- 📱 **Responsive** - Mobile-first, all breakpoints covered
+- ⚡ **Performance** - 60fps animations, <2s initial load
+
+### Benefits
+
+1. **Speed**: Generate production-ready code 10x faster
+2. **Consistency**: All code follows same conventions and design system
+3. **Quality**: Built-in best practices, TypeScript, testing
+4. **Flexibility**: 8+ templates, 100+ prompts, customizable workflows
+5. **Integration**: Works with Serena MCP (12+ coding tools) and Human MCP (27 AI tools)
+
+### Core Principles
+
+- ✅ **Vietnamese communication** - All interactions in Vietnamese
+- ✅ **No auto-docs** - No auto-generated .md files
+- ✅ **No auto-commit** - Manual git control
+- ✅ **Concise output** - Brief, actionable reports
+- ✅ **Immediate execution** - Execute tasks without unnecessary confirmations
+- ✅ **Clean workspace** - Auto-cleanup of unused files
+- ✅ **Deep analysis** - Thorough understanding before execution
+- ✅ **Minimal output** - Think deeply, present concisely
+
+#### 🚨 NGUYÊN TẮC QUAN TRỌNG VỀ GIAO DIỆN (UI/UX)
+
+**KHÔNG TỰ Ý THAY ĐỔI UI:**
+
+- ❌ **ABSOLUTELY NO TỰ Ý THAY ĐỔI GIAO DIỆN** - Không được modify, refactor, or "cải thiện" UI/UX components, layouts, styles, colors, spacing, animations khi không được yêu cầu rõ ràng
+- ❌ **KHÔNG TỰ Ý "OPTIMIZE" UI** - Không được tự động apply best practices, design patterns, or accessibility improvements cho UI nếu không được chỉ định
+- ❌ **KHÔNG THAY ĐỔI DESIGN SYSTEM** - Giữ nguyên Apple Design System specs, colors, typography, spacing đã được định nghĩa
+- ✅ **CHỈ THAY ĐỔI KHI ĐƯỢC YÊU CẦU** - Chỉ modify UI khi user explicitly request: "Thay đổi màu button", "Cải thiện layout", "Apply responsive design", etc.
+- ✅ **HỎI TRƯỚC KHI THAY ĐỔI** - Nếu phát hiện UI issue or có suggestion, hỏi user before: "Tôi thấy button size không consistent, bạn có muốn tôi fix không?"
+
+**Áp dụng cho:**
+
+- Components (Button, Input, Card, Modal, etc.)
+- Pages (Login, Dashboard, Profile, etc.)
+- Layouts (Header, Sidebar, Footer)
+- Styles (colors, spacing, typography, animations)
+- Responsive breakpoints
+- Dark mode
+- Accessibility features
+
+**Ngoại lệ duy nhất:**
+
+- ✅ Bug fixes (UI broken, không render, errors)
+- ✅ Security issues (XSS, injection vulnerabilities)
+- ✅ Critical accessibility violations (WCAG failures)
+
+---
+
+## Quick Start (5 Minutes)
+
+### Step 1: Run Setup Script
+
+```bash
+./setup-agent-system.sh
+```
+
+This automatically:
+
+- ✅ Checks environment (Node.js, npm, uv)
+- ✅ Creates folder structure
+- ✅ Validates configuration files
+- ✅ Creates example component
+- ✅ Sets up .gitignore
+- ✅ Checks MCP servers
+
+### Step 2: Restart VSCode
+
+```
+Command Palette (Cmd+Shift+P) → "Developer: Reload Window"
+```
+
+Or close and reopen VSCode.
+
+### Step 3: Activate Serena Project
+
+Tell Augment AI:
+
+```
+Activate current directory as project
+```
+
+Serena will index your project code for tool usage.
+
+### Step 4: Test Agent System
+
+Try creating your first component:
+
+```
+Tạo component PrimaryButton kiểu button with Apple Design
+```
+
+Augment will automatically create:
+
+- `src/components/PrimaryButton/PrimaryButton.tsx`
+- `src/components/PrimaryButton/index.ts`
+
+### Quick Usage Examples
+
+**Create Component:**
+
+```
+Tạo component LoginForm kiểu form with Apple Design
+```
+
+**Create Page:**
+
+```
+Tạo page Dashboard tại route /dashboard
+```
+
+**Create API:**
+
+```
+Tạo API POST /api/auth/login
+```
+
+**Create Hook:**
+
+```
+Tạo hook useAuth
+```
+
+**Cleanup:**
+
+```
+Cleanup workspace và remove unused files
+```
+
+---
+
+## Configuration
+
+### augment-agents.json
+
+Complete agent system configuration:
+
+```json
+{
+  "agentSystem": {
+    "version": "1.0.0",
+    "language": "vietnamese",
+    "principles": {
+      "noAutoDocs": true,
+      "noAutoCommit": true,
+      "conciseOutput": true,
+      "immediateExecution": true,
+      "cleanWorkspace": true,
+      "deepAnalysis": true,
+      "minimalOutput": true
+    },
+    "designSystem": {
+      "platform": "macOS",
+      "typography": "-apple-system, Inter, SF Pro Display, sans-serif",
+      "colors": "sf-symbols",
+      "spacing": "8px-grid",
+      "borderRadius": "8-16px",
+      "shadows": "subtle-soft",
+      "animations": {
+        "timing": "cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "duration": {
+          "fast": "200-300ms",
+          "normal": "400-600ms"
+        },
+        "effects": {
+          "scale": "1.02-1.05",
+          "transitions": "fade-slide"
+        }
+      },
+      "responsive": {
+        "breakpoints": {
+          "sm": "640px",
+          "md": "768px",
+          "lg": "1024px",
+          "xl": "1280px"
+        },
+        "approach": "mobile-first",
+        "touchTargets": "44x44px"
+      }
+    },
+    "agents": {
+      "execution": {
+        "enabled": true,
+        "autoConfirm": true,
+        "priority": "high",
+        "capabilities": [
+          "code-generation",
+          "file-creation",
+          "dependency-management",
+          "testing",
+          "optimization"
+        ]
+      },
+      "design": {
+        "enabled": true,
+        "strictAppleGuidelines": true,
+        "priority": "high",
+        "capabilities": [
+          "ui-generation",
+          "style-application",
+          "responsive-design",
+          "animation-implementation",
+          "design-validation"
+        ]
+      },
+      "analysis": {
+        "enabled": true,
+        "deepAnalysis": true,
+        "priority": "medium",
+        "capabilities": [
+          "code-analysis",
+          "performance-analysis",
+          "security-analysis",
+          "dependency-analysis",
+          "architecture-review"
+        ]
+      },
+      "fileManager": {
+        "enabled": true,
+        "autoCleanup": true,
+        "priority": "low",
+        "capabilities": [
+          "workspace-cleanup",
+          "file-organization",
+          "duplicate-detection",
+          "unused-code-removal",
+          "structure-optimization"
+        ]
+      }
+    },
+    "mcpServers": {
+      "serena": {
+        "enabled": true,
+        "useCases": [
+          "code-search",
+          "symbol-navigation",
+          "file-operations",
+          "project-onboarding"
+        ]
+      },
+      "humanMcp": {
+        "enabled": true,
+        "useCases": [
+          "visual-analysis",
+          "image-generation",
+          "document-processing",
+          "speech-synthesis"
+        ]
+      }
+    },
+    "workflow": {
+      "onTaskReceived": [
+        "analyze-requirements",
+        "check-design-needs",
+        "execute-task",
+        "apply-design-system",
+        "optimize-code",
+        "cleanup-workspace",
+        "generate-report"
+      ],
+      "onFileCreated": [
+        "validate-structure",
+        "apply-formatting",
+        "check-quality"
+      ],
+      "onProjectOpen": [
+        "activate-serena-project",
+        "load-agent-config",
+        "check-dependencies"
+      ]
+    },
+    "output": {
+      "format": "concise",
+      "language": "vietnamese",
+      "structure": {
+        "completed": "bullet-points",
+        "pending": "brief-reasons",
+        "suggestions": "1-2-key-points"
+      },
+      "maxLines": {
+        "summary": 10,
+        "details": 50
+      }
+    },
+    "quality": {
+      "codeStandards": "clean-code",
+      "designStandards": "apple-hig",
+      "performanceTargets": {
+        "initialLoad": "<2s",
+        "fps": "60fps",
+        "bundleSize": "optimized"
+      },
+      "accessibility": {
+        "wcag": "AA",
+        "touchTargets": "44x44px",
+        "contrast": "4.5:1"
+      }
+    }
+  }
+}
+```
+
+### augment-templates.json
+
+Complete templates configuration:
+
+```json
+{
+  "templates": {
+    "component": {
+      "name": "React Component (Apple Design)",
+      "trigger": "@augment-task: create-component",
+      "parameters": {
+        "componentName": "string",
+        "componentType": "button|input|card|modal|form|layout",
+        "design": "apple-macos",
+        "responsive": "boolean",
+        "animations": "boolean"
+      },
+      "prompt": "Tạo React component {componentName} kiểu {componentType} with Apple Design System:\n- TypeScript interface đầy đủ\n- Responsive design (mobile-first)\n- Smooth animations (cubic-bezier)\n- Clean code, no comments\n- Export named\n- Tailwind CSS with Apple colors",
+      "outputFiles": [
+        "src/components/{componentName}/{componentName}.tsx",
+        "src/components/{componentName}/index.ts"
+      ]
+    },
+    "page": {
+      "name": "Next.js Page (Apple Design)",
+      "trigger": "@augment-task: create-page",
+      "parameters": {
+        "pageName": "string",
+        "routePath": "string",
+        "layoutType": "default|centered|sidebar|dashboard",
+        "seo": "boolean"
+      },
+      "prompt": "Tạo Next.js page {pageName} tại route {routePath}:\n- App Router compatible\n- SEO optimized (metadata)\n- Apple Design System\n- Loading states\n- Error boundaries\n- TypeScript strict mode",
+      "outputFiles": [
+        "src/app/{routePath}/page.tsx",
+        "src/app/{routePath}/loading.tsx",
+        "src/app/{routePath}/error.tsx"
+      ]
+    },
+    "api": {
+      "name": "API Route (Type-safe)",
+      "trigger": "@augment-task: create-api",
+      "parameters": {
+        "apiName": "string",
+        "method": "GET|POST|PUT|DELETE|PATCH",
+        "routePath": "string",
+        "validation": "boolean",
+        "auth": "boolean"
+      },
+      "prompt": "Tạo API route {apiName} with method {method}:\n- TypeScript types đầy đủ\n- Input validation (Zod)\n- Error handling\n- Security headers\n- Rate limiting ready\n- Clean response format",
+      "outputFiles": [
+        "src/app/api/{routePath}/route.ts",
+        "src/types/api/{apiName}.ts"
+      ]
+    },
+    "hook": {
+      "name": "React Hook (Type-safe)",
+      "trigger": "@augment-task: create-hook",
+      "parameters": {
+        "hookName": "string",
+        "hookType": "state|effect|context|custom",
+        "typescript": "boolean"
+      },
+      "prompt": "Tạo React hook {hookName}:\n- TypeScript generics\n- Clean implementation\n- Proper dependencies\n- Error handling\n- Memoization nếu cần",
+      "outputFiles": [
+        "src/hooks/{hookName}.ts"
+      ]
+    },
+    "service": {
+      "name": "Service Layer",
+      "trigger": "@augment-task: create-service",
+      "parameters": {
+        "serviceName": "string",
+        "serviceType": "api|database|auth|storage|cache",
+        "singleton": "boolean"
+      },
+      "prompt": "Tạo service {serviceName} kiểu {serviceType}:\n- TypeScript class/functions\n- Error handling\n- Type-safe methods\n- Singleton pattern nếu cần\n- Clean architecture",
+      "outputFiles": [
+        "src/services/{serviceName}.ts",
+        "src/types/{serviceName}.ts"
+      ]
+    },
+    "util": {
+      "name": "Utility Functions",
+      "trigger": "@augment-task: create-util",
+      "parameters": {
+        "utilName": "string",
+        "category": "string|number|array|object|date|validation"
+      },
+      "prompt": "Tạo utility functions {utilName} cho {category}:\n- Pure functions\n- TypeScript generics\n- Unit test ready\n- Tree-shakeable\n- JSDoc comments",
+      "outputFiles": [
+        "src/utils/{utilName}.ts"
+      ]
+    },
+    "test": {
+      "name": "Test Suite",
+      "trigger": "@augment-task: create-test",
+      "parameters": {
+        "testTarget": "string",
+        "testType": "unit|integration|e2e",
+        "framework": "jest|vitest|playwright"
+      },
+      "prompt": "Tạo test suite cho {testTarget}:\n- {framework} framework\n- {testType} tests\n- Coverage đầy đủ\n- Mock data\n- Edge cases",
+      "outputFiles": [
+        "src/__tests__/{testTarget}.test.ts"
+      ]
+    },
+    "style": {
+      "name": "Style Module (Apple Design)",
+      "trigger": "@augment-task: create-style",
+      "parameters": {
+        "styleName": "string",
+        "styleType": "component|layout|theme|utilities"
+      },
+      "prompt": "Tạo style module {styleName}:\n- Tailwind CSS classes\n- Apple Design System\n- Responsive utilities\n- Animation classes\n- Dark mode support",
+      "outputFiles": [
+        "src/styles/{styleName}.css"
+      ]
+    }
+  },
+  "conventions": {
+    "naming": {
+      "components": "PascalCase",
+      "files": "kebab-case or PascalCase",
+      "functions": "camelCase",
+      "constants": "UPPER_SNAKE_CASE",
+      "types": "PascalCase",
+      "interfaces": "PascalCase (prefix I optional)"
+    },
+    "structure": {
+      "components": "src/components/{ComponentName}/{ComponentName}.tsx",
+      "pages": "src/app/{route}/page.tsx",
+      "api": "src/app/api/{route}/route.ts",
+      "hooks": "src/hooks/{hookName}.ts",
+      "utils": "src/utils/{category}/{utilName}.ts",
+      "types": "src/types/{module}.ts",
+      "styles": "src/styles/{module}.css",
+      "tests": "src/__tests__/{target}.test.ts"
+    },
+    "imports": {
+      "order": [
+        "react",
+        "next",
+        "third-party",
+        "components",
+        "hooks",
+        "utils",
+        "types",
+        "styles"
+      ],
+      "aliases": {
+        "@/components": "src/components",
+        "@/hooks": "src/hooks",
+        "@/utils": "src/utils",
+        "@/types": "src/types",
+        "@/styles": "src/styles",
+        "@/lib": "src/lib"
+      }
+    }
+  },
+  "quickCommands": {
+    "component": "Tạo component {name} kiểu {type} with Apple Design",
+    "page": "Tạo page {name} tại route {path}",
+    "api": "Tạo API {method} {path}",
+    "hook": "Tạo hook {name}",
+    "test": "Tạo tests cho {target}",
+    "optimize": "Optimize performance của {target}",
+    "cleanup": "Cleanup workspace và remove unused code",
+    "analyze": "Analyze project structure và code quality"
+  }
+}
+```
+
+### .vscode/settings.json
+
+VSCode configuration for Augment Code:
+
+```json
+{
+  "augment.codeEnabled": true,
+  "augment.codeAgentSystem": true,
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "typescript.suggest.autoImports": true,
+  "editor.inlineSuggest.enabled": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/*.bak": true,
+    "**/*.tmp": true,
+    "**/node_modules/.cache": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/dist/**": true,
+    "**/build/**": true
+  }
+}
+```
+
+---
+
+## Templates Library
+
+### 1. Component Template
+
+**Command:**
+
+```
+Tạo component {name} kiểu {type} with Apple Design
+```
+
+**Types:** button, input, card, modal, form, layout
+
+**Parameters:**
+
+- `componentName`: Name of the component (PascalCase)
+- `componentType`: button | input | card | modal | form | layout
+- `design`: apple-macos (default)
+- `responsive`: true (default)
+- `animations`: true (default)
+
+**Output Files:**
+
+```
+src/components/{ComponentName}/
+  ├── {ComponentName}.tsx
+  └── index.ts
+```
+
+**Example:**
+
+```
+Tạo component PrimaryButton kiểu button with Apple Design
+```
+
+**Generated Code:**
+
+```typescript
+// src/components/PrimaryButton/PrimaryButton.tsx
+interface PrimaryButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  variant?: 'solid' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  loading?: boolean;
+}
+
+export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
+  children,
+  onClick,
+  variant = 'solid',
+  size = 'md',
+  disabled = false,
+  loading = false,
+}) => {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled || loading}
+      className={`
+        rounded-xl font-semibold transition-all duration-300
+        ${size === 'sm' ? 'px-4 py-2 text-sm' : ''}
+        ${size === 'md' ? 'px-6 py-3 text-base' : ''}
+        ${size === 'lg' ? 'px-8 py-4 text-lg' : ''}
+        ${variant === 'solid' ? 'bg-blue-500 text-white hover:bg-blue-600' : ''}
+        ${variant === 'outline' ? 'border-2 border-blue-500 text-blue-500 hover:bg-blue-50' : ''}
+        ${variant === 'ghost' ? 'text-blue-500 hover:bg-blue-50' : ''}
+        ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:scale-102'}
+      `}
+    >
+      {loading ? 'Loading...' : children}
+    </button>
+  );
+};
+```
+
+---
+
+### 2. Page Template
+
+**Command:**
+
+```
+Tạo page {name} tại route {path}
+```
+
+**Parameters:**
+
+- `pageName`: Name of the page (PascalCase)
+- `routePath`: Route path (e.g., /dashboard, /profile)
+- `layoutType`: default | centered | sidebar | dashboard
+- `seo`: true (default)
+
+**Output Files:**
+
+```
+src/app/{path}/
+  ├── page.tsx
+  ├── loading.tsx
+  └── error.tsx
+```
+
+**Example:**
+
+```
+Tạo page Dashboard tại route /dashboard
+```
+
+---
+
+### 3. API Route Template
+
+**Command:**
+
+```
+Tạo API {method} /api/{path}
+```
+
+**Parameters:**
+
+- `apiName`: Name of the API (camelCase)
+- `method`: GET | POST | PUT | DELETE | PATCH
+- `routePath`: API route path
+- `validation`: true (default)
+- `auth`: false (default)
+
+**Output Files:**
+
+```
+src/app/api/{path}/
+  └── route.ts
+src/types/api/
+  └── {apiName}.ts
+```
+
+**Example:**
+
+```
+Tạo API POST /api/auth/login
+```
+
+---
+
+### 4. Hook Template
+
+**Command:**
+
+```
+Tạo hook {name}
+```
+
+**Parameters:**
+
+- `hookName`: Name of the hook (use prefix)
+- `hookType`: state | effect | context | custom
+- `typescript`: true (default)
+
+**Output Files:**
+
+```
+src/hooks/{hookName}.ts
+```
+
+**Example:**
+
+```
+Tạo hook useAuth
+```
+
+---
+
+### 5. Service Template
+
+**Command:**
+
+```
+Tạo service {name} kiểu {type}
+```
+
+**Parameters:**
+
+- `serviceName`: Name of the service (PascalCase)
+- `serviceType`: api | database | auth | storage | cache
+- `singleton`: false (default)
+
+**Output Files:**
+
+```
+src/services/{serviceName}.ts
+src/types/{serviceName}.ts
+```
+
+**Example:**
+
+```
+Tạo service AuthService kiểu auth
+```
+
+---
+
+## Prompt Library
+
+### Component Creation Prompts
+
+**Basic Component:**
+
+```
+Tạo component {ComponentName} with:
+- TypeScript interface đầy đủ
+- Apple Design System
+- Responsive design
+- Clean code, no comments
+- Export named
+```
+
+**Form Component:**
+
+```
+Tạo form component {FormName} with:
+- React Hook Form
+- Zod validation
+- TypeScript types
+- Apple Design inputs
+- Error handling
+- Submit states
+```
+
+**Card Component:**
+
+```
+Tạo card component {CardName} with:
+- Hover effects (scale 1.02)
+- Smooth shadows
+- Apple border radius (12px)
+- Responsive padding
+- Dark mode support
+```
+
+**Modal Component:**
+
+```
+Tạo modal component {ModalName} with:
+- Backdrop blur
+- Smooth fade-in animation
+- ESC key close
+- Click outside close
+- Focus trap
+- Apple Design System
+```
+
+**Button Component:**
+
+```
+Tạo button component {ButtonName} with:
+- Variants: primary, secondary, ghost
+- Sizes: sm, md, lg
+- Loading state
+- Disabled state
+- Icon support
+- Apple Design System
+```
+
+---
+
+### Page Creation Prompts
+
+**Basic Page:**
+
+```
+Tạo page {PageName} tại route /{route} with:
+- Next.js App Router
+- TypeScript
+- SEO metadata
+- Loading state
+- Error boundary
+- Apple Design layout
+```
+
+**Dashboard Page:**
+
+```
+Tạo dashboard page with:
+- Sidebar navigation
+- Header with user menu
+- 4 stat cards
+- Chart components
+- Responsive grid
+- Apple Design System
+```
+
+**Auth Page:**
+
+```
+Tạo {login|register|forgot-password} page with:
+- Form validation
+- Error messages
+- Loading states
+- Redirect logic
+- Apple Design form
+- Responsive layout
+```
+
+---
+
+### API Creation Prompts
+
+**Basic API Route:**
+
+```
+Tạo API {METHOD} /api/{path} with:
+- TypeScript types
+- Input validation (Zod)
+- Error handling
+- Response format chuẩn
+- Security headers
+```
+
+**CRUD API:**
+
+```
+Tạo CRUD API cho {resource} with:
+- GET /api/{resource} - List all
+- GET /api/{resource}/[id] - Get one
+- POST /api/{resource} - Create
+- PUT /api/{resource}/[id] - Update
+- DELETE /api/{resource}/[id] - Delete
+- TypeScript types đầy đủ
+- Validation cho mọi endpoint
+```
+
+**Auth API:**
+
+```
+Tạo authentication API with:
+- POST /api/auth/login
+- POST /api/auth/register
+- POST /api/auth/logout
+- GET /api/auth/me
+- JWT tokens
+- Password hashing
+- Input validation
+```
+
+---
+
+### Testing Prompts
+
+**Component Tests:**
+
+```
+Tạo tests cho component {ComponentName} with:
+- Render tests
+- Props tests
+- Event handler tests
+- Edge cases
+- Accessibility tests
+- TypeScript types
+```
+
+**API Tests:**
+
+```
+Tạo tests cho API {apiPath} with:
+- Success cases
+- Error cases
+- Validation tests
+- Auth tests
+- Edge cases
+```
+
+---
+
+### Optimization Prompts
+
+**Code Analysis:**
+
+```
+Analyze {file/component/page} và report:
+- Code quality issues
+- Performance bottlenecks
+- Security vulnerabilities
+- Best practice violations
+- Improvement suggestions
+```
+
+**Performance Optimization:**
+
+```
+Optimize {component/page} cho:
+- Fast initial load (<2s)
+- 60fps animations
+- Small bundle size
+- Lazy loading
+- Code splitting
+- Image optimization
+```
+
+**Accessibility Audit:**
+
+```
+Audit accessibility của {component/page}:
+- WCAG AA compliance
+- Keyboard navigation
+- Screen reader support
+- Color contrast
+- Touch targets
+- ARIA labels
+```
+
+---
+
+### Cleanup & Refactoring Prompts
+
+**Workspace Cleanup:**
+
+```
+Cleanup workspace:
+- Remove unused files
+- Remove unused imports
+- Remove unused dependencies
+- Remove backup files
+- Organize file structure
+- Format all code
+```
+
+**Code Refactoring:**
+
+```
+Refactor {file} theo:
+- Clean Code principles
+- DRY principle
+- SOLID principles
+- TypeScript best practices
+- Remove code smells
+- Improve readability
+```
+
+---
+
+### Workflow Prompts
+
+**Complete Feature Workflow:**
+
+```
+Tạo complete {feature} feature:
+
+1. Activate current directory
+2. Tạo page {FeaturePage} tại /{route}
+3. Tạo components cần thiết
+4. Tạo API routes
+5. Tạo hooks
+6. Tạo types
+7. Tạo tests
+8. Cleanup workspace
+9. Report summary
+```
+
+**UI Design Workflow:**
+
+```
+Design và implement {component}:
+
+1. Generate UI mockup with Human MCP
+2. Analyze design requirements
+3. Tạo component with Apple Design
+4. Apply responsive design
+5. Add smooth animations
+6. Test accessibility
+7. Optimize performance
+```
+
+---
+
+## Best Practices from agents.md
+
+Based on the AGENTS.md standard used by 20k+ open-source projects, here are the key best practices:
+
+### 1. Keep It Focused
+
+- **Do**: Provide agent-specific context that helps with code generation
+- **Don't**: Duplicate information already in README.md
+- **Example**: Include build commands, test commands, code style guidelines
+
+### 2. Be Specific and Actionable
+
+```markdown
+## Setup commands
+
+- Install deps: `pnpm install`
+- Start dev server: `pnpm dev`
+- Run tests: `pnpm test`
+
+## Code style
+
+- TypeScript strict mode
+- Single quotes, no semicolons
+- Use functional patterns where possible
+```
+
+### 3. Include Testing Instructions
+
+```markdown
+## Testing instructions
+
+- Find the CI plan in the .github/workflows folder
+- Run `pnpm turbo run test --filter <project_name>` to run every check
+- From the package root you can just call `pnpm test`
+- The commit should pass all tests before you merge
+- To focus on one step, add the Vitest pattern: `pnpm vitest run -t "<test name>"`
+- Fix any test or type errors until the whole suite is green
+- Add or update tests for the code you change, even if nobody asked
+```
+
+### 4. PR and Commit Guidelines
+
+```markdown
+## PR instructions
+
+- Title format: [<project_name>] <Title>
+- Always run `pnpm lint` and `pnpm test` before committing
+- Add tests for any new features
+- Update documentation if needed
+```
+
+### 5. Monorepo Support
+
+- Use nested AGENTS.md files for subprojects
+- The closest AGENTS.md to the edited file takes precedence
+- Each package can have tailored instructions
+
+### 6. Security Considerations
+
+```markdown
+## Security
+
+- Never commit API keys or secrets
+- Use environment variables for sensitive data
+- Run security audits before deployment
+- Follow OWASP guidelines for web security
+```
+
+### 7. Development Environment Tips
+
+```markdown
+## Dev environment tips
+
+- Use `pnpm dlx turbo run where <project_name>` to jump to a package
+- Run `pnpm install --filter <project_name>` to add the package to your workspace
+- Use `pnpm create vite@latest <project_name> -- --template react-ts` to spin up a new React + Vite package
+- Check the name field inside each package's package.json to confirm the right name
+```
+
+---
+
+## Usage Examples
+
+### Example 1: Complete Login Feature
+
+**Prompt:**
+
+```
+Tạo complete login feature with Apple Design
+```
+
+**Generated Files:**
+
+```
+src/app/login/
+  ├── page.tsx              # Login page with SEO
+  ├── loading.tsx           # Loading state
+  └── error.tsx             # Error boundary
+
+src/components/LoginForm/
+  ├── LoginForm.tsx         # Form component with validation
+  └── index.ts              # Barrel export
+
+src/app/api/auth/login/
+  └── route.ts              # API route with Zod validation
+
+src/hooks/
+  └── useAuth.ts            # Authentication hook
+
+src/types/
+  └── auth.ts               # TypeScript types
+```
+
+**Key Features:**
+
+- ✅ Form validation with Zod
+- ✅ Loading and error states
+- ✅ TypeScript strict mode
+- ✅ Apple Design System
+- ✅ Responsive layout
+- ✅ Accessibility compliant
+
+---
+
+### Example 2: Dashboard with Analytics
+
+**Prompt:**
+
+```
+Tạo dashboard page with sidebar, header, và 4 stat cards showing user analytics
+```
+
+**Generated Files:**
+
+```
+src/app/dashboard/
+  └── page.tsx
+
+src/components/DashboardLayout/
+  ├── DashboardLayout.tsx
+  └── index.ts
+
+src/components/Sidebar/
+  ├── Sidebar.tsx
+  └── index.ts
+
+src/components/Header/
+  ├── Header.tsx
+  └── index.ts
+
+src/components/StatCard/
+  ├── StatCard.tsx
+  └── index.ts
+```
+
+**Key Features:**
+
+- ✅ Responsive grid layout
+- ✅ Smooth animations on hover
+- ✅ Real-time data updates
+- ✅ Mobile-friendly sidebar
+- ✅ Dark mode support
+
+---
+
+### Example 3: CRUD API for Products
+
+**Prompt:**
+
+```
+Tạo CRUD API cho products with validation và TypeScript types
+```
+
+**Generated Files:**
+
+```
+src/app/api/products/
+  └── route.ts              # GET, POST
+
+src/app/api/products/[id]/
+  └── route.ts              # GET, PUT, DELETE
+
+src/types/api/
+  └── products.ts           # TypeScript interfaces
+```
+
+**Key Features:**
+
+- ✅ Full CRUD operations
+- ✅ Zod validation schemas
+- ✅ Error handling
+- ✅ TypeScript types
+- ✅ Security headers
+- ✅ Rate limiting ready
+
+---
+
+### Example 4: Reusable Data Table Component
+
+**Prompt:**
+
+```
+Tạo DataTable component with:
+- Sorting
+- Pagination
+- Search
+- Row selection
+- Export to CSV
+- Apple Design System
+```
+
+**Generated Component:**
+
+```typescript
+interface DataTableProps<T> {
+  data: T[];
+  columns: Column<T>[];
+  onRowClick?: (row: T) => void;
+  searchable?: boolean;
+  sortable?: boolean;
+  paginated?: boolean;
+  selectable?: boolean;
+  exportable?: boolean;
+}
+
+export function DataTable<T>({ ... }: DataTableProps<T>) {
+  // Implementation with all features
+}
+```
+
+**Key Features:**
+
+- ✅ Generic TypeScript types
+- ✅ Fully customizable
+- ✅ Responsive design
+- ✅ Keyboard navigation
+- ✅ Accessibility compliant
+
+---
+
+### Example 5: Image Upload with Preview
+
+**Prompt:**
+
+```
+Tạo ImageUpload component with:
+- Drag and drop
+- Preview before upload
+- Multiple files
+- Progress indicator
+- File size validation
+- Apple Design
+```
+
+**Key Features:**
+
+- ✅ Drag & drop interface
+- ✅ Image preview grid
+- ✅ Upload progress
+- ✅ File validation
+- ✅ Error handling
+- ✅ Responsive layout
+
+---
+
+## Apple Design System Specs
+
+### Typography
+
+**Font Family:**
+
+```css
+font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display',
+  'SF Pro Text', sans-serif;
+```
+
+**Font Sizes:**
+
+```css
+/* Headings */
+h1: 2.5rem (40px) - font-weight: 700
+h2: 2rem (32px) - font-weight: 600
+h3: 1.5rem (24px) - font-weight: 600
+h4: 1.25rem (20px) - font-weight: 600
+
+/* Body */
+body: 1rem (16px) - font-weight: 400
+small: 0.875rem (14px) - font-weight: 400
+caption: 0.75rem (12px) - font-weight: 400
+```
+
+**Line Heights:**
+
+```css
+headings: 1.2
+body: 1.5
+small: 1.4
+```
+
+---
+
+### Colors
+
+**Primary Colors:**
+
+```css
+/* Apple Blue */
+--blue-50: #e3f2fd;
+--blue-500: #007aff; /* Primary */
+--blue-600: #0051d5;
+--blue-700: #003d99;
+
+/* Grays */
+--gray-50: #f9fafb;
+--gray-100: #f3f4f6;
+--gray-200: #e5e7eb;
+--gray-300: #d1d5db;
+--gray-400: #9ca3af;
+--gray-500: #6b7280;
+--gray-600: #4b5563;
+--gray-700: #374151;
+--gray-800: #1f2937;
+--gray-900: #111827;
+```
+
+**Semantic Colors:**
+
+```css
+/* Success */
+--success: #34c759;
+
+/* Warning */
+--warning: #ff9500;
+
+/* Error */
+--error: #ff3b30;
+
+/* Info */
+--info: #5ac8fa;
+```
+
+**Dark Mode:**
+
+```css
+/* Automatically handled by Tailwind's dark: prefix */
+dark:bg-gray-800;
+dark:text-gray-100;
+```
+
+---
+
+### Spacing
+
+**8px Grid System:**
+
+```css
+/* Spacing scale */
+0: 0px
+1: 0.25rem (4px)
+2: 0.5rem (8px)
+3: 0.75rem (12px)
+4: 1rem (16px)
+5: 1.25rem (20px)
+6: 1.5rem (24px)
+8: 2rem (32px)
+10: 2.5rem (40px)
+12: 3rem (48px)
+16: 4rem (64px)
+20: 5rem (80px)
+24: 6rem (96px)
+```
+
+**Common Patterns:**
+
+```css
+/* Card padding */
+padding: 1.5rem (24px)
+
+/* Section spacing */
+margin-bottom: 2rem (32px)
+
+/* Component gap */
+gap: 1rem (16px)
+```
+
+---
+
+### Border Radius
+
+```css
+/* Sizes */
+--radius-sm: 0.5rem (8px)
+--radius-md: 0.75rem (12px)
+--radius-lg: 1rem (16px)
+--radius-xl: 1.5rem (24px)
+
+/* Usage */
+buttons: 0.75rem (12px)
+cards: 1rem (16px)
+modals: 1.5rem (24px)
+inputs: 0.5rem (8px)
+```
+
+---
+
+### Shadows
+
+```css
+/* Elevation levels */
+--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+--shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+--shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+/* Soft shadows (Apple style) */
+box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+```
+
+---
+
+### Animations
+
+**Timing Functions:**
+
+```css
+/* Apple's standard easing */
+--ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+--ease-out: cubic-bezier(0, 0, 0.2, 1);
+--ease-in: cubic-bezier(0.4, 0, 1, 1);
+```
+
+**Durations:**
+
+```css
+/* Fast interactions */
+--duration-fast: 200ms;
+
+/* Normal transitions */
+--duration-normal: 300ms;
+
+/* Slow animations */
+--duration-slow: 500ms;
+```
+
+**Common Animations:**
+
+```css
+/* Hover scale */
+transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+hover:scale-102 (transform: scale(1.02))
+
+/* Fade in */
+transition: opacity 0.3s ease-in-out;
+
+/* Slide up */
+transition: transform 0.3s ease-out;
+transform: translateY(10px) → translateY(0)
+```
+
+---
+
+### Responsive Breakpoints
+
+```css
+/* Mobile first approach */
+sm: 640px; /* Small devices */
+md: 768px; /* Tablets */
+lg: 1024px; /* Laptops */
+xl: 1280px; /* Desktops */
+2xl: 1536px; /* Large screens */
+```
+
+**Usage:**
+
+```tsx
+<div className="w-full md:w-1/2 lg:w-1/3">
+  {/* Full width on mobile, half on tablet, third on desktop */}
+</div>
+```
+
+---
+
+### Touch Targets
+
+**Minimum Sizes:**
+
+```css
+/* Buttons and interactive elements */
+min-height: 44px;
+min-width: 44px;
+
+/* Touch-friendly spacing */
+gap: 12px; /* Between touch targets */
+```
+
+---
+
+### Accessibility
+
+**Color Contrast:**
+
+```css
+/* WCAG AA compliance */
+Normal text: 4.5:1
+Large text: 3:1
+UI components: 3:1
+```
+
+**Focus States:**
+
+```css
+/* Visible focus indicators */
+focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+outline: 2px solid var(--blue-500);
+outline-offset: 2px;
+```
+
+**ARIA Labels:**
+
+```tsx
+<button aria-label="Close modal">
+  <XIcon />
+</button>
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**Issue: Augment doesn't understand the task**
+
+```
+Solution: Use clearer format
+"Tạo [type] [name] with [requirements]"
+
+Example:
+"Tạo React component LoginButton with Apple Design System, responsive, smooth animations"
+```
+
+**Issue: Output doesn't follow conventions**
+
+```
+Solution: Reference the configuration
+"Refactor {file} theo conventions trong augment-templates.json"
+```
+
+**Issue: Design doesn't match Apple style**
+
+```
+Solution: Explicitly apply design system
+"Apply Apple Design System vào {component} theo augment-agents.json"
+```
+
+**Issue: Need workspace cleanup**
+
+```
+Solution: Run cleanup command
+"Cleanup workspace và remove unused files"
+```
+
+**Issue: Serena not activated**
+
+```
+Solution: Activate project
+"Activate current directory as project"
+```
+
+**Issue: MCP server not responding**
+
+```
+Solution: Restart VSCode
+Command Palette (Cmd+Shift+P) → "Developer: Reload Window"
+```
+
+---
+
+## MCP Servers Integration
+
+### Serena MCP (Coding Tools)
+
+**Capabilities:**
+
+- ✅ Semantic code search
+- ✅ Symbol-level editing
+- ✅ File operations
+- ✅ Project onboarding
+- ✅ Shell command execution
+- ✅ LSP-based navigation
+
+**Usage Examples:**
+
+**Project Activation:**
+
+```
+"Activate current directory as project"
+```
+
+**Code Search:**
+
+```
+"Find all components in this project"
+"Find all files containing authentication"
+"Find symbol UserService"
+"Find references of handleLogin"
+```
+
+**File Operations:**
+
+```
+"Read file src/services/auth.ts"
+"Create file src/utils/validation.ts with email validation"
+"List directory src/components"
+```
+
+**Code Editing:**
+
+```
+"Replace handleLogin body with new implementation"
+"Insert after UserService class: new method getUserProfile"
+```
+
+---
+
+### Human MCP (AI Tools)
+
+**Capabilities:**
+
+- ✅ Visual analysis (27 tools)
+- ✅ Image generation
+- ✅ Document processing
+- ✅ Speech synthesis
+- ✅ Advanced reasoning (Google Gemini)
+
+**Usage Examples:**
+
+**Image Generation:**
+
+```
+"Generate an image of a modern login form with Apple design"
+"Generate a dashboard UI mockup with sidebar and charts"
+"Generate a logo for my SaaS product"
+```
+
+**Visual Analysis:**
+
+```
+"Analyze this screenshot for UI/UX issues"
+"Compare these 2 designs and suggest improvements"
+"Identify accessibility issues in this image"
+```
+
+**Document Processing:**
+
+```
+"Read this PDF and summarize key points"
+"Extract data from this Excel file"
+"Convert this document to markdown"
+```
+
+**Speech Synthesis:**
+
+```
+"Convert this text to speech with professional voice"
+"Narrate this documentation"
+"Explain this code with voice"
+```
+
+---
+
+### Combining MCP Servers
+
+**Workflow Example:**
+
+```
+Step 1: "Generate a modern dashboard UI mockup" (Human MCP)
+Step 2: Analyze the generated image
+Step 3: "Activate current directory as project" (Serena)
+Step 4: "Find all existing dashboard components" (Serena)
+Step 5: "Tạo Dashboard component based on the mockup" (Augment + Design Agent)
+Step 6: "Optimize performance của Dashboard component" (Analysis Agent)
+```
+
+---
+
+## Project Cleanup System
+
+### Overview
+
+The **Project Cleanup System** is a specialized agent designed to automatically clean legacy projects, remove garbage files, and optimize project structure before applying the modern agent system.
+
+**Why Cleanup is Important:**
+
+- 🗑️ **Remove clutter** - Delete auto-generated docs, backup files, logs
+- 📁 **Optimize structure** - Reorganize files into clean architecture
+- ⚡ **Improve performance** - Reduce project size, faster builds
+- 🧹 **Maintain quality** - Keep workspace clean and organized
+
+**When to Run Cleanup:**
+
+- ✅ Before applying Agents.md to legacy projects
+- ✅ After major refactoring or migrations
+- ✅ Weekly/monthly maintenance
+- ✅ Before deployment or code reviews
+
+---
+
+### Garbage Patterns
+
+Files and directories that will be automatically detected and removed:
+
+#### Auto-Generated Documentation
+
+| Pattern | Description | Examples |
+|---------|-------------|----------|
+| `**/*_SUMMARY.md` | Auto-generated summaries | `PROJECT_SUMMARY.md` |
+| `**/*_REPORT.md` | Auto-generated reports | `ANALYSIS_REPORT.md` |
+| `**/*_ANALYSIS.md` | Auto-generated analysis | `CODE_ANALYSIS.md` |
+| `**/*_CHECKLIST.md` | Auto-generated checklists | `DEPLOY_CHECKLIST.md` |
+| `**/README_AUTO.md` | Auto-generated READMEs | `README_AUTO.md` |
+| `**/GUIDE_AUTO.md` | Auto-generated guides | `SETUP_GUIDE_AUTO.md` |
+| `**/*_GENERATED.md` | Any generated markdown | `API_GENERATED.md` |
+
+#### Backup & Temporary Files
+
+| Pattern | Description | Examples |
+|---------|-------------|----------|
+| `**/*.bak` | Backup files | `index.js.bak` |
+| `**/*.tmp` | Temporary files | `cache.tmp` |
+| `**/*.temp` | Temp files | `upload.temp` |
+| `**/*.backup` | Backup files | `config.backup` |
+| `**/*.old` | Old versions | `app.old.js` |
+| `**/*.orig` | Original files | `merge.orig` |
+| `**/*.save` | Saved copies | `data.save` |
+
+#### Log & Cache Files
+
+| Pattern | Description | Examples |
+|---------|-------------|----------|
+| `**/*.log` | Log files | `error.log`, `debug.log` |
+| `**/logs/**/*` | Log directories | `logs/2024/` |
+| `**/.cache/**/*` | Cache directories | `.cache/webpack/` |
+| `**/tmp/**/*` | Temp directories | `tmp/uploads/` |
+| `**/temp/**/*` | Temp directories | `temp/sessions/` |
+
+#### System Files
+
+| Pattern | Description | Examples |
+|---------|-------------|----------|
+| `**/.DS_Store` | macOS metadata | `.DS_Store` |
+| `**/Thumbs.db` | Windows thumbnails | `Thumbs.db` |
+| `**/desktop.ini` | Windows config | `desktop.ini` |
+| `**/.Spotlight-V100` | macOS Spotlight | `.Spotlight-V100` |
+| `**/.Trashes` | macOS trash | `.Trashes` |
+
+#### Old Test Files
+
+| Pattern | Description | Examples |
+|---------|-------------|----------|
+| `**/__tests__/backup/**/*` | Test backups | `__tests__/backup/` |
+| `**/*.test.bak.js` | Backup test files | `user.test.bak.js` |
+| `**/*.spec.old.ts` | Old spec files | `api.spec.old.ts` |
+| `**/test-reports/**/*` | Old test reports | `test-reports/2023/` |
+
+---
+
+### Protected Patterns
+
+Files and directories that are **NEVER** deleted (protected):
+
+#### Essential Configuration
+
+| Pattern | Reason | Examples |
+|---------|--------|----------|
+| `**/package.json` | Dependencies | `package.json` |
+| `**/package-lock.json` | Lock file | `package-lock.json` |
+| `**/yarn.lock` | Yarn lock | `yarn.lock` |
+| `**/tsconfig.json` | TypeScript config | `tsconfig.json` |
+| `**/.env` | Environment vars | `.env`, `.env.local` |
+| `**/.env.example` | Env template | `.env.example` |
+| `**/.gitignore` | Git ignore | `.gitignore` |
+| `**/.eslintrc.*` | ESLint config | `.eslintrc.js` |
+| `**/.prettierrc` | Prettier config | `.prettierrc` |
+
+#### Source Code & Assets
+
+| Pattern | Reason | Examples |
+|---------|--------|----------|
+| `**/src/**/*` | Source code | `src/components/` |
+| `**/public/**/*` | Public assets | `public/images/` |
+| `**/assets/**/*` | Asset files | `assets/fonts/` |
+| `**/components/**/*` | Components | `components/ui/` |
+| `**/pages/**/*` | Pages | `pages/dashboard/` |
+
+#### Important Documentation
+
+| Pattern | Reason | Examples |
+|---------|--------|----------|
+| `**/README.md` | Main README | `README.md` |
+| `**/agents.md` | This file! | `agents.md`, `Agents.md` |
+| `**/augment-agents.json` | Agent config | `augment-agents.json` |
+| `**/docs/important/**/*` | Important docs | `docs/important/` |
+
+#### System Directories
+
+| Pattern | Reason | Examples |
+|---------|--------|----------|
+| `**/node_modules` | Dependencies | `node_modules/` |
+| `**/.git` | Git repository | `.git/` |
+| `**/.vscode` | VSCode settings | `.vscode/` |
+
+---
+
+### Cleanup Workflow
+
+The cleanup process runs in **4 phases**:
+
+#### Phase 1: Scan & Analysis
+
+**Objective:** Identify all garbage files and calculate potential space savings
+
+**Actions:**
+
+1. Scan entire project directory
+2. Match files against garbage patterns
+3. Exclude protected patterns
+4. Calculate total size of garbage files
+5. Generate scan report
+
+**Output:**
+
+```
+📊 SCAN RESULTS:
+✅ Found: 147 garbage files
+✅ Found: 23 empty directories
+💾 Total size: 45.67 MB
+⏱️ Scan time: 2.34s
+```
+
+**Verification:**
+
+- [ ] Review list of files to be deleted
+- [ ] Confirm no important files are included
+- [ ] Check total size is reasonable
+
+---
+
+#### Phase 2: Garbage Cleanup
+
+**Objective:** Safely delete identified garbage files
+
+**Actions:**
+
+1. Create backup (optional, to `.trash/` directory)
+2. Delete garbage files one by one
+3. Track deleted files and errors
+4. Calculate freed space
+
+**Output:**
+
+```
+🗑️ CLEANUP PROGRESS:
+✅ Deleted: 147/147 files
+✅ Deleted: 23/23 directories
+💾 Freed: 45.67 MB
+❌ Errors: 0
+⏱️ Cleanup time: 8.12s
+```
+
+**Verification:**
+
+- [ ] All garbage files deleted
+- [ ] No errors occurred
+- [ ] Protected files untouched
+- [ ] Project still builds successfully
+
+---
+
+#### Phase 3: Structure Optimization
+
+**Objective:** Reorganize project structure for better maintainability
+
+**Actions:**
+
+1. Move misplaced files to correct directories
+2. Group related files together
+3. Remove empty directories
+4. Apply naming conventions
+
+**Reorganization Rules:**
+
+```typescript
+{
+  // Documentation
+  '**/*.md': 'docs/',
+  '**/*.txt': 'docs/texts/',
+
+  // Configuration
+  '**/*.json': 'config/',
+  '**/*.env*': 'config/environments/',
+
+  // Source code
+  '**/*.ts': 'src/',
+  '**/*.tsx': 'src/components/',
+  '**/*.css': 'src/styles/',
+
+  // Assets
+  '**/*.png': 'public/images/',
+  '**/*.jpg': 'public/images/',
+  '**/*.svg': 'public/icons/'
+}
+```
+
+**Output:**
+
+```
+📁 STRUCTURE OPTIMIZATION:
+✅ Moved: 34 files to correct locations
+✅ Removed: 12 empty directories
+✅ Renamed: 8 files to follow conventions
+⏱️ Optimization time: 3.45s
+```
+
+---
+
+#### Phase 4: Verification & Reporting
+
+**Objective:** Verify cleanup success and generate comprehensive report
+
+**Actions:**
+
+1. Verify all garbage files removed
+2. Verify protected files intact
+3. Run project build test
+4. Generate cleanup report
+5. Save report to `docs/cleanup-report.md`
+
+**Report Template:**
+
+```markdown
+# 🧹 PROJECT CLEANUP REPORT
+
+**Date:** 2025-10-16 14:30:00
+**Project:** /Users/user/my-project
+
+## 📊 SUMMARY
+
+- 🗑️ Files deleted: 147
+- 📁 Directories deleted: 23
+- 💾 Space freed: 45.67 MB
+- ⏱️ Total time: 14.23s
+- ❌ Errors: 0
+
+## 🔍 DETAILS BY PHASE
+
+### Phase 1: Scan & Analysis
+- Files found: 147
+- Directories found: 23
+- Total size: 45.67 MB
+
+### Phase 2: Garbage Cleanup
+- Files deleted: 147
+- Directories deleted: 23
+- Freed space: 45.67 MB
+
+### Phase 3: Structure Optimization
+- Files moved: 34
+- Empty dirs removed: 12
+- Files renamed: 8
+
+### Phase 4: Verification
+- Build test: ✅ PASSED
+- Protected files: ✅ INTACT
+- Project health: ✅ GOOD
+
+## 💡 RECOMMENDATIONS
+
+1. Run cleanup weekly to prevent accumulation
+2. Configure .gitignore to prevent garbage files
+3. Use Agent System to maintain clean code
+4. Review and update cleanup patterns regularly
+```
+
+---
+
+### Usage Guide
+
+#### Quick Commands
+
+**Using npm scripts:**
+
+```bash
+# Scan for garbage files (dry-run, safe)
+npm run cleanup:scan
+
+# Run cleanup with dry-run (preview only)
+npm run cleanup:run --dry
+
+# Run actual cleanup (deletes files)
+npm run cleanup:run
+
+# Optimize project structure
+npm run cleanup:optimize
+
+# Full cleanup (all phases)
+npm run cleanup:full
+```
+
+**Using Augment Code:**
+
+```
+"Scan project for garbage files"
+"Run cleanup agent with dry-run"
+"Execute full project cleanup"
+"Optimize project structure"
+```
+
+---
+
+#### Augment Commands & Keybindings
+
+Add to `.vscode/settings.json` or use directly:
+
+| Command | Keybinding | Description |
+|---------|------------|-------------|
+| `agent.cleanup.scan` | `Ctrl+Shift+C S` | Scan for garbage files |
+| `agent.cleanup.run` | `Ctrl+Shift+C R` | Run cleanup (with confirmation) |
+| `agent.cleanup.optimize` | `Ctrl+Shift+C O` | Optimize structure |
+| `agent.cleanup.full` | `Ctrl+Shift+C F` | Full cleanup workflow |
+
+**Command Configuration:**
+
+```json
+{
+  "commands": {
+    "agent.cleanup.scan": {
+      "title": "Agent: Scan Project Garbage",
+      "description": "Scan entire project for garbage files",
+      "args": []
+    },
+    "agent.cleanup.run": {
+      "title": "Agent: Run Cleanup",
+      "description": "Execute cleanup with confirmation",
+      "args": ["${dryRun}"]
+    },
+    "agent.cleanup.optimize": {
+      "title": "Agent: Optimize Structure",
+      "description": "Reorganize project structure",
+      "args": []
+    },
+    "agent.cleanup.full": {
+      "title": "Agent: Full Cleanup",
+      "description": "Run complete cleanup workflow",
+      "args": []
+    }
+  }
+}
+```
+
+---
+
+### Quick Cleanup Script
+
+Save as `cleanup.sh` in project root:
+
+```bash
+#!/bin/bash
+# Quick cleanup script for legacy projects
+
+echo "🧹 PROJECT CLEANUP SCRIPT"
+echo "========================="
+echo ""
+
+# Step 1: Scan
+echo "📊 Step 1: Scanning for garbage files..."
+npm run cleanup:scan
+
+echo ""
+echo "Review the scan results above."
+read -p "Continue with cleanup? (y/n): " confirm
+
+if [ "$confirm" != "y" ]; then
+  echo "❌ Cleanup cancelled"
+  exit 0
+fi
+
+# Step 2: Cleanup
+echo ""
+echo "🗑️ Step 2: Cleaning up garbage files..."
+npm run cleanup:run
+
+# Step 3: Optimize
+echo ""
+echo "📁 Step 3: Optimizing project structure..."
+npm run cleanup:optimize
+
+# Step 4: Report
+echo ""
+echo "✅ CLEANUP COMPLETED!"
+echo ""
+echo "📄 Check cleanup report at: docs/cleanup-report.md"
+```
+
+**Usage:**
+
+```bash
+chmod +x cleanup.sh
+./cleanup.sh
+```
+
+---
+
+### Best Practices
+
+#### 1. Always Run Dry-Run First
+
+```bash
+# GOOD: Preview before deleting
+npm run cleanup:scan
+npm run cleanup:run --dry
+
+# BAD: Delete without preview
+npm run cleanup:run  # Dangerous!
+```
+
+#### 2. Backup Important Files
+
+```bash
+# Create backup before cleanup
+git commit -am "Backup before cleanup"
+
+# Or use cleanup with trash bin
+npm run cleanup:run --trash
+```
+
+#### 3. Review Scan Results
+
+```
+✅ DO: Carefully review list of files to be deleted
+✅ DO: Check for false positives
+✅ DO: Verify protected patterns are working
+❌ DON'T: Blindly run cleanup without review
+```
+
+#### 4. Run Cleanup Regularly
+
+```
+✅ Weekly: For active projects
+✅ Monthly: For stable projects
+✅ Before: Major refactoring, deployment, code review
+✅ After: Migrations, dependency updates
+```
+
+#### 5. Configure .gitignore
+
+Prevent garbage files from being committed:
+
+```gitignore
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Cache
+.cache/
+tmp/
+temp/
+
+# Auto-generated docs
+*_REPORT.md
+*_SUMMARY.md
+*_ANALYSIS.md
+```
+
+#### 6. Customize Patterns
+
+Adapt garbage patterns to your project:
+
+```typescript
+// Add project-specific patterns
+const customGarbagePatterns = {
+  files: [
+    '**/*.old.js',           // Your old files
+    '**/legacy/**/*',        // Legacy code
+    '**/*-deprecated.*',     // Deprecated files
+  ]
+};
+```
+
+#### 7. Test After Cleanup
+
+```bash
+# Always test after cleanup
+npm run build
+npm run test
+npm run lint
+```
+
+---
+
+### Troubleshooting
+
+#### Issue: Important file was deleted
+
+**Solution:**
+
+```bash
+# Restore from trash bin (if enabled)
+cp .trash/path/to/file ./path/to/file
+
+# Or restore from git
+git checkout HEAD -- path/to/file
+```
+
+#### Issue: Cleanup is too slow
+
+**Solution:**
+
+```bash
+# Exclude large directories
+npm run cleanup:scan --exclude="node_modules,dist,build"
+```
+
+#### Issue: False positives in scan
+
+**Solution:**
+
+```typescript
+// Add to protected patterns
+protectedPatterns: [
+  '**/docs/important/**/*.md',  // Protect important docs
+  '**/legacy/keep/**/*',        // Keep legacy files
+]
+```
+
+#### Issue: Cleanup fails with errors
+
+**Solution:**
+
+```bash
+# Run with verbose logging
+npm run cleanup:run --verbose
+
+# Check permissions
+ls -la path/to/file
+
+# Run with sudo (if needed)
+sudo npm run cleanup:run
+```
+
+---
+
+## Development Workflow for Low-Code/AI-Assisted Projects
+
+### Frontend-First vs Backend-First Analysis
+
+#### Comparison Table
+
+| Aspect | Frontend-First | Backend-First |
+|--------|---------------|---------------|
+| **Visual Feedback** | ✅ Immediate UI preview | ❌ No visual output initially |
+| **User Experience** | ✅ Early UX validation | ❌ Late UX validation |
+| **AI Assistance** | ✅ Easier to describe UI | ⚠️ Harder to describe data structures |
+| **Iteration Speed** | ✅ Fast visual iterations | ⚠️ Slower, need testing tools |
+| **Motivation** | ✅ See progress quickly | ⚠️ Abstract progress |
+| **Complexity** | ⚠️ May need mock data | ✅ Real data from start |
+| **Best For** | UI-heavy apps, prototypes | Data-heavy apps, APIs |
+
+#### Recommendation: **Frontend-First for AI-Assisted Development**
+
+**Why Frontend-First is better with AI coding assistants:**
+
+1. **Visual Validation** - You can immediately see if the AI generated correct UI
+2. **Easier Prompts** - Describing UI is more natural than describing data structures
+3. **Faster Iterations** - Visual feedback loop is faster than testing APIs
+4. **Better Motivation** - Seeing progress keeps momentum
+5. **AI Strengths** - AI excels at generating UI components from descriptions
+6. **Mock Data** - Easy to use mock data initially, replace with real API later
+
+**When to use Backend-First:**
+
+- Building pure API services (no UI)
+- Complex data modeling requirements
+- Team has backend specialists
+- Data structure is well-defined upfront
+
+---
+
+### Standard Project Structure
+
+```
+project-root/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── (auth)/            # Route groups
+│   │   │   ├── login/
+│   │   │   │   ├── page.tsx
+│   │   │   │   ├── loading.tsx
+│   │   │   │   └── error.tsx
+│   │   │   └── register/
+│   │   ├── (dashboard)/
+│   │   │   ├── layout.tsx     # Dashboard layout
+│   │   │   ├── page.tsx       # Dashboard home
+│   │   │   ├── users/
+│   │   │   └── settings/
+│   │   ├── api/               # API routes
+│   │   │   ├── auth/
+│   │   │   │   ├── login/route.ts
+│   │   │   │   └── register/route.ts
+│   │   │   ├── users/
+│   │   │   │   ├── route.ts   # GET, POST /api/users
+│   │   │   │   └── [id]/route.ts  # GET, PUT, DELETE /api/users/:id
+│   │   │   └── products/
+│   │   ├── layout.tsx         # Root layout
+│   │   └── page.tsx           # Home page
+│   ├── components/            # React components
+│   │   ├── ui/               # Reusable UI components
+│   │   │   ├── Button/
+│   │   │   ├── Input/
+│   │   │   ├── Card/
+│   │   │   └── Modal/
+│   │   ├── forms/            # Form components
+│   │   │   ├── LoginForm/
+│   │   │   └── RegisterForm/
+│   │   └── layouts/          # Layout components
+│   │       ├── Header/
+│   │       ├── Sidebar/
+│   │       └── Footer/
+│   ├── hooks/                # Custom React hooks
+│   │   ├── useAuth.ts
+│   │   ├── useUser.ts
+│   │   └── useLocalStorage.ts
+│   ├── lib/                  # Library code
+│   │   ├── api.ts           # API client
+│   │   ├── auth.ts          # Auth utilities
+│   │   └── db.ts            # Database client
+│   ├── services/            # Business logic
+│   │   ├── auth.service.ts
+│   │   ├── user.service.ts
+│   │   └── product.service.ts
+│   ├── types/               # TypeScript types
+│   │   ├── api/
+│   │   │   ├── auth.ts
+│   │   │   └── user.ts
+│   │   ├── models/
+│   │   │   ├── User.ts
+│   │   │   └── Product.ts
+│   │   └── index.ts
+│   ├── utils/               # Utility functions
+│   │   ├── validation.ts
+│   │   ├── formatting.ts
+│   │   └── constants.ts
+│   ├── styles/              # Global styles
+│   │   ├── globals.css
+│   │   └── theme.css
+│   └── __tests__/           # Tests
+│       ├── components/
+│       ├── hooks/
+│       └── utils/
+├── public/                  # Static assets
+│   ├── images/
+│   ├── fonts/
+│   └── icons/
+├── prisma/                  # Database schema (if using Prisma)
+│   └── schema.prisma
+├── .env.local              # Environment variables
+├── .env.example            # Example env file
+├── next.config.js          # Next.js config
+├── tailwind.config.js      # Tailwind config
+├── tsconfig.json           # TypeScript config
+├── package.json
+├── Agents.md               # This file
+└── README.md
+```
+
+---
+
+### Tech Stack Recommendations
+
+**Frontend:**
+
+- ✅ **Next.js 14+** - App Router, Server Components, API Routes
+- ✅ **React 18+** - Latest features, Server Components
+- ✅ **TypeScript** - Type safety, better AI assistance
+- ✅ **Tailwind CSS** - Utility-first, Apple Design System compatible
+- ✅ **Zod** - Runtime validation, type inference
+
+**Backend/API:**
+
+- ✅ **Next.js API Routes** - Serverless, same codebase
+- ✅ **Prisma** - Type-safe ORM, great DX
+- ✅ **PostgreSQL** - Robust, scalable
+- ✅ **NextAuth.js** - Authentication made easy
+
+**State Management:**
+
+- ✅ **React Server Components** - Server-side state
+- ✅ **Zustand** - Client-side global state (if needed)
+- ✅ **React Query** - Server state management
+
+**Testing:**
+
+- ✅ **Vitest** - Fast, modern testing
+- ✅ **Testing Library** - Component testing
+- ✅ **Playwright** - E2E testing
+
+**Deployment:**
+
+- ✅ **Vercel** - Zero-config Next.js deployment
+- ✅ **Supabase** - Database + Auth + Storage
+
+---
+
+### Step-by-Step Development Workflow
+
+#### Workflow Diagram
+
+```mermaid
+graph TD
+    A[Start Project] --> B[Initialize Next.js]
+    B --> C[Setup Agent System]
+    C --> D[Design UI Mockups]
+    D --> E[Build UI Components]
+    E --> F[Create Pages]
+    F --> G[Add Mock Data]
+    G --> H[Test UI/UX]
+    H --> I{UI Complete?}
+    I -->|No| D
+    I -->|Yes| J[Design Data Models]
+    J --> K[Setup Database]
+    K --> L[Create API Routes]
+    L --> M[Connect Frontend to API]
+    M --> N[Replace Mock Data]
+    N --> O[Add Authentication]
+    O --> P[Write Tests]
+    P --> Q[Optimize Performance]
+    Q --> R[Deploy]
+    R --> S[Done]
+```
+
+---
+
+#### Phase 1: Project Initialization (15 minutes)
+
+**Goal:** Setup Next.js project with Agent System
+
+**Step 1.1: Create Next.js Project**
+
+**Prompt:**
+
+```
+Setup new Next.js 14 project with:
+- App Router
+- TypeScript
+- Tailwind CSS
+- ESLint + Prettier
+- src/ directory
+- Apple Design System ready
+```
+
+**Expected Output:**
+
+- Next.js project initialized
+- Dependencies installed
+- Basic folder structure created
+
+**Verification:**
+
+- [ ] `npm run dev` works
+- [ ] TypeScript compiles without errors
+- [ ] Tailwind CSS is working
+
+**Estimated Time:** 5 minutes
+
+---
+
+**Step 1.2: Setup Agent System**
+
+**Prompt:**
+
+```
+Copy Agents.md file vào project root và run setup script
+```
+
+**Manual Steps:**
+
+```bash
+# Copy Agents.md to project root
+cp /path/to/Agents.md ./
+
+# Run setup (if setup script exists)
+./setup-agent-system.sh
+
+# Or manually create structure
+mkdir -p src/{components,app,hooks,lib,services,types,utils,styles,__tests__}
+mkdir -p public/{images,fonts,icons}
+```
+
+**Verification:**
+
+- [ ] Agents.md exists in root
+- [ ] Folder structure matches standard
+- [ ] VSCode settings configured
+
+**Estimated Time:** 5 minutes
+
+---
+
+**Step 1.3: Activate MCP Servers**
+
+**Prompt:**
+
+```
+Activate current directory as project
+```
+
+**Verification:**
+
+- [ ] Serena MCP activated
+- [ ] Can search code with Serena
+- [ ] Human MCP available
+
+**Estimated Time:** 2 minutes
+
+---
+
+#### Phase 2: UI Design & Mockups (30 minutes)
+
+**Goal:** Design UI mockups for all major screens
+
+**Step 2.1: Generate UI Mockups**
+
+**Prompt:**
+
+```
+Generate UI mockups with Human MCP:
+
+1. "Generate a modern login page with Apple design - clean, minimal, centered form"
+2. "Generate a dashboard layout with sidebar, header, and 4 stat cards"
+3. "Generate a user profile page with avatar, info cards, and edit form"
+4. "Generate a data table page with search, filters, and pagination"
+```
+
+**Expected Output:**
+
+- 4+ UI mockup images
+- Saved in `public/mockups/`
+
+**Verification:**
+
+- [ ] All mockups generated
+- [ ] Mockups follow Apple Design
+- [ ] Mockups are clear and detailed
+
+**Estimated Time:** 15 minutes
+
+---
+
+**Step 2.2: Analyze Mockups**
+
+**Prompt:**
+
+```
+Analyze these mockups và list:
+- Required components
+- Color palette
+- Typography needs
+- Layout patterns
+- Responsive breakpoints
+```
+
+**Expected Output:**
+
+- Component list
+- Design tokens
+- Layout specifications
+
+**Estimated Time:** 10 minutes
+
+---
+
+#### Phase 3: Build UI Components (60 minutes)
+
+**Goal:** Create reusable UI components
+
+**Step 3.1: Create Base Components**
+
+**Prompts:**
+
+```
+1. "Tạo component Button with variants (primary, secondary, ghost), sizes (sm, md, lg), Apple Design"
+
+2. "Tạo component Input with types (text, email, password), validation states, Apple Design"
+
+3. "Tạo component Card with hover effects, shadows, Apple Design"
+
+4. "Tạo component Modal with backdrop blur, animations, ESC close, Apple Design"
+```
+
+**Expected Output:**
+
+```
+src/components/ui/
+  ├── Button/
+  │   ├── Button.tsx
+  │   └── index.ts
+  ├── Input/
+  ├── Card/
+  └── Modal/
+```
+
+**Verification:**
+
+- [ ] All components render correctly
+- [ ] Props work as expected
+- [ ] TypeScript types are correct
+- [ ] Apple Design applied
+
+**Estimated Time:** 30 minutes
+
+---
+
+**Step 3.2: Create Form Components**
+
+**Prompts:**
+
+```
+1. "Tạo LoginForm component with email, password inputs, remember me checkbox, submit button, validation with Zod"
+
+2. "Tạo RegisterForm component with name, email, password, confirm password, terms checkbox, validation"
+```
+
+**Expected Output:**
+
+```
+src/components/forms/
+  ├── LoginForm/
+  └── RegisterForm/
+```
+
+**Verification:**
+
+- [ ] Forms validate correctly
+- [ ] Error messages display
+- [ ] Submit handlers work
+
+**Estimated Time:** 20 minutes
+
+---
+
+**Step 3.3: Create Layout Components**
+
+**Prompts:**
+
+```
+1. "Tạo Header component with logo, navigation, user menu, Apple Design"
+
+2. "Tạo Sidebar component with navigation links, collapsible, responsive"
+
+3. "Tạo Footer component with links, copyright, social icons"
+```
+
+**Expected Output:**
+
+```
+src/components/layouts/
+  ├── Header/
+  ├── Sidebar/
+  └── Footer/
+```
+
+**Estimated Time:** 15 minutes
+
+---
+
+#### Phase 4: Create Pages with Mock Data (45 minutes)
+
+**Goal:** Build all pages using components and mock data
+
+**Step 4.1: Create Auth Pages**
+
+**Prompts:**
+
+```
+1. "Tạo login page tại /login with LoginForm, Apple Design, SEO metadata"
+
+2. "Tạo register page tại /register with RegisterForm, Apple Design"
+```
+
+**Expected Output:**
+
+```
+src/app/(auth)/
+  ├── login/
+  │   ├── page.tsx
+  │   ├── loading.tsx
+  │   └── error.tsx
+  └── register/
+```
+
+**Verification:**
+
+- [ ] Pages render correctly
+- [ ] Forms work
+- [ ] Loading states show
+- [ ] Error boundaries work
+
+**Estimated Time:** 15 minutes
+
+---
+
+**Step 4.2: Create Dashboard Page**
+
+**Prompt:**
+
+```
+Tạo dashboard page tại /dashboard with:
+- DashboardLayout (Header + Sidebar)
+- 4 StatCard components with mock data
+- Chart placeholder
+- Responsive grid
+- Apple Design
+```
+
+**Mock Data Prompt:**
+
+```
+Tạo mock data file src/lib/mockData.ts with:
+- User stats (users, revenue, orders, growth)
+- Chart data (monthly revenue)
+- Recent activities
+```
+
+**Expected Output:**
+
+```
+src/app/(dashboard)/
+  ├── layout.tsx
+  └── page.tsx
+
+src/lib/
+  └── mockData.ts
+```
+
+**Verification:**
+
+- [ ] Dashboard displays correctly
+- [ ] Mock data shows
+- [ ] Responsive on mobile
+- [ ] Charts render (placeholder)
+
+**Estimated Time:** 20 minutes
+
+---
+
+**Step 4.3: Create Data Table Page**
+
+**Prompt:**
+
+```
+Tạo users page tại /dashboard/users with:
+- DataTable component
+- Search functionality
+- Pagination
+- Mock user data (20 users)
+- Apple Design
+```
+
+**Expected Output:**
+
+```
+src/app/(dashboard)/users/
+  └── page.tsx
+
+src/components/ui/DataTable/
+  ├── DataTable.tsx
+  └── index.ts
+```
+
+**Estimated Time:** 15 minutes
+
+---
+
+#### Phase 5: Test UI/UX (30 minutes)
+
+**Goal:** Verify all UI works correctly
+
+**Step 5.1: Manual Testing**
+
+**Checklist:**
+
+- [ ] All pages load without errors
+- [ ] Navigation works
+- [ ] Forms validate correctly
+- [ ] Buttons respond to clicks
+- [ ] Modals open/close
+- [ ] Responsive on mobile (375px)
+- [ ] Responsive on tablet (768px)
+- [ ] Responsive on desktop (1280px)
+- [ ] Dark mode works (if implemented)
+- [ ] Animations are smooth (60fps)
+
+**Estimated Time:** 20 minutes
+
+---
+
+**Step 5.2: Accessibility Check**
+
+**Prompt:**
+
+```
+Audit accessibility của tất cả pages:
+- Keyboard navigation
+- Screen reader support
+- Color contrast
+- Touch targets
+- ARIA labels
+```
+
+**Verification:**
+
+- [ ] Can navigate with keyboard only
+- [ ] Focus indicators visible
+- [ ] Color contrast >= 4.5:1
+- [ ] Touch targets >= 44x44px
+
+**Estimated Time:** 10 minutes
+
+---
+
+#### Phase 6: Backend Setup (60 minutes)
+
+**Goal:** Setup database and create data models
+
+**Step 6.1: Design Data Models**
+
+**Prompt:**
+
+```
+Based on UI requirements, design database schema with Prisma:
+- User model (id, name, email, password, role, createdAt)
+- Product model (id, name, description, price, stock, createdAt)
+- Order model (id, userId, products, total, status, createdAt)
+- Relations between models
+```
+
+**Expected Output:**
+
+```
+prisma/
+  └── schema.prisma
+```
+
+**Verification:**
+
+- [ ] Schema is valid
+- [ ] Relations are correct
+- [ ] Indexes added for performance
+
+**Estimated Time:** 20 minutes
+
+---
+
+**Step 6.2: Setup Database**
+
+**Manual Steps:**
+
+```bash
+# Install Prisma
+npm install prisma @prisma/client
+
+# Initialize Prisma
+npx prisma init
+
+# Setup Supabase (or PostgreSQL)
+# Get connection string from Supabase dashboard
+
+# Add to .env.local
+DATABASE_URL="postgresql://..."
+
+# Generate Prisma Client
+npx prisma generate
+
+# Push schema to database
+npx prisma db push
+```
+
+**Verification:**
+
+- [ ] Database connected
+- [ ] Tables created
+- [ ] Prisma Client generated
+
+**Estimated Time:** 15 minutes
+
+---
+
+**Step 6.3: Seed Database**
+
+**Prompt:**
+
+```
+Tạo seed script prisma/seed.ts with:
+- 10 sample users
+- 20 sample products
+- 15 sample orders
+- Realistic data using faker
+```
+
+**Run Seed:**
+
+```bash
+npx prisma db seed
+```
+
+**Verification:**
+
+- [ ] Data seeded successfully
+- [ ] Can query data with Prisma Studio
+
+**Estimated Time:** 15 minutes
+
+---
+
+#### Phase 7: Create API Routes (90 minutes)
+
+**Goal:** Build type-safe API routes
+
+**Step 7.1: Create Auth API**
+
+**Prompts:**
+
+```
+1. "Tạo API POST /api/auth/register with Zod validation, password hashing, Prisma"
+
+2. "Tạo API POST /api/auth/login with email/password validation, JWT token generation"
+
+3. "Tạo API GET /api/auth/me with JWT verification, return current user"
+```
+
+**Expected Output:**
+
+```
+src/app/api/auth/
+  ├── register/route.ts
+  ├── login/route.ts
+  └── me/route.ts
+
+src/types/api/
+  └── auth.ts
+```
+
+**Verification:**
+
+- [ ] Can register new user
+- [ ] Can login with credentials
+- [ ] JWT token returned
+- [ ] Can get current user with token
+
+**Estimated Time:** 30 minutes
+
+---
+
+**Step 7.2: Create CRUD APIs**
+
+**Prompts:**
+
+```
+1. "Tạo CRUD API cho users:
+   - GET /api/users (list with pagination)
+   - GET /api/users/[id] (get one)
+   - PUT /api/users/[id] (update)
+   - DELETE /api/users/[id] (delete)
+   - Validation with Zod
+   - Auth required"
+
+2. "Tạo CRUD API cho products tương tự users"
+```
+
+**Expected Output:**
+
+```
+src/app/api/users/
+  ├── route.ts
+  └── [id]/route.ts
+
+src/app/api/products/
+  ├── route.ts
+  └── [id]/route.ts
+```
+
+**Verification:**
+
+- [ ] All CRUD operations work
+- [ ] Validation works
+- [ ] Auth required
+- [ ] Proper error handling
+
+**Estimated Time:** 45 minutes
+
+---
+
+**Step 7.3: Test APIs**
+
+**Prompt:**
+
+```
+Tạo tests cho tất cả API routes with Vitest:
+- Success cases
+- Validation errors
+- Auth errors
+- Edge cases
+```
+
+**Run Tests:**
+
+```bash
+npm run test
+```
+
+**Verification:**
+
+- [ ] All tests pass
+- [ ] Coverage > 80%
+
+**Estimated Time:** 20 minutes
+
+---
+
+#### Phase 8: Connect Frontend to Backend (60 minutes)
+
+**Goal:** Replace mock data with real API calls
+
+**Step 8.1: Create API Client**
+
+**Prompt:**
+
+```
+Tạo API client src/lib/api.ts with:
+- Fetch wrapper with error handling
+- JWT token management
+- TypeScript types
+- Request/response interceptors
+```
+
+**Expected Output:**
+
+```typescript
+// src/lib/api.ts
+export const api = {
+  auth: {
+    login: (data) => fetch('/api/auth/login', ...),
+    register: (data) => fetch('/api/auth/register', ...),
+    me: () => fetch('/api/auth/me', ...),
+  },
+  users: {
+    list: (params) => fetch('/api/users', ...),
+    get: (id) => fetch(`/api/users/${id}`, ...),
+    update: (id, data) => fetch(`/api/users/${id}`, ...),
+    delete: (id) => fetch(`/api/users/${id}`, ...),
+  },
+};
+```
+
+**Estimated Time:** 20 minutes
+
+---
+
+**Step 8.2: Create React Hooks**
+
+**Prompts:**
+
+```
+1. "Tạo hook useAuth with login, register, logout, user state"
+
+2. "Tạo hook useUsers with list, get, update, delete, loading states"
+
+3. "Tạo hook useProducts tương tự useUsers"
+```
+
+**Expected Output:**
+
+```
+src/hooks/
+  ├── useAuth.ts
+  ├── useUsers.ts
+  └── useProducts.ts
+```
+
+**Estimated Time:** 25 minutes
+
+---
+
+**Step 8.3: Update Pages to Use Real Data**
+
+**Prompts:**
+
+```
+1. "Update LoginForm để call useAuth hook thay vì mock"
+
+2. "Update Dashboard page để fetch real stats từ API"
+
+3. "Update Users page để use useUsers hook"
+```
+
+**Verification:**
+
+- [ ] Login works with real API
+- [ ] Dashboard shows real data
+- [ ] Users table shows real data
+- [ ] CRUD operations work
+
+**Estimated Time:** 20 minutes
+
+---
+
+#### Phase 9: Add Authentication (45 minutes)
+
+**Goal:** Protect routes and add auth flow
+
+**Step 9.1: Setup NextAuth.js**
+
+**Manual Steps:**
+
+```bash
+npm install next-auth
+```
+
+**Prompt:**
+
+```
+Setup NextAuth.js with:
+- Credentials provider
+- JWT strategy
+- Session management
+- Protected routes middleware
+```
+
+**Expected Output:**
+
+```
+src/app/api/auth/[...nextauth]/
+  └── route.ts
+
+middleware.ts
+```
+
+**Estimated Time:** 20 minutes
+
+---
+
+**Step 9.2: Protect Routes**
+
+**Prompt:**
+
+```
+Add authentication protection:
+- Redirect to /login if not authenticated
+- Protect /dashboard/* routes
+- Allow public access to /login, /register
+```
+
+**Verification:**
+
+- [ ] Can't access dashboard without login
+- [ ] Redirects to login
+- [ ] After login, redirects to dashboard
+
+**Estimated Time:** 15 minutes
+
+---
+
+**Step 9.3: Add User Menu**
+
+**Prompt:**
+
+```
+Update Header component with:
+- User avatar
+- Dropdown menu (Profile, Settings, Logout)
+- Logout functionality
+```
+
+**Estimated Time:** 10 minutes
+
+---
+
+#### Phase 10: Testing & Optimization (90 minutes)
+
+**Goal:** Ensure quality and performance
+
+**Step 10.1: Write Component Tests**
+
+**Prompt:**
+
+```
+Tạo tests cho tất cả components with Testing Library:
+- Render tests
+- Props tests
+- Event handler tests
+- Accessibility tests
+```
+
+**Run Tests:**
+
+```bash
+npm run test
+```
+
+**Estimated Time:** 30 minutes
+
+---
+
+**Step 10.2: Write E2E Tests**
+
+**Prompt:**
+
+```
+Tạo E2E tests with Playwright:
+- Login flow
+- Register flow
+- Dashboard navigation
+- CRUD operations
+```
+
+**Run E2E:**
+
+```bash
+npx playwright test
+```
+
+**Estimated Time:** 30 minutes
+
+---
+
+**Step 10.3: Performance Optimization**
+
+**Prompts:**
+
+```
+1. "Analyze bundle size và optimize imports"
+
+2. "Add lazy loading cho heavy components"
+
+3. "Optimize images with next/image"
+
+4. "Add caching strategies"
+```
+
+**Verification:**
+
+- [ ] Lighthouse score > 90
+- [ ] Initial load < 2s
+- [ ] FPS = 60
+- [ ] Bundle size optimized
+
+**Estimated Time:** 20 minutes
+
+---
+
+**Step 10.4: Final Cleanup**
+
+**Prompt:**
+
+```
+Cleanup workspace:
+- Remove unused files
+- Remove unused imports
+- Remove unused dependencies
+- Format all code
+- Fix all linting errors
+```
+
+**Estimated Time:** 10 minutes
+
+---
+
+#### Phase 11: Deployment (30 minutes)
+
+**Goal:** Deploy to production
+
+**Step 11.1: Prepare for Deployment**
+
+**Checklist:**
+
+- [ ] All tests pass
+- [ ] No TypeScript errors
+- [ ] No ESLint errors
+- [ ] Environment variables documented
+- [ ] README updated
+
+**Estimated Time:** 10 minutes
+
+---
+
+**Step 11.2: Deploy to Vercel**
+
+**Manual Steps:**
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Login
+vercel login
+
+# Deploy
+vercel --prod
+```
+
+**Or use Vercel Dashboard:**
+
+1. Connect GitHub repo
+2. Configure environment variables
+3. Deploy
+
+**Verification:**
+
+- [ ] App deployed successfully
+- [ ] All pages work
+- [ ] API routes work
+- [ ] Database connected
+
+**Estimated Time:** 15 minutes
+
+---
+
+**Step 11.3: Post-Deployment**
+
+**Checklist:**
+
+- [ ] Test production URL
+- [ ] Monitor errors (Sentry)
+- [ ] Check analytics
+- [ ] Document deployment process
+
+**Estimated Time:** 5 minutes
+
+---
+
+### Total Estimated Time
+
+| Phase | Time |
+|-------|------|
+| 1. Project Initialization | 15 min |
+| 2. UI Design & Mockups | 30 min |
+| 3. Build UI Components | 60 min |
+| 4. Create Pages | 45 min |
+| 5. Test UI/UX | 30 min |
+| 6. Backend Setup | 60 min |
+| 7. Create API Routes | 90 min |
+| 8. Connect Frontend to Backend | 60 min |
+| 9. Add Authentication | 45 min |
+| 10. Testing & Optimization | 90 min |
+| 11. Deployment | 30 min |
+| **TOTAL** | **~8.5 hours** |
+
+**Note:** Times are estimates for an experienced developer using AI assistance. Actual time may vary based on project complexity and familiarity with the stack.
+
+---
+
+### Best Practices for AI-Assisted Development
+
+#### 1. Writing Effective Prompts
+
+**Good Prompts:**
+
+```
+✅ "Tạo LoginForm component with email/password inputs, Zod validation, error states, submit handler, Apple Design"
+
+✅ "Tạo API POST /api/users with Zod validation, Prisma create, error handling, return user without password"
+```
+
+**Bad Prompts:**
+
+```
+❌ "Make a login form"
+❌ "Create user API"
+```
+
+**Tips:**
+
+- Be specific about requirements
+- Mention tech stack (Zod, Prisma, etc.)
+- Specify design system (Apple Design)
+- Include error handling requirements
+- Mention TypeScript types
+
+---
+
+#### 2. Verifying AI-Generated Code
+
+**Always Check:**
+
+- [ ] TypeScript types are correct
+- [ ] No `any` types
+- [ ] Error handling exists
+- [ ] Validation is present
+- [ ] Security best practices followed
+- [ ] Performance considerations
+- [ ] Accessibility features
+
+**Use Tools:**
+
+```bash
+# Type check
+npm run type-check
+
+# Lint
+npm run lint
+
+# Test
+npm run test
+
+# Build
+npm run build
+```
+
+---
+
+#### 3. Iterating and Refining
+
+**Workflow:**
+
+1. Generate initial code with AI
+2. Test manually
+3. Identify issues
+4. Refine with specific prompts
+5. Test again
+6. Repeat until perfect
+
+**Example Iteration:**
+
+```
+Initial: "Tạo Button component"
+→ Test → Missing loading state
+
+Refine: "Add loading state with spinner vào Button component"
+→ Test → Spinner too large
+
+Refine: "Reduce spinner size to 16px trong Button component"
+→ Test → Perfect!
+```
+
+---
+
+#### 4. Common Pitfalls to Avoid
+
+**Don't:**
+
+- ❌ Accept AI code without testing
+- ❌ Skip TypeScript type checking
+- ❌ Ignore security warnings
+- ❌ Use mock data in production
+- ❌ Skip error handling
+- ❌ Forget about accessibility
+- ❌ Ignore performance
+
+**Do:**
+
+- ✅ Test every AI-generated component
+- ✅ Verify TypeScript types
+- ✅ Add proper error handling
+- ✅ Implement validation
+- ✅ Follow security best practices
+- ✅ Optimize for performance
+- ✅ Ensure accessibility
+
+---
+
+### Conclusion
+
+This workflow enables you to build a complete, production-ready web application using AI coding assistants in approximately **8-10 hours**. The key is:
+
+1. **Frontend-First Approach** - Visual feedback drives faster iterations
+2. **Clear, Specific Prompts** - AI generates better code with detailed requirements
+3. **Iterative Refinement** - Test, refine, repeat until perfect
+4. **Quality Checks** - Always verify AI-generated code
+5. **Best Practices** - Follow security, performance, and accessibility standards
+
+With this Agent System and workflow, you can leverage AI to build professional applications 10x faster while maintaining high code quality.
+
+---
+
+## Quick Reference
+
+### Essential Commands
+
+```bash
+# Development
+npm run dev              # Start dev server
+npm run build            # Build for production
+npm run start            # Start production server
+
+# Testing
+npm run test             # Run unit tests
+npm run test:e2e         # Run E2E tests
+npm run type-check       # TypeScript check
+npm run lint             # Lint code
+
+# Database
+npx prisma studio        # Open Prisma Studio
+npx prisma db push       # Push schema to DB
+npx prisma db seed       # Seed database
+npx prisma generate      # Generate Prisma Client
+
+# Deployment
+vercel --prod            # Deploy to Vercel
+```
+
+---
+
+### Most Used Prompts
+
+**Component:**
+
+```
+Tạo component {Name} with {features}, Apple Design
+```
+
+**Page:**
+
+```
+Tạo page {Name} tại {route} with {components}, Apple Design
+```
+
+**API:**
+
+```
+Tạo API {method} {route} with Zod validation, Prisma, error handling
+```
+
+**Hook:**
+
+```
+Tạo hook use{Name} with {features}, loading states, error handling
+```
+
+---
+
+### File Structure Quick Reference
+
+```
+src/
+├── app/              # Pages & API routes
+├── components/       # React components
+│   ├── ui/          # Base components
+│   ├── forms/       # Form components
+│   └── layouts/     # Layout components
+├── hooks/           # Custom hooks
+├── lib/             # Library code
+├── services/        # Business logic
+├── types/           # TypeScript types
+├── utils/           # Utilities
+└── styles/          # Global styles
+```
+
+---
+
+### Support & Resources
+
+**Documentation:**
+
+- [Next.js Docs](https://nextjs.org/docs)
+- [React Docs](https://react.dev)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Prisma Docs](https://www.prisma.io/docs)
+- [Agents.md Standard](https://agents.md)
+
+**MCP Servers:**
+
+- [Serena GitHub](https://github.com/oraios/serena)
+- [Human MCP GitHub](https://github.com/mrgoonie/human-mcp)
+
+**Community:**
+
+- [Augment Code Discord](https://discord.gg/augmentcode)
+- [Next.js Discord](https://discord.gg/nextjs)
+
+---
+
+**Happy Building! 🚀**
+
+---
+
+**Version:** 3.0.0
+**Last Updated:** 2025-10-20
+**License:** MIT
+**Author:** Nguyen Hai Ninh
+**Developer:** Nguyen Hai Ninh (<haininh3496@gmail.com>)
+
+---
+
+# 🎨 LIQUID GLASS DESIGN SYSTEM (COMPREHENSIVE)
+
+> **🔴 CRITICAL:** This is the PRIMARY design system for UI development.
+> AI Agents MUST follow these guidelines when creating ANY UI components.
+
+## 📋 Table of Contents
+
+1. [🎨 Kiến Trúc Thiết Kế](#kiến-trúc-thiết-kế)
+2. [🌈 Hệ Thống Màu Sắc](#hệ-thống-màu-sắc)
+3. [📝 Typography System](#typography-system)
+4. [📏 Spacing System](#spacing-system)
+5. [🔘 Border Radius](#border-radius)
+6. [🌓 Shadow System](#shadow-system)
+7. [🎭 Backdrop Blur](#backdrop-blur)
+8. [🎬 Animation System](#animation-system)
+9. [📱 Mobile-First Patterns](#mobile-first-patterns)
+10. [🎯 Interaction Patterns](#interaction-patterns)
+11. [🎨 Design Philosophy](#design-philosophy)
+12. [📊 Technical Specs](#technical-specs)
+
+---
+
+## 🎨 Kiến Trúc Thiết Kế
+
+### **3-Layer Architecture**
+
+Liquid Glass Design System được xây dựng trên kiến trúc 3 lớp:
+
+```
+Layer 3: Content Layer (z-index: 10-50)
+         ↑
+Layer 2: Surface Layer (z-index: 1-9) - Glass surfaces
+         ↑
+Layer 1: Background Layer (z-index: 0) - Gradients + Blur Orbs
+```
+
+#### **Layer 1: Background Layer (z-index: 0)**
+
+**Purpose:** Tạo nền gradient with animated blur orbs
+
+**Components:**
+
+- Pastel gradient background (3 color stops)
+- Animated blur orbs (3-5 orbs)
+- Subtle animations (floating, pulsing)
+
+**CSS Example:**
+
+```css
+.background-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    135deg,
+    #fef3f3 0%,    /* Soft pink */
+    #f0f4ff 50%,   /* Soft blue */
+    #fef9f3 100%   /* Soft peach */
+  );
+}
+
+.blur-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: float 20s ease-in-out infinite;
+}
+
+.blur-orb-1 {
+  width: 288px;
+  height: 288px;
+  background: radial-gradient(circle, #ffc4d6 0%, transparent 70%);
+  top: 10%;
+  left: 15%;
+}
+
+.blur-orb-2 {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, #c4d7ff 0%, transparent 70%);
+  bottom: 20%;
+  right: 10%;
+}
+
+.blur-orb-3 {
+  width: 384px;
+  height: 384px;
+  background: radial-gradient(circle, #ffd4c4 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(20px, -20px); }
+  50% { transform: translate(-15px, 15px); }
+  75% { transform: translate(15px, 10px); }
+}
+```
+
+#### **Layer 2: Surface Layer (z-index: 1-9)**
+
+**Purpose:** Glass surfaces with backdrop blur
+
+**4 Opacity Levels:**
+
+| Level | Opacity | Blur | Use Case | Reasoning |
+|-------|---------|------|----------|-----------|
+| **Level 1** | 30% | 24px | Main containers | Subtle, see-through, elegant |
+| **Level 2** | 20% | 40px | Overlays, modals | Very transparent, focus on content |
+| **Level 3** | 70% | 12px | Cards, panels | More solid, better readability |
+| **Level 4** | 90% | 4px | Buttons, inputs | Almost opaque, clear interaction |
+
+**CSS Examples:**
+
+```css
+/* Level 1: Main Container (30% opacity) */
+.glass-container {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Level 2: Modal Overlay (20% opacity) */
+.glass-modal {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Level 3: Card (70% opacity) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Level 4: Button (90% opacity) */
+.glass-button {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 1);
+}
+```
+
+#### **Layer 3: Content Layer (z-index: 10-50)**
+
+**Purpose:** Text, icons, interactive elements
+
+**Z-index Strategy:**
+
+- Text content: z-index: 10
+- Icons: z-index: 15
+- Buttons: z-index: 20
+- Dropdowns: z-index: 30
+- Modals: z-index: 40
+- Tooltips: z-index: 50
+
+**Best Practices:**
+
+1. ✅ Always use relative z-index (not absolute values like 9999)
+2. ✅ Group related elements in same z-index range
+3. ✅ Leave gaps between ranges for future additions
+4. ✅ Document z-index usage in comments
+
+---
+
+## 🌈 Hệ Thống Màu Sắc
+
+### **Background Gradients**
+
+**3-Stop Pastel Gradient:**
+
+```css
+background: linear-gradient(
+  135deg,
+  #fef3f3 0%,    /* Soft pink - Hue: 0°, Sat: 50%, Light: 97% */
+  #f0f4ff 50%,   /* Soft blue - Hue: 220°, Sat: 100%, Light: 97% */
+  #fef9f3 100%   /* Soft peach - Hue: 30°, Sat: 50%, Light: 97% */
+);
+```
+
+**Why These Colors:**
+
+- **Soft Pink (#fef3f3):** Warm, welcoming, reduces eye strain
+- **Soft Blue (#f0f4ff):** Calm, professional, iOS-like
+- **Soft Peach (#fef9f3):** Balanced, neutral, complements both
+
+**Hue Rotation Analysis:**
+
+- Pink (0°) → Blue (220°) = 220° rotation
+- Blue (220°) → Peach (30°) = 170° rotation (via 360°)
+- Creates smooth, harmonious transition
+
+**Góc Độ 135deg:**
+
+- Diagonal từ top-left → bottom-right
+- Tạo depth và movement
+- Không quá aggressive (như 90deg or 180deg)
+
+---
+
+### **Blur Orbs**
+
+**3 Orbs with Kích Thước Khác Nhau:**
+
+| Orb | Size | Color | Position | Opacity | Blur | Animation |
+|-----|------|-------|----------|---------|------|-----------|
+| **Orb 1** | 288px | Pink (#ffc4d6) | Top-left (10%, 15%) | 0.6 | 80px | Float 20s |
+| **Orb 2** | 320px | Blue (#c4d7ff) | Bottom-right (20%, 10%) | 0.6 | 80px | Float 25s |
+| **Orb 3** | 384px | Peach (#ffd4c4) | Center (50%, 50%) | 0.6 | 80px | Float 30s |
+
+**Why These Sizes:**
+
+- **288px (18rem):** Base size, divisible by 8pt grid (288 = 36 × 8)
+- **320px (20rem):** Medium size, divisible by 8pt grid (320 = 40 × 8)
+- **384px (24rem):** Large size, divisible by 8pt grid (384 = 48 × 8)
+
+**Mathematical Relationship:**
+
+```
+288px × 1.11 ≈ 320px
+320px × 1.20 ≈ 384px
+Ratio: 1 : 1.11 : 1.33
+```
+
+**Opacity 0.6 (60%):**
+
+- Visible enough to create atmosphere
+- Transparent enough to not distract
+- Blends well with gradient background
+
+**Blur 80px:**
+
+- Large blur creates soft, dreamy effect
+- Matches "liquid" aesthetic
+- GPU-accelerated for performance
+
+**Animation Timing:**
+
+- Orb 1: 20s (fastest)
+- Orb 2: 25s (medium)
+- Orb 3: 30s (slowest)
+- Different speeds create organic, natural movement
+
+---
+
+### **Glass Surfaces**
+
+**4 Opacity Levels Explained:**
+
+#### **Level 1: 30% Opacity (Main Containers)**
+
+```css
+background: rgba(255, 255, 255, 0.3);
+backdrop-filter: blur(24px);
+```
+
+**Why 30%:**
+
+- Subtle, elegant, see-through
+- Shows background gradient and orbs
+- Creates "floating" effect
+- Best for large containers (main app container)
+
+**Why 24px Blur:**
+
+- Medium blur for balance
+- Not too sharp (like 4px)
+- Not too blurry (like 64px)
+- Divisible by 8pt grid (24 = 3 × 8)
+
+**Use Cases:**
+
+- Main app container
+- Dashboard background
+- Large panels
+
+---
+
+#### **Level 2: 20% Opacity (Overlays)**
+
+```css
+background: rgba(255, 255, 255, 0.2);
+backdrop-filter: blur(40px);
+```
+
+**Why 20%:**
+
+- Very transparent
+- Focus on content, not container
+- Creates depth (layering effect)
+
+**Why 40px Blur:**
+
+- Heavy blur for dreamy effect
+- Background becomes abstract
+- Divisible by 8pt grid (40 = 5 × 8)
+
+**Use Cases:**
+
+- Modal overlays
+- Dropdown menus
+- Tooltips
+
+---
+
+#### **Level 3: 70% Opacity (Cards)**
+
+```css
+background: rgba(255, 255, 255, 0.7);
+backdrop-filter: blur(12px);
+```
+
+**Why 70%:**
+
+- More solid, better readability
+- Still shows some background
+- Good contrast for text
+
+**Why 12px Blur:**
+
+- Light blur for subtle effect
+- Maintains sharpness
+- Divisible by 8pt grid (12 = 1.5 × 8)
+
+**Use Cases:**
+
+- Task cards
+- List items
+- Content panels
+
+---
+
+#### **Level 4: 90% Opacity (Buttons)**
+
+```css
+background: rgba(255, 255, 255, 0.9);
+backdrop-filter: blur(4px);
+```
+
+**Why 90%:**
+
+- Almost opaque
+- Clear interaction cue
+- High contrast for text
+
+**Why 4px Blur:**
+
+- Minimal blur
+- Maintains sharpness
+- Divisible by 8pt grid (4 = 0.5 × 8)
+
+**Use Cases:**
+
+- Buttons
+- Input fields
+- Interactive elements
+
+---
+
+### **iOS Blue #007AFF**
+
+**Color Values:**
+
+| Format | Value | Notes |
+|--------|-------|-------|
+| **HEX** | #007AFF | iOS system blue |
+| **RGB** | rgb(0, 122, 255) | R:0, G:122, B:255 |
+| **HSL** | hsl(211, 100%, 50%) | Hue:211°, Sat:100%, Light:50% |
+| **OKLCH** | oklch(0.55 0.22 250) | Perceptually uniform |
+
+**Contrast Ratios:**
+
+| Background | Contrast | WCAG Level |
+|------------|----------|------------|
+| White (#FFFFFF) | 4.5:1 | AA (normal text) |
+| Light Gray (#F5F5F5) | 4.2:1 | AA (large text) |
+| Glass 90% | 4.8:1 | AA (normal text) |
+| Glass 70% | 3.5:1 | AA (large text only) |
+
+**Why iOS Blue:**
+
+- Universally recognized as "action" color
+- High contrast on white/light backgrounds
+- Accessible (WCAG AA compliant)
+- Matches iOS Human Interface Guidelines
+
+---
+
+### **Semantic Colors**
+
+#### **Priority Colors**
+
+| Priority | Color | HEX | Use Case | Psychology |
+|----------|-------|-----|----------|------------|
+| **High** | Red | #FF3B30 | Urgent tasks | Attention, urgency |
+| **Medium** | Orange | #FF9500 | Important tasks | Warning, caution |
+| **Low** | Green | #34C759 | Normal tasks | Calm, safe |
+| **None** | Gray | #8E8E93 | Backlog | Neutral, inactive |
+
+**Color Psychology:**
+
+- **Red:** Stimulates action, creates urgency
+- **Orange:** Draws attention without alarm
+- **Green:** Reassuring, positive
+- **Gray:** Neutral, low priority
+
+---
+
+#### **Status Colors**
+
+| Status | Color | HEX | Icon | Meaning |
+|--------|-------|-----|------|---------|
+| **Success** | Green | #34C759 | ✓ | Completed, success |
+| **Warning** | Orange | #FF9500 | ⚠ | Needs attention |
+| **Error** | Red | #FF3B30 | ✕ | Failed, error |
+| **Info** | Blue | #007AFF | ℹ | Information |
+
+---
+
+### **Text Hierarchy**
+
+**5 Levels with Contrast Ratios:**
+
+| Level | Size | Weight | Color | Contrast | Use Case |
+|-------|------|--------|-------|----------|----------|
+| **H1** | 17px | 500 | #000000 | 21:1 | Page titles |
+| **H2** | 15px | 500 | #000000 | 21:1 | Section headers |
+| **Body** | 15px | 400 | #000000 | 21:1 | Main content |
+| **Caption** | 13px | 400 | #3C3C43 | 10.7:1 | Metadata, timestamps |
+| **Disabled** | 15px | 400 | #8E8E93 | 4.5:1 | Disabled text |
+
+**Why These Contrast Ratios:**
+
+- **21:1 (Black on White):** Maximum readability
+- **10.7:1 (Dark Gray):** Still AAA compliant
+- **4.5:1 (Medium Gray):** AA compliant (minimum)
+
+**WCAG Compliance:**
+
+- H1, H2, Body: AAA (7:1+)
+- Caption: AAA (7:1+)
+- Disabled: AA (4.5:1+)
+
+---
+
+## 📝 Typography System
+
+### **Font Stack**
+
+```css
+font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", 
+             "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+```
+
+**Fallback Chain Explained:**
+
+1. **-apple-system:** macOS/iOS San Francisco font (primary)
+2. **BlinkMacSystemFont:** Chrome on macOS
+3. **SF Pro Display:** San Francisco for large text (20px+)
+4. **SF Pro Text:** San Francisco for small text (<20px)
+5. **Segoe UI:** Windows system font
+6. **Roboto:** Android system font
+7. **Helvetica Neue:** Older macOS fallback
+8. **Arial:** Universal fallback
+9. **sans-serif:** Generic fallback
+
+**Why San Francisco:**
+
+- Apple's system font since iOS 9 / macOS El Capitan
+- Optimized for legibility at all sizes
+- Dynamic tracking (letter-spacing adjusts by size)
+- Optical sizes for different text sizes
+- Professional, modern, clean
+
+---
+
+### **Font Sizes**
+
+**iOS Standard Sizes:**
+
+| Size | Use Case | Why This Size | Mathematical Relationship |
+|------|----------|---------------|---------------------------|
+| **17px** | Body text, buttons | iOS default body size | 12px × 1.417 |
+| **15px** | Secondary text, labels | iOS secondary size | 12px × 1.25 |
+| **13px** | Captions, metadata | iOS caption size | 12px × 1.083 |
+
+**Mathematical Relationships:**
+
+```
+Base: 12px (not used, but foundation)
+13px = 12px × 1.083 (small increment)
+15px = 12px × 1.25  (25% larger)
+17px = 12px × 1.417 (golden ratio-ish)
+
+Also:
+13px × 1.15 ≈ 15px
+15px × 1.13 ≈ 17px
+```
+
+**Why These Specific Sizes:**
+
+- **17px:** iOS default, proven optimal for mobile reading
+- **15px:** Smaller but still comfortable, good for dense UIs
+- **13px:** Minimum for comfortable reading (WCAG recommends 12px+)
+
+**NOT Using:**
+
+- 14px, 16px, 18px (not iOS standard)
+- Arbitrary sizes (breaks consistency)
+
+---
+
+### **Font Weights**
+
+**Only 2 Weights:**
+
+| Weight | Value | Use Case | Why |
+|--------|-------|----------|-----|
+| **Regular** | 400 | Body text, captions | Default, most readable |
+| **Medium** | 500 | Headers, emphasis | Subtle emphasis without being bold |
+
+**Why Only 2 Weights:**
+
+- **Simplicity:** Fewer choices = more consistent
+- **iOS Standard:** iOS uses primarily 400 and 500
+- **Performance:** Fewer font files to load
+- **Readability:** 400 is optimal for body text, 500 for headers
+
+**NOT Using:**
+
+- 300 (Light): Too thin, poor readability
+- 600 (Semibold): Too heavy, not iOS-like
+- 700 (Bold): Too aggressive for this design
+
+---
+
+### **Line Height**
+
+**Universal 1.5 Ratio:**
+
+```css
+line-height: 1.5; /* 150% of font size */
+```
+
+**Examples:**
+
+- 17px font → 25.5px line-height
+- 15px font → 22.5px line-height
+- 13px font → 19.5px line-height
+
+**Why 1.5:**
+
+- **WCAG Recommendation:** 1.5 minimum for body text
+- **Readability:** Comfortable spacing between lines
+- **Universal:** Works for all font sizes
+- **iOS Standard:** iOS uses ~1.4-1.5 for body text
+
+**NOT Using:**
+
+- 1.2 (too tight, hard to read)
+- 1.8 (too loose, breaks visual flow)
+- Variable line-heights (inconsistent)
+
+---
+
+## 📏 Spacing System (8pt Grid)
+
+### **Base Unit: 4px**
+
+**Why 4px:**
+
+- **Divisible by 2:** Easy to halve (2px)
+- **Divisible by 4:** Quarter grid (1px)
+- **Divisible by 8:** Standard 8pt grid
+- **iOS Standard:** iOS uses 4px/8px increments
+
+**Grid Multiples:**
+
+```
+1× = 4px   (0.25rem)
+2× = 8px   (0.5rem)
+3× = 12px  (0.75rem)
+4× = 16px  (1rem)
+5× = 20px  (1.25rem)
+6× = 24px  (1.5rem)
+8× = 32px  (2rem)
+11× = 44px (2.75rem) - iOS touch target
+```
+
+---
+
+### **Padding System**
+
+**Standard Padding: px-4 py-3 (16px × 12px)**
+
+```css
+padding: 12px 16px; /* py-3 px-4 */
+```
+
+**Ratio Analysis:**
+
+- Horizontal: 16px (4 × 4px)
+- Vertical: 12px (3 × 4px)
+- Ratio: 4:3 (classic aspect ratio)
+
+**Why 16px Horizontal:**
+
+- Comfortable touch target width
+- Aligns with 8pt grid (16 = 2 × 8)
+- iOS standard for buttons
+
+**Why 12px Vertical:**
+
+- Balanced with 16px horizontal
+- Creates rectangular (not square) buttons
+- Aligns with 4pt grid (12 = 3 × 4)
+
+---
+
+### **Gap System**
+
+| Gap | Value | Use Case | Why |
+|-----|-------|----------|-----|
+| **gap-2** | 8px | Tight spacing (icons + text) | Minimum comfortable gap |
+| **gap-3** | 12px | Medium spacing (list items) | Balanced, not too tight |
+| **gap-4** | 16px | Loose spacing (cards) | Comfortable breathing room |
+
+---
+
+### **Touch Targets: 44px Minimum**
+
+**iOS Standard:**
+
+- Minimum touch target: 44px × 44px
+- Recommended: 48px × 48px
+
+**Implementation:**
+
+```css
+.button {
+  min-height: 44px; /* iOS minimum */
+  padding: 12px 16px; /* Ensures 44px+ height */
+}
+
+.icon-button {
+  width: 44px;
+  height: 44px;
+  padding: 10px; /* 44px - (10px × 2) = 24px icon */
+}
+```
+
+**Why 44px:**
+
+- **Apple HIG:** iOS Human Interface Guidelines standard
+- **Accessibility:** Easy to tap for all users
+- **Ergonomics:** Average fingertip is ~40-44px
+
+---
+
+## 🔘 Border Radius
+
+### **Primary: 20px (1.25rem)**
+
+```css
+border-radius: 20px;
+```
+
+**Mathematical Reasoning:**
+
+- 20px = 5 × 4px (perfect 8pt grid multiple)
+- 20px = 1.25rem (clean rem value)
+- 20px = 2.5 × 8px (8pt grid multiple)
+
+**Why 20px:**
+
+- **Squircle Aesthetic:** Mimics iOS app icon curves
+- **Not Too Round:** 16px too subtle, 24px too round
+- **Goldilocks Zone:** Just right for modern UI
+
+---
+
+### **Squircle Aesthetic**
+
+**iOS 14+ App Icon Influence:**
+
+- iOS app icons use "squircle" (square + circle hybrid)
+- Not perfect circle, not sharp square
+- Smooth, continuous curvature
+
+**Optical Correction:**
+
+- 20px radius on 80px element = 25% curve
+- 20px radius on 48px element = 41.67% curve
+- Creates consistent "roundness" feel
+
+---
+
+### **Radius-to-Size Ratios**
+
+| Element | Size | Radius | Ratio | Visual Effect |
+|---------|------|--------|-------|---------------|
+| **Large Card** | 400px | 20px | 5% | Subtle rounding |
+| **Medium Card** | 200px | 20px | 10% | Noticeable rounding |
+| **Button** | 44px | 20px | 45% | Very round (pill-like) |
+| **Avatar** | 40px | 20px | 50% | Perfect circle |
+| **Tag** | 24px | 12px | 50% | Perfect circle |
+
+---
+
+## 🌓 Shadow System
+
+### **5% Opacity - Why So Subtle?**
+
+```css
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+```
+
+**Reasoning:**
+
+- **Glass Aesthetic:** Heavy shadows break illusion
+- **Subtle Depth:** Just enough to create layering
+- **Not Distracting:** Focus on content, not shadows
+- **Modern:** Flat design with hint of depth
+
+**Comparison:**
+
+- Material Design: 10-20% opacity (too heavy)
+- iOS: 5-8% opacity (subtle, elegant)
+- Liquid Glass: 5% opacity (matches iOS)
+
+---
+
+### **Colored Shadows (Blue Glow)**
+
+```css
+/* Button hover state */
+box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+```
+
+**Why Blue Glow:**
+
+- Matches iOS Blue (#007AFF)
+- Creates "active" feeling
+- Draws attention to interactive elements
+- 30% opacity for visibility without overwhelming
+
+---
+
+## 🎭 Backdrop Blur
+
+### **4 Levels**
+
+| Level | Blur | Use Case | Effect |
+|-------|------|----------|--------|
+| **Level 1** | 4px | Buttons, inputs | Minimal blur, sharp |
+| **Level 2** | 24px | Main containers | Medium blur, balanced |
+| **Level 3** | 40px | Modals, overlays | Heavy blur, dreamy |
+| **Level 4** | 64px | Full-screen overlays | Maximum blur, abstract |
+
+**Effect Chain:**
+
+```
+Content → Backdrop Blur → Glass Overlay = Frosted Glass Effect
+```
+
+**Performance:**
+
+- GPU-accelerated
+- Use `will-change: backdrop-filter` for animations
+- Limit to 3-4 blur layers max
+
+---
+
+## 🎬 Animation System
+
+### **150ms Duration (iOS Standard)**
+
+```css
+transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+```
+
+**Why 150ms:**
+
+- iOS standard timing
+- Fast enough to feel responsive
+- Slow enough to be smooth
+- Not jarring or abrupt
+
+**Timing Function:**
+
+- `cubic-bezier(0.4, 0, 0.2, 1)` = "ease-out"
+- Starts fast, ends slow
+- Natural, organic feel
+
+---
+
+### **Scale Animations**
+
+| Element | Scale | Use Case |
+|---------|-------|----------|
+| **Large** | scale(0.98) | Cards, panels (2% shrink) |
+| **Small** | scale(0.95) | Buttons, icons (5% shrink) |
+
+**Why Different Scales:**
+
+- Large elements: Subtle feedback (2%)
+- Small elements: Noticeable feedback (5%)
+
+---
+
+## 📱 Mobile-First Patterns
+
+### **448px Container (iPhone 14 Pro Max)**
+
+```css
+max-width: 448px; /* 28rem */
+```
+
+**Why 448px:**
+
+- iPhone 14 Pro Max width: 430px
+- 448px = 430px + 18px padding
+- Divisible by 8pt grid (448 = 56 × 8)
+
+---
+
+## �� Interaction Patterns
+
+### **Tap Targets**
+
+- Entire row clickable (not just text)
+- Icon + padding = 44px minimum
+- Button area = 44px × full width
+
+---
+
+## 🎨 Design Philosophy
+
+### **5 Core Principles**
+
+1. **Minimalism:** Less is more
+2. **Clarity:** Clear hierarchy
+3. **Consistency:** Predictable patterns
+4. **Lightness:** Airy, spacious
+5. **Precision:** Mathematical accuracy
+
+---
+
+## 📊 Technical Specs
+
+### **Performance Budget**
+
+- Max blur layers: 4
+- Max transition duration: 300ms
+- Target FPS: 60
+
+### **Browser Support**
+
+- Chrome 76+
+- Safari 9+
+- Firefox 103+
+- Edge 79+
+
+### **Accessibility**
+
+- WCAG AA compliant
+- Contrast ratios: 4.5:1+
+- Touch targets: 44px+
+- Keyboard navigation
+
+---
+
+**🎉 Design System Complete!**

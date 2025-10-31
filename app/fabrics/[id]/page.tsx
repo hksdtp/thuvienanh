@@ -3,16 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { 
-  XMarkIcon, 
-  MagnifyingGlassPlusIcon,
-  InformationCircleIcon,
-  ShareIcon,
-  PlusIcon,
-  ArrowDownTrayIcon,
-  CheckCircleIcon
-} from '@heroicons/react/24/outline'
-import { Fabric, ApiResponse } from '@/types/database'
+import { Fabric, FabricImage, ApiResponse } from '@/types/database'
+import ImageLightbox from '@/components/ImageLightbox'
 
 interface FabricDetailPageProps {
   params: {
@@ -23,9 +15,10 @@ interface FabricDetailPageProps {
 export default function FabricDetailPage({ params }: FabricDetailPageProps) {
   const router = useRouter()
   const [fabric, setFabric] = useState<Fabric | null>(null)
+  const [images, setImages] = useState<FabricImage[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-  const [imageError, setImageError] = useState(false)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   useEffect(() => {
     const fetchFabric = async () => {
@@ -33,9 +26,13 @@ export default function FabricDetailPage({ params }: FabricDetailPageProps) {
         setLoading(true)
         const response = await fetch(`/api/fabrics/${params.id}`)
         const result: ApiResponse<Fabric> = await response.json()
-        
+
         if (result.success && result.data) {
           setFabric(result.data)
+          // Set images from fabric data
+          if (result.data.images && result.data.images.length > 0) {
+            setImages(result.data.images)
+          }
         } else {
           console.error('Failed to fetch fabric:', result.error)
         }
@@ -45,276 +42,126 @@ export default function FabricDetailPage({ params }: FabricDetailPageProps) {
         setLoading(false)
       }
     }
-    
+
     fetchFabric()
   }, [params.id])
 
-  const handleClose = () => {
-    router.back()
-  }
-
-  const handleAddToCollection = () => {
-    // TODO: Implement add to collection
-    alert('Chức năng thêm vào bộ sưu tập đang được phát triển')
-  }
-
-  const handleShare = () => {
-    // TODO: Implement share
-    if (navigator.share) {
-      navigator.share({
-        title: fabric?.name,
-        text: fabric?.description,
-        url: window.location.href
-      })
-    } else {
-      navigator.clipboard.writeText(window.location.href)
-      alert('Đã copy link vào clipboard')
-    }
-  }
-
-  const handleDownload = () => {
-    // TODO: Implement download
-    if (fabric?.primary_image_url) {
-      window.open(fabric.primary_image_url, '_blank')
-    }
-  }
-
-  const getStockStatus = () => {
-    if (!fabric) return { text: '', color: '', available: false }
-    
-    if (fabric.stock_quantity > fabric.min_order_quantity * 2) {
-      return {
-        text: `Còn hàng (${fabric.stock_quantity}m)`,
-        color: 'text-green-600',
-        available: true
-      }
-    } else if (fabric.stock_quantity > 0) {
-      return {
-        text: `Sắp hết (${fabric.stock_quantity}m)`,
-        color: 'text-yellow-600',
-        available: true
-      }
-    } else {
-      return {
-        text: 'Hết hàng',
-        color: 'text-red-600',
-        available: false
-      }
-    }
-  }
-
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-white border-t-transparent"></div>
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent"></div>
       </div>
     )
   }
 
   if (!fabric) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center">
-        <div className="text-white text-center">
-          <h2 className="text-2xl font-semibold mb-4">Không tìm thấy vải</h2>
-          <button
-            onClick={handleClose}
-            className="px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200"
-          >
-            Quay lại
-          </button>
-        </div>
+      <div className="text-center p-8">
+        <h2 className="text-2xl font-semibold mb-4">Không tìm thấy vải</h2>
+        <button
+          onClick={() => router.back()}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Quay lại
+        </button>
       </div>
     )
   }
 
-  const stockStatus = getStockStatus()
-  const images = fabric.primary_image_url ? [fabric.primary_image_url] : []
-
   return (
-    <div className="fixed inset-0 bg-black flex">
-      {/* Left side - Image viewer */}
-      <div className="flex-1 flex flex-col">
-        {/* Top bar */}
-        <div className="absolute top-0 left-0 right-80 z-10 flex items-center justify-between p-4">
-          {/* Close button */}
-          <button
-            onClick={handleClose}
-            className="p-2 bg-black/50 hover:bg-black/70 rounded-lg text-white transition-colors"
-          >
-            <XMarkIcon className="h-6 w-6" />
-          </button>
-
-          {/* Title */}
-          <div className="flex-1 mx-4 text-white">
-            <h1 className="text-lg font-semibold">{fabric.name}</h1>
-            <p className="text-sm text-gray-300">{fabric.code}</p>
-          </div>
-
-          {/* Action buttons */}
-          <div className="flex items-center space-x-2">
-            <button className="p-2 bg-black/50 hover:bg-black/70 rounded-lg text-white transition-colors">
-              <MagnifyingGlassPlusIcon className="h-5 w-5" />
-            </button>
-            <button className="p-2 bg-black/50 hover:bg-black/70 rounded-lg text-white transition-colors">
-              <InformationCircleIcon className="h-5 w-5" />
-            </button>
-            <button 
-              onClick={handleShare}
-              className="p-2 bg-black/50 hover:bg-black/70 rounded-lg text-white transition-colors"
-            >
-              <ShareIcon className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Main image */}
-        <div className="flex-1 flex items-center justify-center p-20">
-          <div className="relative w-full h-full max-w-2xl max-h-[600px]">
-            {images.length > 0 && !imageError ? (
-              <Image
-                src={images[selectedImageIndex]}
-                alt={fabric.name}
-                fill
-                className="object-contain"
-                onError={() => setImageError(true)}
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-800 rounded-lg">
-                <span className="text-gray-400 text-lg">Không có ảnh</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Thumbnails */}
-        {images.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-            {images.map((img, index) => (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
               <button
-                key={index}
-                onClick={() => setSelectedImageIndex(index)}
-                className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
-                  selectedImageIndex === index
-                    ? 'border-cyan-500'
-                    : 'border-gray-600 hover:border-gray-400'
-                }`}
+                onClick={() => router.back()}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <Image
-                  src={img}
-                  alt={`${fabric.name} ${index + 1}`}
-                  width={64}
-                  height={64}
-                  className="object-cover"
-                />
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
               </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Right sidebar - Details */}
-      <div className="w-80 bg-white flex flex-col overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {/* Add to collection button */}
-          <button
-            onClick={handleAddToCollection}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-medium rounded-lg transition-colors"
-          >
-            <PlusIcon className="h-5 w-5" />
-            <span>Thêm vào bộ sưu tập</span>
-          </button>
-
-          {/* Description */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-2">Mô tả</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              {fabric.description || 'Chưa có mô tả'}
-            </p>
-          </div>
-
-          {/* Technical specs */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">Thông số kỹ thuật</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Chất liệu</span>
-                <span className="text-gray-900 font-medium">{fabric.material}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Khổ vải</span>
-                <span className="text-gray-900">{fabric.width} cm</span>
-              </div>
-              {fabric.weight && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Trọng lượng</span>
-                  <span className="text-gray-900">{fabric.weight} g/m²</span>
-                </div>
-              )}
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Màu sắc</span>
-                <span className="text-gray-900">{fabric.color}</span>
-              </div>
-              {fabric.finish && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Hoàn thiện</span>
-                  <span className="text-gray-900">{fabric.finish}</span>
-                </div>
-              )}
-              {fabric.origin && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Xuất xứ</span>
-                  <span className="text-gray-900">{fabric.origin}</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Price & Stock */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900 mb-3">Giá & Tình trạng kho</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Giá / mét</span>
-                <span className="text-gray-900 font-semibold">${fabric.price_per_meter.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm items-center">
-                <span className="text-gray-600">Tồn kho</span>
-                <span className={`font-medium flex items-center ${stockStatus.color}`}>
-                  {stockStatus.available && <CheckCircleIcon className="h-4 w-4 mr-1" />}
-                  {stockStatus.text}
-                </span>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">{fabric.name}</h1>
+                <p className="text-sm text-gray-500">Mã: {fabric.code}</p>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Bottom actions */}
-        <div className="border-t border-gray-200 p-4 space-y-2">
-          <button
-            onClick={handleAddToCollection}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-white font-medium rounded-lg transition-colors"
-          >
-            <PlusIcon className="h-5 w-5" />
-            <span>Thêm vào bộ sưu tập</span>
-          </button>
-          
-          <button
-            onClick={handleShare}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg border border-gray-300 transition-colors"
-          >
-            <ShareIcon className="h-5 w-5" />
-            <span>Chia sẻ</span>
-          </button>
-          
-          <button
-            onClick={handleDownload}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium rounded-lg border border-gray-300 transition-colors"
-          >
-            <ArrowDownTrayIcon className="h-5 w-5" />
-            <span>Tải xuống ảnh</span>
-          </button>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Image Gallery */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-between">
+            <span>Thư Viện Ảnh</span>
+            <span className="text-sm font-normal text-gray-500">
+              {images.length} ảnh
+            </span>
+          </h3>
+
+          {images.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {images.map((image, idx) => (
+                <div
+                  key={image.id}
+                  className="group relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  onClick={() => {
+                    setCurrentImageIndex(idx)
+                    setLightboxOpen(true)
+                  }}
+                >
+                  <Image
+                    src={image.url}
+                    alt={fabric.name}
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                    className="object-cover group-hover:scale-110 transition-all duration-500"
+                    quality={85}
+                  />
+
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200" />
+
+                  {/* Index badge */}
+                  <div className="absolute top-2 left-2 px-2 py-1 bg-black/60 text-white text-xs font-medium rounded backdrop-blur-sm">
+                    {idx + 1}
+                  </div>
+
+                  {/* Primary badge */}
+                  {image.is_primary && (
+                    <div className="absolute top-2 right-2 px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded">
+                      Ảnh chính
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-500">
+              <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <p>Chưa có ảnh nào</p>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* ImageLightbox - Same as Projects/Albums */}
+      <ImageLightbox
+        images={images.map(img => ({
+          id: img.id,
+          image_url: img.url,
+          caption: fabric.name
+        }))}
+        currentIndex={currentImageIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </div>
   )
 }

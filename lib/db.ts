@@ -7,12 +7,14 @@ import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg'
 const dbConfig = {
   host: process.env.POSTGRES_HOST || 'localhost',
   port: parseInt(process.env.POSTGRES_PORT || '5432'),
-  database: process.env.POSTGRES_DB || 'tva_fabric_library',
-  user: process.env.POSTGRES_USER || 'tva_admin',
-  password: process.env.POSTGRES_PASSWORD || 'Villad24@TVA',
+  database: process.env.POSTGRES_DB || 'tva',
+  user: process.env.POSTGRES_USER || 'postgres',
+  password: process.env.POSTGRES_PASSWORD || '',
   max: 20, // Maximum pool size
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000,
+  connectionTimeoutMillis: 30000, // Increased to 30s for Tailscale connections
+  keepAlive: true,
+  keepAliveInitialDelayMillis: 10000,
 }
 
 // Create connection pool
@@ -21,22 +23,54 @@ let pool: Pool | null = null
 export function getPool(): Pool {
   if (!pool) {
     pool = new Pool(dbConfig)
-    
+
     // Log connection events
     pool.on('connect', () => {
       console.log('✅ PostgreSQL: New client connected')
     })
-    
+
     pool.on('error', (err) => {
       console.error('❌ PostgreSQL pool error:', err)
     })
-    
+
     pool.on('remove', () => {
       console.log('🔌 PostgreSQL: Client removed from pool')
     })
+
+    // Warm up connection pool on first access
+    warmupPool().catch(err => {
+      console.error('⚠️ Pool warmup failed (non-critical):', err.message)
+    })
   }
-  
+
   return pool
+}
+
+// Warm up the connection pool
+let isWarmingUp = false
+let isWarmedUp = false
+
+async function warmupPool(): Promise<void> {
+  // Prevent multiple warmup attempts
+  if (isWarmingUp || isWarmedUp) {
+    return
+  }
+
+  isWarmingUp = true
+
+  try {
+    console.log('🔥 Warming up database connection pool...')
+    const client = await getPool().connect()
+    await client.query('SELECT 1')
+    client.release()
+    isWarmedUp = true
+    console.log('✅ Database pool warmed up successfully')
+  } catch (error: any) {
+    console.error('❌ Pool warmup failed:', error.message)
+    // Don't throw - allow app to continue
+  } finally {
+    isWarmingUp = false
+  }
 }
 
 // Test database connection
@@ -53,21 +87,44 @@ export async function testConnection(): Promise<boolean> {
   }
 }
 
-// Execute a query
+// Execute a query with retry logic
 export async function query<T extends QueryResultRow = any>(
   text: string,
-  params?: any[]
+  params?: any[],
+  retries = 3
 ): Promise<QueryResult<T>> {
   const start = Date.now()
-  try {
-    const result = await getPool().query<T>(text, params)
-    const duration = Date.now() - start
-    console.log('📊 Query executed:', { text: text.substring(0, 100), duration, rows: result.rowCount })
-    return result
-  } catch (error) {
-    console.error('❌ Query error:', { text, error })
-    throw error
+  let lastError: any
+
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const result = await getPool().query<T>(text, params)
+      const duration = Date.now() - start
+      console.log('📊 Query executed:', { text: text.substring(0, 100), duration, rows: result.rowCount })
+      return result
+    } catch (error: any) {
+      lastError = error
+      console.error(`❌ Query error (attempt ${attempt}/${retries}):`, {
+        text: text.substring(0, 100),
+        error: error.message
+      })
+
+      // Don't retry on syntax errors or constraint violations
+      if (error.code && !['ECONNREFUSED', 'ETIMEDOUT', 'ENOTFOUND'].includes(error.code)) {
+        throw error
+      }
+
+      // Wait before retry (exponential backoff)
+      if (attempt < retries) {
+        const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000)
+        console.log(`⏳ Retrying in ${delay}ms...`)
+        await new Promise(resolve => setTimeout(resolve, delay))
+      }
+    }
   }
+
+  console.error('❌ Query failed after all retries:', { text, error: lastError })
+  throw lastError
 }
 
 // Execute queries within a transaction

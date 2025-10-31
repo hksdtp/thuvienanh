@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { XMarkIcon, CloudArrowUpIcon, PhotoIcon } from '@heroicons/react/24/outline'
 import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import { compressImage } from '@/lib/imageCompression'
 
 interface ImageUploadModalProps {
   isOpen: boolean
@@ -19,9 +20,11 @@ interface FileWithPreview {
   file: File
   id: string
   preview: string
-  status: 'pending' | 'uploading' | 'success' | 'error'
+  status: 'pending' | 'compressing' | 'uploading' | 'success' | 'error'
   error?: string
   url?: string
+  originalSize?: number
+  compressedSize?: number
 }
 
 export default function ImageUploadModal({
@@ -69,9 +72,7 @@ export default function ImageUploadModal({
       if (!acceptedFormats.includes(file.type)) {
         return false
       }
-      if (file.size > 5 * 1024 * 1024) { // 5MB
-        return false
-      }
+      // Remove size limit check - we'll compress large files
       return true
     })
 
@@ -84,7 +85,8 @@ export default function ImageUploadModal({
       file: file,
       id: Math.random().toString(36).substring(7),
       preview: URL.createObjectURL(file),
-      status: 'pending'
+      status: 'pending',
+      originalSize: file.size
     }))
 
     setFiles(prev => [...prev, ...filesWithPreview])
@@ -114,9 +116,50 @@ export default function ImageUploadModal({
         const formData = new FormData()
         formData.append('albumId', entityId)
 
-        files.forEach(fileItem => {
-          formData.append('files', fileItem.file)
-        })
+        // Compress files > 5MB before upload
+        for (let i = 0; i < files.length; i++) {
+          const fileItem = files[i]
+          const fileSizeMB = fileItem.file.size / 1024 / 1024
+
+          if (fileSizeMB > 5) {
+            // Show compressing status
+            setFiles(prev => prev.map(f =>
+              f.id === fileItem.id ? { ...f, status: 'compressing' } : f
+            ))
+
+            console.log(`🗜️ Compressing ${fileItem.file.name} (${fileSizeMB.toFixed(2)} MB)...`)
+
+            try {
+              const compressedFile = await compressImage(fileItem.file, {
+                maxWidth: 1920,
+                maxHeight: 1920,
+                quality: 0.85,
+                maxSizeMB: 5
+              })
+
+              const compressedSizeMB = compressedFile.size / 1024 / 1024
+              console.log(`✅ Compressed to ${compressedSizeMB.toFixed(2)} MB`)
+
+              // Update file with compressed version
+              setFiles(prev => prev.map(f =>
+                f.id === fileItem.id ? {
+                  ...f,
+                  file: compressedFile,
+                  compressedSize: compressedFile.size,
+                  status: 'pending'
+                } : f
+              ))
+
+              formData.append('files', compressedFile)
+            } catch (error) {
+              console.error('Compression error:', error)
+              // Use original file if compression fails
+              formData.append('files', fileItem.file)
+            }
+          } else {
+            formData.append('files', fileItem.file)
+          }
+        }
 
         setFiles(prev => prev.map(f => ({ ...f, status: 'uploading' })))
 
@@ -145,15 +188,49 @@ export default function ImageUploadModal({
     } else {
       // For other entity types, upload one by one
       for (let i = 0; i < files.length; i++) {
-        const file = files[i]
+        const fileItem = files[i]
 
         try {
+          let fileToUpload = fileItem.file
+          const fileSizeMB = fileItem.file.size / 1024 / 1024
+
+          // Compress if > 5MB
+          if (fileSizeMB > 5) {
+            setFiles(prev => prev.map(f =>
+              f.id === fileItem.id ? { ...f, status: 'compressing' } : f
+            ))
+
+            console.log(`🗜️ Compressing ${fileItem.file.name} (${fileSizeMB.toFixed(2)} MB)...`)
+
+            try {
+              fileToUpload = await compressImage(fileItem.file, {
+                maxWidth: 1920,
+                maxHeight: 1920,
+                quality: 0.85,
+                maxSizeMB: 5
+              })
+
+              const compressedSizeMB = fileToUpload.size / 1024 / 1024
+              console.log(`✅ Compressed to ${compressedSizeMB.toFixed(2)} MB`)
+
+              setFiles(prev => prev.map(f =>
+                f.id === fileItem.id ? {
+                  ...f,
+                  compressedSize: fileToUpload.size
+                } : f
+              ))
+            } catch (error) {
+              console.error('Compression error:', error)
+              // Use original file if compression fails
+            }
+          }
+
           setFiles(prev => prev.map(f =>
-            f.id === file.id ? { ...f, status: 'uploading' } : f
+            f.id === fileItem.id ? { ...f, status: 'uploading' } : f
           ))
 
           const formData = new FormData()
-          formData.append('file', file.file)
+          formData.append('file', fileToUpload)
           if (entityId) formData.append('entityId', entityId)
           if (category) formData.append('category', category)
 
@@ -166,7 +243,7 @@ export default function ImageUploadModal({
 
           if (result.success) {
             setFiles(prev => prev.map(f =>
-              f.id === file.id ? { ...f, status: 'success', url: result.data.url } : f
+              f.id === fileItem.id ? { ...f, status: 'success', url: result.data.url } : f
             ))
             uploadedUrls.push(result.data.url)
           } else {
@@ -175,7 +252,7 @@ export default function ImageUploadModal({
         } catch (error) {
           console.error('Upload error:', error)
           setFiles(prev => prev.map(f =>
-            f.id === file.id ? { ...f, status: 'error', error: error instanceof Error ? error.message : 'Upload failed' } : f
+            f.id === fileItem.id ? { ...f, status: 'error', error: error instanceof Error ? error.message : 'Upload failed' } : f
           ))
         }
 
@@ -247,7 +324,10 @@ export default function ImageUploadModal({
                 Kéo thả ảnh vào đây hoặc click để chọn
               </p>
               <p className="text-sm text-macos-text-secondary">
-                Hỗ trợ JPG, PNG, WebP. Tối đa {maxFiles} ảnh, mỗi ảnh không quá 5MB
+                Hỗ trợ JPG, PNG, WebP. Tối đa {maxFiles} ảnh
+              </p>
+              <p className="text-xs text-macos-text-tertiary mt-1">
+                Ảnh &gt; 5MB sẽ tự động nén trước khi upload
               </p>
               <input
                 ref={fileInputRef}
@@ -277,18 +357,26 @@ export default function ImageUploadModal({
                       />
                       
                       {/* Status Overlay */}
-                      {file.status === 'uploading' && (
-                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent"></div>
+                      {file.status === 'compressing' && (
+                        <div className="absolute inset-0 bg-blue-500 bg-opacity-50 flex flex-col items-center justify-center">
+                          <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent mb-2"></div>
+                          <span className="text-xs text-white font-medium">Nén ảnh...</span>
                         </div>
                       )}
-                      
+
+                      {file.status === 'uploading' && (
+                        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center">
+                          <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent mb-2"></div>
+                          <span className="text-xs text-white font-medium">Đang tải...</span>
+                        </div>
+                      )}
+
                       {file.status === 'success' && (
                         <div className="absolute inset-0 bg-green-500 bg-opacity-20 flex items-center justify-center">
                           <CheckCircleIcon className="w-12 h-12 text-green-600" />
                         </div>
                       )}
-                      
+
                       {file.status === 'error' && (
                         <div className="absolute inset-0 bg-red-500 bg-opacity-20 flex items-center justify-center">
                           <ExclamationCircleIcon className="w-12 h-12 text-red-600" />
@@ -306,10 +394,22 @@ export default function ImageUploadModal({
                       </button>
                     )}
 
-                    {/* Filename */}
-                    <p className="mt-2 text-xs text-macos-text-secondary truncate">
-                      {file.file.name}
-                    </p>
+                    {/* Filename & Size Info */}
+                    <div className="mt-2">
+                      <p className="text-xs text-macos-text-secondary truncate">
+                        {file.file.name}
+                      </p>
+                      {file.originalSize && (
+                        <p className="text-xs text-macos-text-tertiary mt-1">
+                          {(file.originalSize / 1024 / 1024).toFixed(2)} MB
+                          {file.compressedSize && file.compressedSize < file.originalSize && (
+                            <span className="text-green-600 ml-1">
+                              → {(file.compressedSize / 1024 / 1024).toFixed(2)} MB
+                            </span>
+                          )}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

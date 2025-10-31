@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
 
 interface OptimizedImageProps {
   src: string
@@ -56,13 +55,11 @@ export default function OptimizedImage({
   if (width && height) {
     return (
       <div className={`relative overflow-hidden ${className}`}>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isLoading ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-          className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse"
-        />
-        
+        {/* Loading skeleton - removed framer-motion for performance */}
+        {isLoading && (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse" />
+        )}
+
         <Image
           src={imageSrc}
           alt={alt}
@@ -74,13 +71,14 @@ export default function OptimizedImage({
           blurDataURL={blurDataURL || defaultBlurDataURL}
           onLoadingComplete={handleLoadingComplete}
           onError={handleError}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className={`
             ${className}
             ${isLoading ? 'opacity-0' : 'opacity-100'}
-            transition-opacity duration-500 ease-out
+            transition-opacity duration-300 ease-out
           `}
         />
-        
+
         {hasError && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
             <span className="text-gray-400 text-sm">Failed to load image</span>
@@ -93,13 +91,11 @@ export default function OptimizedImage({
   // For fill mode
   return (
     <div className={`relative ${className}`}>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isLoading ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-        className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse"
-      />
-      
+      {/* Loading skeleton - removed framer-motion for performance */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse" />
+      )}
+
       <Image
         src={imageSrc}
         alt={alt}
@@ -110,10 +106,11 @@ export default function OptimizedImage({
         blurDataURL={blurDataURL || defaultBlurDataURL}
         onLoadingComplete={handleLoadingComplete}
         onError={handleError}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className={`
           object-cover
           ${isLoading ? 'opacity-0' : 'opacity-100'}
-          transition-opacity duration-500 ease-out
+          transition-opacity duration-300 ease-out
         `}
       />
       

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { 
+import {
   ArrowLeftIcon,
   MapPinIcon,
   CalendarIcon,
@@ -12,21 +12,37 @@ import {
 } from '@heroicons/react/24/outline'
 import { Project, ApiResponse } from '@/types/database'
 import Image from 'next/image'
+import ImageLightbox from '@/components/ImageLightbox'
+import OptimizedImageGrid from '@/components/OptimizedImageGrid'
+
+interface ProjectImage {
+  id: string
+  project_id: string
+  image_url: string
+  image_id: string
+  caption?: string
+  sort_order: number
+  added_at: string
+}
 
 export default function ProjectDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
+  const [images, setImages] = useState<ProjectImage[]>([])
   const [loading, setLoading] = useState(true)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   useEffect(() => {
     fetchProject()
+    fetchImages()
   }, [params.id])
 
   const fetchProject = async () => {
     try {
       const response = await fetch(`/api/projects/${params.id}`)
       const result: ApiResponse<Project> = await response.json()
-      
+
       if (result.success && result.data) {
         setProject(result.data)
       }
@@ -34,6 +50,19 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
       console.error('Error fetching project:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchImages = async () => {
+    try {
+      const response = await fetch(`/api/projects/${params.id}/images`)
+      const result: ApiResponse<ProjectImage[]> = await response.json()
+
+      if (result.success && result.data) {
+        setImages(result.data)
+      }
+    } catch (error) {
+      console.error('Error fetching project images:', error)
     }
   }
 
@@ -98,19 +127,35 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                 )}
               </div>
 
-              {/* Image Gallery Placeholder */}
+              {/* Image Gallery - Optimized */}
               <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Thư Viện Ảnh Dự Án</h3>
-                <div className="grid grid-cols-4 gap-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
-                      <PhotoIcon className="w-8 h-8 text-gray-400" />
-                    </div>
-                  ))}
-                </div>
-                <p className="text-sm text-gray-500 mt-4 text-center">
-                  Chưa có ảnh nào được tải lên
-                </p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center justify-between">
+                  <span>Thư Viện Ảnh Dự Án</span>
+                  <span className="text-sm font-normal text-gray-500">
+                    {images.length} ảnh
+                  </span>
+                </h3>
+                {images.length > 0 ? (
+                  <OptimizedImageGrid
+                    images={images}
+                    onImageClick={(index) => {
+                      setCurrentImageIndex(index)
+                      setLightboxOpen(true)
+                    }}
+                    columns={{ mobile: 2, tablet: 3, desktop: 4, wide: 5 }}
+                    aspectRatio="square"
+                    showCaptions={true}
+                    showIndex={true}
+                    quality={85}
+                  />
+                ) : (
+                  <div className="text-center py-12 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+                    <PhotoIcon className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+                    <p className="text-sm text-gray-500">
+                      Chưa có ảnh nào được tải lên
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -232,6 +277,14 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
       </div>
+
+      {/* Advanced Lightbox */}
+      <ImageLightbox
+        images={images}
+        currentIndex={currentImageIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </div>
   )
 }

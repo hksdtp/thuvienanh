@@ -20,22 +20,17 @@ export async function GET(request: NextRequest) {
         id,
         name,
         description,
-        project_type,
+        type,
         location,
-        client_name,
         completion_date,
-        cover_image_url,
-        cover_image_id,
-        image_count,
+        cover_image,
+        images,
+        fabrics_used,
+        is_featured,
         created_at,
-        updated_at,
-        created_by,
-        is_active,
-        tags,
-        status,
-        is_featured
+        updated_at
       FROM projects
-      WHERE is_active = true
+      WHERE 1=1
     `
 
     const params: any[] = []
@@ -50,14 +45,14 @@ export async function GET(request: NextRequest) {
 
     // Type filter (shorthand for project_type)
     if (type) {
-      sql += ` AND project_type = $${paramIndex}`
+      sql += ` AND type = $${paramIndex}`
       params.push(type)
       paramIndex++
     }
 
     // Project type filter
     if (project_type) {
-      sql += ` AND project_type = $${paramIndex}`
+      sql += ` AND type = $${paramIndex}`
       params.push(project_type)
       paramIndex++
     }
@@ -118,13 +113,11 @@ export async function POST(request: NextRequest) {
       description,
       project_type,
       location,
-      client_name,
       completion_date,
-      tags,
-      status,
       is_featured,
-      cover_image_url,
-      images
+      cover_image,
+      images,
+      fabrics_used
     } = body
 
     // Validation
@@ -142,16 +135,14 @@ export async function POST(request: NextRequest) {
       INSERT INTO projects (
         name,
         description,
-        project_type,
+        type,
         location,
-        client_name,
         completion_date,
-        tags,
-        status,
         is_featured,
-        cover_image_url,
-        created_by
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        cover_image,
+        images,
+        fabrics_used
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *
     `
 
@@ -160,35 +151,15 @@ export async function POST(request: NextRequest) {
       description?.trim() || null,
       project_type || null,
       location?.trim() || null,
-      client_name?.trim() || null,
       completion_date || null,
-      tags || [],
-      status || 'planning',
       is_featured || false,
-      cover_image_url || null,
-      'system' // TODO: Replace with actual user ID from auth
+      cover_image || null,
+      images ? JSON.stringify(images) : null,
+      fabrics_used ? JSON.stringify(fabrics_used) : null
     ]
 
     const result = await query(sql, params)
     const project = result.rows[0]
-
-    // Add images if provided
-    if (images && images.length > 0) {
-      for (let i = 0; i < images.length; i++) {
-        const img = images[i]
-        await query(
-          `INSERT INTO project_images (project_id, image_url, image_id, caption, display_order)
-           VALUES ($1, $2, $3, $4, $5)`,
-          [project.id, img.image_url, img.image_id, img.caption || null, i]
-        )
-      }
-
-      // Update image count
-      await query(
-        `UPDATE projects SET image_count = $1 WHERE id = $2`,
-        [images.length, project.id]
-      )
-    }
 
     const response: ApiResponse<Project> = {
       success: true,

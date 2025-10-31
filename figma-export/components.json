@@ -1,0 +1,1551 @@
+[
+  {
+    "id": "0:0",
+    "name": "Document",
+    "type": "DOCUMENT",
+    "depth": 0,
+    "children": []
+  },
+  {
+    "id": "0:1",
+    "name": "Page 1",
+    "type": "CANVAS",
+    "depth": 1,
+    "children": []
+  },
+  {
+    "id": "2:3",
+    "name": "Image Upload Interface",
+    "type": "FRAME",
+    "depth": 2,
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 773,
+      "height": 906
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 1
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:4",
+    "name": "App",
+    "type": "FRAME",
+    "depth": 3,
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 773,
+      "height": 906
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:5",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 4,
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 773,
+      "height": 906
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:6",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 5,
+    "bounds": {
+      "x": 193.25,
+      "y": 0,
+      "width": 384,
+      "height": 384
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0.3176470696926117,
+      "g": 0.6352941393852234,
+      "b": 1,
+      "a": 0.20000000298023224
+    },
+    "cornerRadius": 33554400,
+    "padding": {}
+  },
+  {
+    "id": "2:7",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 5,
+    "bounds": {
+      "x": 195.75,
+      "y": 522,
+      "width": 384,
+      "height": 384
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0.7607843279838562,
+      "g": 0.47843137383461,
+      "b": 1,
+      "a": 0.20000000298023224
+    },
+    "cornerRadius": 33554400,
+    "padding": {}
+  },
+  {
+    "id": "2:8",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 5,
+    "bounds": {
+      "x": 194.5,
+      "y": 261,
+      "width": 384,
+      "height": 384
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0.9843137264251709,
+      "g": 0.3921568691730499,
+      "b": 0.7137255072593689,
+      "a": 0.20000000298023224
+    },
+    "cornerRadius": 33554400,
+    "padding": {}
+  },
+  {
+    "id": "2:9",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 4,
+    "bounds": {
+      "x": 32,
+      "y": 32,
+      "width": 709,
+      "height": 842
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:10",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 5,
+    "bounds": {
+      "x": 32,
+      "y": 32,
+      "width": 709,
+      "height": 106
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:11",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 6,
+    "bounds": {
+      "x": 295.21875,
+      "y": 32,
+      "width": 182.546875,
+      "height": 38
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.4000000059604645
+    },
+    "cornerRadius": 33554400,
+    "padding": {}
+  },
+  {
+    "id": "2:12",
+    "name": "Icon",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 312.21875,
+      "y": 43,
+      "width": 16,
+      "height": 16
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:13",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 8,
+    "bounds": {
+      "x": 313.5505065917969,
+      "y": 44.33173751831055,
+      "width": 13.336524963378906,
+      "height": 13.336524963378906
+    },
+    "children": []
+  },
+  {
+    "id": "2:14",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 8,
+    "bounds": {
+      "x": 325.5520935058594,
+      "y": 44.33333206176758,
+      "width": 0,
+      "height": 2.6666667461395264
+    },
+    "children": []
+  },
+  {
+    "id": "2:15",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 8,
+    "bounds": {
+      "x": 324.21875,
+      "y": 45.66666793823242,
+      "width": 2.6666667461395264,
+      "height": 0
+    },
+    "children": []
+  },
+  {
+    "id": "2:16",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 8,
+    "bounds": {
+      "x": 313.5520935058594,
+      "y": 55,
+      "width": 2.6666667461395264,
+      "height": 2.6666667461395264
+    },
+    "children": []
+  },
+  {
+    "id": "2:17",
+    "name": "Text",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 336.21875,
+      "y": 41,
+      "width": 124.546875,
+      "height": 20
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:18",
+    "name": "Tạo Công Trình Mới",
+    "type": "TEXT",
+    "depth": 8,
+    "bounds": {
+      "x": 335.21875,
+      "y": 41,
+      "width": 127,
+      "height": 20
+    },
+    "children": [],
+    "text": "Tạo Công Trình Mới",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 14,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.150390625,
+      "lineHeightPx": 20,
+      "lineHeightPercent": 118.04158782958984,
+      "lineHeightPercentFontSize": 142.85714721679688,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:19",
+    "name": "Heading 1",
+    "type": "FRAME",
+    "depth": 6,
+    "bounds": {
+      "x": 32,
+      "y": 82,
+      "width": 709,
+      "height": 24
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:20",
+    "name": "Thêm Công Trình",
+    "type": "TEXT",
+    "depth": 7,
+    "bounds": {
+      "x": 323.15625,
+      "y": 82,
+      "width": 126,
+      "height": 24
+    },
+    "children": [],
+    "text": "Thêm Công Trình",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 16,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.3125,
+      "lineHeightPx": 24,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:21",
+    "name": "Paragraph",
+    "type": "FRAME",
+    "depth": 6,
+    "bounds": {
+      "x": 32,
+      "y": 114,
+      "width": 709,
+      "height": 24
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:22",
+    "name": "Điền thông tin và tải lên hình ảnh công trình của ",
+    "type": "TEXT",
+    "depth": 7,
+    "bounds": {
+      "x": 198.71875,
+      "y": 114,
+      "width": 377,
+      "height": 24
+    },
+    "children": [],
+    "text": "Điền thông tin và tải lên hình ảnh công trình của bạn",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 16,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.3125,
+      "lineHeightPx": 24,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:23",
+    "name": "Form",
+    "type": "FRAME",
+    "depth": 5,
+    "bounds": {
+      "x": 32,
+      "y": 170,
+      "width": 709,
+      "height": 704
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:24",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 6,
+    "bounds": {
+      "x": 32,
+      "y": 170,
+      "width": 709,
+      "height": 108
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:25",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 32,
+      "y": 170,
+      "width": 709,
+      "height": 108
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "cornerRadius": 16,
+    "padding": {}
+  },
+  {
+    "id": "2:26",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 32,
+      "y": 170,
+      "width": 709,
+      "height": 108
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.6000000238418579
+    },
+    "cornerRadius": 16,
+    "padding": {
+      "top": 25,
+      "right": 25,
+      "bottom": 1,
+      "left": 25
+    }
+  },
+  {
+    "id": "2:27",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 8,
+    "bounds": {
+      "x": 57,
+      "y": 195,
+      "width": 659,
+      "height": 58
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:28",
+    "name": "Primitive.label",
+    "type": "FRAME",
+    "depth": 9,
+    "bounds": {
+      "x": 57,
+      "y": 195,
+      "width": 659,
+      "height": 14
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:29",
+    "name": "Tên công trình",
+    "type": "TEXT",
+    "depth": 10,
+    "bounds": {
+      "x": 57,
+      "y": 195,
+      "width": 95,
+      "height": 14
+    },
+    "children": [],
+    "text": "Tên công trình",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 14,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.150390625,
+      "lineHeightPx": 14,
+      "lineHeightPercent": 82.62910461425781,
+      "lineHeightPercentFontSize": 100,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:30",
+    "name": "Input",
+    "type": "FRAME",
+    "depth": 9,
+    "bounds": {
+      "x": 57,
+      "y": 217,
+      "width": 659,
+      "height": 36
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.800000011920929
+    },
+    "cornerRadius": 8,
+    "padding": {
+      "top": 4,
+      "right": 12,
+      "bottom": 4,
+      "left": 12
+    }
+  },
+  {
+    "id": "2:31",
+    "name": "Nhập tên công trình...",
+    "type": "TEXT",
+    "depth": 10,
+    "bounds": {
+      "x": 69,
+      "y": 226.5,
+      "width": 140,
+      "height": 17
+    },
+    "children": [],
+    "text": "Nhập tên công trình...",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 14,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.150390625,
+      "lineHeightPx": 16.94318199157715,
+      "lineHeightPercent": 100,
+      "lineHeightUnit": "INTRINSIC_%"
+    }
+  },
+  {
+    "id": "2:32",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 6,
+    "bounds": {
+      "x": 32,
+      "y": 302,
+      "width": 709,
+      "height": 136
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:33",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 32,
+      "y": 302,
+      "width": 709,
+      "height": 136
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "cornerRadius": 16,
+    "padding": {}
+  },
+  {
+    "id": "2:34",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 32,
+      "y": 302,
+      "width": 709,
+      "height": 136
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.6000000238418579
+    },
+    "cornerRadius": 16,
+    "padding": {
+      "top": 25,
+      "right": 25,
+      "bottom": 1,
+      "left": 25
+    }
+  },
+  {
+    "id": "2:35",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 8,
+    "bounds": {
+      "x": 57,
+      "y": 327,
+      "width": 659,
+      "height": 86
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:36",
+    "name": "Primitive.label",
+    "type": "FRAME",
+    "depth": 9,
+    "bounds": {
+      "x": 57,
+      "y": 327,
+      "width": 659,
+      "height": 14
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:37",
+    "name": "Mô tả",
+    "type": "TEXT",
+    "depth": 10,
+    "bounds": {
+      "x": 57,
+      "y": 327,
+      "width": 38,
+      "height": 14
+    },
+    "children": [],
+    "text": "Mô tả",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 14,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.150390625,
+      "lineHeightPx": 14,
+      "lineHeightPercent": 82.62910461425781,
+      "lineHeightPercentFontSize": 100,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:38",
+    "name": "Textarea",
+    "type": "FRAME",
+    "depth": 9,
+    "bounds": {
+      "x": 57,
+      "y": 349,
+      "width": 659,
+      "height": 64
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.800000011920929
+    },
+    "cornerRadius": 8,
+    "padding": {
+      "top": 8,
+      "right": 12,
+      "bottom": 8,
+      "left": 12
+    }
+  },
+  {
+    "id": "2:39",
+    "name": "Mô tả chi tiết về công trình...",
+    "type": "TEXT",
+    "depth": 10,
+    "bounds": {
+      "x": 69,
+      "y": 357,
+      "width": 185,
+      "height": 20
+    },
+    "children": [],
+    "text": "Mô tả chi tiết về công trình...",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 14,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.150390625,
+      "lineHeightPx": 20,
+      "lineHeightPercent": 118.04158782958984,
+      "lineHeightPercentFontSize": 142.85714721679688,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:40",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 6,
+    "bounds": {
+      "x": 32,
+      "y": 462,
+      "width": 709,
+      "height": 344
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:41",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 32,
+      "y": 462,
+      "width": 709,
+      "height": 344
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "cornerRadius": 16,
+    "padding": {}
+  },
+  {
+    "id": "2:42",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 32,
+      "y": 462,
+      "width": 709,
+      "height": 344
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.6000000238418579
+    },
+    "cornerRadius": 16,
+    "padding": {
+      "top": 25,
+      "right": 25,
+      "bottom": 1,
+      "left": 25
+    }
+  },
+  {
+    "id": "2:43",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 8,
+    "bounds": {
+      "x": 57,
+      "y": 487,
+      "width": 659,
+      "height": 294
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:44",
+    "name": "Primitive.label",
+    "type": "FRAME",
+    "depth": 9,
+    "bounds": {
+      "x": 57,
+      "y": 487,
+      "width": 659,
+      "height": 14
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:45",
+    "name": "Hình ảnh",
+    "type": "TEXT",
+    "depth": 10,
+    "bounds": {
+      "x": 57,
+      "y": 487,
+      "width": 59,
+      "height": 14
+    },
+    "children": [],
+    "text": "Hình ảnh",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 14,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.150390625,
+      "lineHeightPx": 14,
+      "lineHeightPercent": 82.62910461425781,
+      "lineHeightPercentFontSize": 100,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:46",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 9,
+    "bounds": {
+      "x": 57,
+      "y": 517,
+      "width": 659,
+      "height": 192
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.4000000059604645
+    },
+    "cornerRadius": 14,
+    "padding": {}
+  },
+  {
+    "id": "2:47",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 10,
+    "bounds": {
+      "x": 91,
+      "y": 551,
+      "width": 591,
+      "height": 124
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:48",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 11,
+    "bounds": {
+      "x": 354.5,
+      "y": 551,
+      "width": 64,
+      "height": 64
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.6000000238418579
+    },
+    "cornerRadius": 33554400,
+    "padding": {
+      "top": 16,
+      "right": 16,
+      "left": 16
+    }
+  },
+  {
+    "id": "2:49",
+    "name": "Icon",
+    "type": "FRAME",
+    "depth": 12,
+    "bounds": {
+      "x": 370.5,
+      "y": 567,
+      "width": 32,
+      "height": 32
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:50",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 13,
+    "bounds": {
+      "x": 386.5,
+      "y": 571,
+      "width": 0,
+      "height": 16
+    },
+    "children": []
+  },
+  {
+    "id": "2:51",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 13,
+    "bounds": {
+      "x": 379.8333435058594,
+      "y": 571,
+      "width": 13.333333015441895,
+      "height": 6.666666507720947
+    },
+    "children": []
+  },
+  {
+    "id": "2:52",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 13,
+    "bounds": {
+      "x": 374.5,
+      "y": 587,
+      "width": 24,
+      "height": 8
+    },
+    "children": []
+  },
+  {
+    "id": "2:53",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 11,
+    "bounds": {
+      "x": 241.78125,
+      "y": 627,
+      "width": 289.4375,
+      "height": 48
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:54",
+    "name": "Paragraph",
+    "type": "FRAME",
+    "depth": 12,
+    "bounds": {
+      "x": 241.78125,
+      "y": 627,
+      "width": 289.4375,
+      "height": 24
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:55",
+    "name": "Text",
+    "type": "FRAME",
+    "depth": 13,
+    "bounds": {
+      "x": 241.78125,
+      "y": 630,
+      "width": 225.15625,
+      "height": 18
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:56",
+    "name": "Kéo thả hình ảnh vào đây hoặc",
+    "type": "TEXT",
+    "depth": 14,
+    "bounds": {
+      "x": 241.78125,
+      "y": 630,
+      "width": 223,
+      "height": 24
+    },
+    "children": [],
+    "text": "Kéo thả hình ảnh vào đây hoặc",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 16,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.3125,
+      "lineHeightPx": 24,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:57",
+    "name": "Text",
+    "type": "FRAME",
+    "depth": 13,
+    "bounds": {
+      "x": 466.9375,
+      "y": 630,
+      "width": 64.28125,
+      "height": 18
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:58",
+    "name": "Chọn file",
+    "type": "TEXT",
+    "depth": 14,
+    "bounds": {
+      "x": 466.9375,
+      "y": 630,
+      "width": 65,
+      "height": 24
+    },
+    "children": [],
+    "text": "Chọn file",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 16,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.3125,
+      "lineHeightPx": 24,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:59",
+    "name": "Paragraph",
+    "type": "FRAME",
+    "depth": 12,
+    "bounds": {
+      "x": 241.78125,
+      "y": 655,
+      "width": 289.4375,
+      "height": 20
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:60",
+    "name": "PNG, JPG, GIF tối đa 10MB",
+    "type": "TEXT",
+    "depth": 13,
+    "bounds": {
+      "x": 299.875,
+      "y": 655,
+      "width": 174,
+      "height": 20
+    },
+    "children": [],
+    "text": "PNG, JPG, GIF tối đa 10MB",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 14,
+      "textAlignHorizontal": "CENTER",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.150390625,
+      "lineHeightPx": 20,
+      "lineHeightPercent": 118.04158782958984,
+      "lineHeightPercentFontSize": 142.85714721679688,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:61",
+    "name": "File Upload",
+    "type": "FRAME",
+    "depth": 10,
+    "bounds": {
+      "x": 59,
+      "y": 519,
+      "width": 655,
+      "height": 188
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:62",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 9,
+    "bounds": {
+      "x": 57,
+      "y": 725,
+      "width": 659,
+      "height": 56
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.20000000298023224
+    },
+    "cornerRadius": 10,
+    "padding": {
+      "right": 0.015625
+    }
+  },
+  {
+    "id": "2:63",
+    "name": "Icon",
+    "type": "FRAME",
+    "depth": 10,
+    "bounds": {
+      "x": 294.140625,
+      "y": 743,
+      "width": 20,
+      "height": 20
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:64",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 11,
+    "bounds": {
+      "x": 296.640625,
+      "y": 745.5,
+      "width": 15,
+      "height": 15
+    },
+    "children": []
+  },
+  {
+    "id": "2:65",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 11,
+    "bounds": {
+      "x": 299.9739685058594,
+      "y": 748.8333129882812,
+      "width": 3.3333332538604736,
+      "height": 3.3333332538604736
+    },
+    "children": []
+  },
+  {
+    "id": "2:66",
+    "name": "Vector",
+    "type": "VECTOR",
+    "depth": 11,
+    "bounds": {
+      "x": 299.140625,
+      "y": 752.4403686523438,
+      "width": 12.5,
+      "height": 8.059643745422363
+    },
+    "children": []
+  },
+  {
+    "id": "2:67",
+    "name": "Paragraph",
+    "type": "FRAME",
+    "depth": 10,
+    "bounds": {
+      "x": 322.140625,
+      "y": 741,
+      "width": 156.703125,
+      "height": 24
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {}
+  },
+  {
+    "id": "2:68",
+    "name": "Chưa có hình ảnh nào",
+    "type": "TEXT",
+    "depth": 11,
+    "bounds": {
+      "x": 322.140625,
+      "y": 741,
+      "width": 159,
+      "height": 24
+    },
+    "children": [],
+    "text": "Chưa có hình ảnh nào",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Regular",
+      "fontWeight": 400,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 16,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.3125,
+      "lineHeightPx": 24,
+      "lineHeightPercent": 123.94366455078125,
+      "lineHeightPercentFontSize": 150,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:69",
+    "name": "Container",
+    "type": "FRAME",
+    "depth": 6,
+    "bounds": {
+      "x": 32,
+      "y": 830,
+      "width": 709,
+      "height": 44
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "padding": {
+      "top": 8
+    }
+  },
+  {
+    "id": "2:70",
+    "name": "Button",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 536.15625,
+      "y": 838,
+      "width": 60.359375,
+      "height": 36
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 0.6000000238418579
+    },
+    "cornerRadius": 8,
+    "padding": {
+      "top": 8,
+      "right": 16,
+      "bottom": 8,
+      "left": 16
+    }
+  },
+  {
+    "id": "2:71",
+    "name": "Hủy",
+    "type": "TEXT",
+    "depth": 8,
+    "bounds": {
+      "x": 552.8359375,
+      "y": 846,
+      "width": 27,
+      "height": 20
+    },
+    "children": [],
+    "text": "Hủy",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 14,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.150390625,
+      "lineHeightPx": 20,
+      "lineHeightPercent": 118.04158782958984,
+      "lineHeightPercentFontSize": 142.85714721679688,
+      "lineHeightUnit": "PIXELS"
+    }
+  },
+  {
+    "id": "2:72",
+    "name": "Button",
+    "type": "FRAME",
+    "depth": 7,
+    "bounds": {
+      "x": 608.515625,
+      "y": 838,
+      "width": 132.484375,
+      "height": 36
+    },
+    "children": [],
+    "backgroundColor": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 0
+    },
+    "cornerRadius": 8,
+    "padding": {
+      "top": 8,
+      "right": 16,
+      "bottom": 8,
+      "left": 16
+    }
+  },
+  {
+    "id": "2:73",
+    "name": "Lưu Công Trình",
+    "type": "TEXT",
+    "depth": 8,
+    "bounds": {
+      "x": 624.2578125,
+      "y": 846,
+      "width": 101,
+      "height": 20
+    },
+    "children": [],
+    "text": "Lưu Công Trình",
+    "style": {
+      "fontFamily": "Inter",
+      "fontPostScriptName": null,
+      "fontStyle": "Medium",
+      "fontWeight": 500,
+      "textAutoResize": "WIDTH_AND_HEIGHT",
+      "fontSize": 14,
+      "textAlignHorizontal": "LEFT",
+      "textAlignVertical": "TOP",
+      "letterSpacing": -0.150390625,
+      "lineHeightPx": 20,
+      "lineHeightPercent": 118.04158782958984,
+      "lineHeightPercentFontSize": 142.85714721679688,
+      "lineHeightUnit": "PIXELS"
+    }
+  }
+]

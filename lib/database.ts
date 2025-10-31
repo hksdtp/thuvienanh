@@ -20,6 +20,8 @@ import {
   PaginatedResponse
 } from '@/types/database'
 
+import { query } from './db'
+
 // Mock data cho development - CLEARED FOR REAL DATA
 let collections: Collection[] = []
 
@@ -166,65 +168,245 @@ export class CollectionService {
   }
 }
 
-// Fabric CRUD operations
+// Helper function to parse fabric data from database
+function parseFabricRow(row: any): Fabric {
+  return {
+    ...row,
+    width: row.width ? parseFloat(row.width) : 0,
+    weight: row.weight ? parseFloat(row.weight) : 0,
+    price_per_meter: row.price_per_meter ? parseFloat(row.price_per_meter) : 0,
+    stock_quantity: row.stock_quantity ? parseInt(row.stock_quantity) : 0,
+    min_order_quantity: row.min_order_quantity ? parseInt(row.min_order_quantity) : 1,
+  }
+}
+
+// Fabric CRUD operations - Real Database Implementation
 export class FabricService {
   static async getAll(filter?: FabricFilter): Promise<Fabric[]> {
-    let result = fabrics.filter(f => f.is_active)
-    
-    if (filter?.search) {
-      const searchTerm = filter.search.toLowerCase()
-      result = result.filter(f => 
-        f.name.toLowerCase().includes(searchTerm) ||
-        f.code.toLowerCase().includes(searchTerm) ||
-        f.description?.toLowerCase().includes(searchTerm) ||
-        f.search_keywords?.toLowerCase().includes(searchTerm) ||
-        f.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-      )
-    }
-    
-    if (filter?.material?.length) {
-      result = result.filter(f => filter.material!.includes(f.material))
-    }
-    
-    if (filter?.color?.length) {
-      result = result.filter(f => filter.color!.includes(f.color))
-    }
-    
-    if (filter?.collection_id) {
-      const fabricIds = collectionFabrics
-        .filter(cf => cf.collection_id === filter.collection_id)
-        .map(cf => cf.fabric_id)
-      result = result.filter(f => fabricIds.includes(f.id))
-    }
+    try {
+      let queryText = `
+        SELECT
+          id, name, code, description, composition, width, weight,
+          color, pattern, price, moq, image_url, thumbnail_url,
+          images, stock_status, is_new, is_clearance, category,
+          collection_id, created_at, updated_at
+        FROM fabrics
+        WHERE 1=1
+      `
+      const queryParams: any[] = []
+      let paramIndex = 1
 
-    if (filter?.min_order_quantity) {
-      result = result.filter(f => {
-        const moq = f.min_order_quantity || 1
-        return moq >= (filter.min_order_quantity!.min || 0) &&
-               moq <= (filter.min_order_quantity!.max || Infinity)
-      })
-    }
+      // Search filter
+      if (filter?.search) {
+        queryText += ` AND (
+          name ILIKE $${paramIndex} OR
+          code ILIKE $${paramIndex} OR
+          description ILIKE $${paramIndex} OR
+          search_keywords ILIKE $${paramIndex}
+        )`
+        queryParams.push(`%${filter.search}%`)
+        paramIndex++
+      }
 
-    if (filter?.created_after) {
-      const afterDate = new Date(filter.created_after)
-      result = result.filter(f => f.created_at >= afterDate)
-    }
+      // Composition filter (material)
+      if (filter?.material?.length) {
+        queryText += ` AND composition = ANY($${paramIndex})`
+        queryParams.push(filter.material)
+        paramIndex++
+      }
 
-    if (filter?.tags?.length) {
-      result = result.filter(f =>
-        filter.tags!.some(tag =>
-          f.tags.some(fabricTag =>
-            fabricTag.toLowerCase().includes(tag.toLowerCase())
-          )
-        )
-      )
-    }
+      // Color filter
+      if (filter?.color?.length) {
+        queryText += ` AND color = ANY($${paramIndex})`
+        queryParams.push(filter.color)
+        paramIndex++
+      }
 
-    return result.sort((a, b) => b.updated_at.getTime() - a.updated_at.getTime())
+      // Created after filter (for "new" fabrics)
+      if (filter?.created_after) {
+        queryText += ` AND created_at >= $${paramIndex}`
+        queryParams.push(filter.created_after)
+        paramIndex++
+      }
+
+      // Order by updated_at DESC
+      queryText += ` ORDER BY updated_at DESC`
+
+      const result = await query(queryText, queryParams)
+      return result.rows.map(parseFabricRow)
+    } catch (error) {
+      console.error('Error fetching fabrics:', error)
+      return []
+    }
   }
-  
+
   static async getById(id: string): Promise<Fabric | null> {
-    return fabrics.find(f => f.id === id && f.is_active) || null
+    try {
+      // Get fabric details
+      const fabricResult = await query(`
+        SELECT
+          id, name, code, description, composition, width, weight,
+          color, pattern, price, moq, image_url, thumbnail_url,
+          images, stock_status, is_new, is_clearance, category,
+          collection_id, created_at, updated_at
+        FROM fabrics
+        WHERE id = $1
+      `, [id])
+
+      if (fabricResult.rows.length === 0) {
+        return null
+      }
+
+      const fabric = parseFabricRow(fabricResult.rows[0])
+
+      // Get all images from fabric_images table
+      const imagesResult = await query(`
+        SELECT id, fabric_id, url, sort_order, is_primary, uploaded_at
+        FROM fabric_images
+        WHERE fabric_id = $1
+        ORDER BY sort_order ASC
+      `, [id])
+
+      // Attach images to fabric object
+      fabric.images = imagesResult.rows
+
+      return fabric
+    } catch (error) {
+      console.error('Error fetching fabric by ID:', error)
+      return null
+    }
+  }
+
+  static async update(id: string, data: Partial<Fabric>): Promise<Fabric | null> {
+    try {
+      const updates: string[] = []
+      const values: any[] = []
+      let paramIndex = 1
+
+      // Build dynamic UPDATE query
+      if (data.name !== undefined) {
+        updates.push(`name = $${paramIndex}`)
+        values.push(data.name)
+        paramIndex++
+      }
+      if (data.code !== undefined) {
+        updates.push(`code = $${paramIndex}`)
+        values.push(data.code)
+        paramIndex++
+      }
+      if (data.description !== undefined) {
+        updates.push(`description = $${paramIndex}`)
+        values.push(data.description)
+        paramIndex++
+      }
+      if (data.material !== undefined) {
+        updates.push(`composition = $${paramIndex}`)
+        values.push(data.material)
+        paramIndex++
+      }
+      if (data.width !== undefined) {
+        updates.push(`width = $${paramIndex}`)
+        values.push(data.width)
+        paramIndex++
+      }
+      if (data.weight !== undefined) {
+        updates.push(`weight = $${paramIndex}`)
+        values.push(data.weight)
+        paramIndex++
+      }
+      if (data.color !== undefined) {
+        updates.push(`color = $${paramIndex}`)
+        values.push(data.color)
+        paramIndex++
+      }
+      if (data.pattern !== undefined) {
+        updates.push(`pattern = $${paramIndex}`)
+        values.push(data.pattern)
+        paramIndex++
+      }
+      if (data.finish !== undefined) {
+        updates.push(`finish = $${paramIndex}`)
+        values.push(data.finish)
+        paramIndex++
+      }
+      if (data.origin !== undefined) {
+        updates.push(`origin = $${paramIndex}`)
+        values.push(data.origin)
+        paramIndex++
+      }
+      if (data.price_per_meter !== undefined) {
+        updates.push(`price_per_meter = $${paramIndex}`)
+        values.push(data.price_per_meter)
+        paramIndex++
+      }
+      if (data.stock_quantity !== undefined) {
+        updates.push(`stock_quantity = $${paramIndex}`)
+        values.push(data.stock_quantity)
+        paramIndex++
+      }
+      if (data.min_order_quantity !== undefined) {
+        updates.push(`min_order_quantity = $${paramIndex}`)
+        values.push(data.min_order_quantity)
+        paramIndex++
+      }
+      if (data.primary_image_url !== undefined) {
+        updates.push(`primary_image_url = $${paramIndex}`)
+        values.push(data.primary_image_url)
+        paramIndex++
+      }
+      if (data.tags !== undefined) {
+        updates.push(`tags = $${paramIndex}`)
+        values.push(data.tags)
+        paramIndex++
+      }
+      if (data.search_keywords !== undefined) {
+        updates.push(`search_keywords = $${paramIndex}`)
+        values.push(data.search_keywords)
+        paramIndex++
+      }
+
+      if (updates.length === 0) {
+        return await this.getById(id)
+      }
+
+      updates.push(`updated_at = CURRENT_TIMESTAMP`)
+      values.push(id)
+
+      const queryText = `
+        UPDATE fabrics
+        SET ${updates.join(', ')}
+        WHERE id = $${paramIndex} AND is_active = true
+        RETURNING *
+      `
+
+      const result = await query(queryText, values)
+
+      if (result.rows.length === 0) {
+        return null
+      }
+
+      return parseFabricRow(result.rows[0])
+    } catch (error) {
+      console.error('Error updating fabric:', error)
+      return null
+    }
+  }
+
+  static async delete(id: string): Promise<boolean> {
+    try {
+      // Soft delete - set is_active to false
+      const result = await query(`
+        UPDATE fabrics
+        SET is_active = false, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $1 AND is_active = true
+        RETURNING id
+      `, [id])
+
+      return result.rows.length > 0
+    } catch (error) {
+      console.error('Error deleting fabric:', error)
+      return false
+    }
   }
 }
 
@@ -234,8 +416,6 @@ let albums: Album[] = []
 let albumImages: AlbumImage[] = []
 
 // Album Service - Real Database Implementation
-import { query } from './db'
-
 export class AlbumService {
   static async getAll(filter?: AlbumFilter): Promise<Album[]> {
     try {

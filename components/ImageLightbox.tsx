@@ -8,7 +8,8 @@ import {
   TrashIcon,
   MagnifyingGlassPlusIcon,
   MagnifyingGlassMinusIcon,
-  ArrowDownTrayIcon
+  ArrowDownTrayIcon,
+  PhotoIcon
 } from '@heroicons/react/24/outline'
 
 interface ImageLightboxProps {
@@ -36,18 +37,42 @@ export default function ImageLightbox({
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const [showThumbnails, setShowThumbnails] = useState(true)
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const [imageError, setImageError] = useState(false)
   const imageContainerRef = useRef<HTMLDivElement>(null)
+  const imageRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
     setIndex(currentIndex)
     resetZoom()
+    setImageLoaded(false)
+    setImageError(false)
   }, [currentIndex])
 
   useEffect(() => {
     if (!isOpen) {
       resetZoom()
+      setImageLoaded(false)
+      setImageError(false)
     }
   }, [isOpen])
+
+  // Preload adjacent images for faster navigation
+  useEffect(() => {
+    if (!isOpen || images.length <= 1) return
+
+    const preloadImage = (url: string) => {
+      const img = new Image()
+      img.src = url
+    }
+
+    // Preload next and previous images
+    const nextIndex = (index + 1) % images.length
+    const prevIndex = (index - 1 + images.length) % images.length
+
+    if (images[nextIndex]) preloadImage(images[nextIndex].image_url)
+    if (images[prevIndex]) preloadImage(images[prevIndex].image_url)
+  }, [index, images, isOpen])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -89,11 +114,15 @@ export default function ImageLightbox({
   const handlePrevious = useCallback(() => {
     setIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
     resetZoom()
+    setImageLoaded(false)
+    setImageError(false)
   }, [images.length, resetZoom])
 
   const handleNext = useCallback(() => {
     setIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0))
     resetZoom()
+    setImageLoaded(false)
+    setImageError(false)
   }, [images.length, resetZoom])
 
   const handleZoomIn = useCallback(() => {
@@ -255,7 +284,7 @@ export default function ImageLightbox({
       {/* Main image area */}
       <div
         ref={imageContainerRef}
-        className="flex-1 flex items-center justify-center overflow-hidden px-20 py-16"
+        className="flex-1 flex items-center justify-center overflow-hidden px-4 sm:px-8 md:px-12 lg:px-20 py-16"
         style={{ cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default' }}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
@@ -263,14 +292,50 @@ export default function ImageLightbox({
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       >
+        {/* Loading skeleton */}
+        {!imageLoaded && !imageError && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="relative w-full h-full max-w-4xl max-h-[80vh] bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl animate-pulse flex items-center justify-center">
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                <p className="text-white/60 text-sm font-medium">Đang tải ảnh...</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Error state */}
+        {imageError && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <PhotoIcon className="w-24 h-24 text-white/40 mx-auto mb-4" />
+              <p className="text-white/80 text-lg font-medium">Không thể tải ảnh</p>
+              <button
+                onClick={() => {
+                  setImageError(false)
+                  setImageLoaded(false)
+                }}
+                className="mt-4 px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full transition-all"
+              >
+                Thử lại
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Main image */}
         <div
-          className="relative w-full h-full flex items-center justify-center transition-transform duration-200 ease-out"
+          className={`relative w-full h-full flex items-center justify-center transition-all duration-300 ${
+            imageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
           style={{
             transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
-            transformOrigin: 'center center'
+            transformOrigin: 'center center',
+            transition: isDragging ? 'none' : 'transform 0.2s ease-out, opacity 0.3s ease-out'
           }}
         >
           <img
+            ref={imageRef}
             src={currentImage.image_url}
             alt={currentImage.caption || 'Image'}
             style={{
@@ -282,6 +347,11 @@ export default function ImageLightbox({
             }}
             className="select-none rounded-lg shadow-2xl"
             draggable={false}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => {
+              setImageError(true)
+              setImageLoaded(false)
+            }}
           />
         </div>
       </div>

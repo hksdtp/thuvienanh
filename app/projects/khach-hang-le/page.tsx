@@ -7,14 +7,12 @@ import { motion } from 'framer-motion'
 import { Project, ApiResponse } from '@/types/database'
 import PageHeader from '@/components/PageHeader'
 import ProjectCard from '@/components/ProjectCard'
-import ProjectUploadModal from '@/components/ProjectUploadModal'
 
 export default function KhachHangLePage() {
   const router = useRouter()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [uploadModalOpen, setUploadModalOpen] = useState(false)
 
   useEffect(() => {
     fetchProjects()
@@ -35,9 +33,37 @@ export default function KhachHangLePage() {
     }
   }
 
-  const handleUploadSuccess = () => {
-    fetchProjects()
-    setUploadModalOpen(false)
+  const handleEditProject = (project: Project, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    router.push(`/projects/${project.id}`)
+  }
+
+  const handleDeleteProject = async (project: Project, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const confirmed = confirm(`Bạn có chắc muốn xóa dự án "${project.name}"?`)
+    if (!confirmed) return
+
+    try {
+      const response = await fetch(`/api/projects/${project.id}`, {
+        method: 'DELETE'
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setTimeout(() => {
+          fetchProjects()
+        }, 500)
+      } else {
+        throw new Error(result.error || 'Failed to delete project')
+      }
+    } catch (error) {
+      console.error('Error deleting project:', error)
+      alert('Có lỗi xảy ra khi xóa dự án')
+    }
   }
 
   const filteredProjects = projects.filter(project =>
@@ -53,7 +79,7 @@ export default function KhachHangLePage() {
         actions={
           <motion.button
             whileTap={{ scale: 0.95 }}
-            onClick={() => setUploadModalOpen(true)}
+            onClick={() => router.push('/projects/upload?type=nha-dan')}
             className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md"
           >
             <PlusIcon className="w-5 h-5" strokeWidth={2} />
@@ -107,7 +133,7 @@ export default function KhachHangLePage() {
             </p>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => setUploadModalOpen(true)}
+              onClick={() => router.push('/projects/upload?type=nha-dan')}
               className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all"
             >
               <PlusIcon className="w-5 h-5" strokeWidth={2} />
@@ -123,21 +149,16 @@ export default function KhachHangLePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05, duration: 0.3 }}
               >
-                <ProjectCard project={project} />
+                <ProjectCard
+                  project={project}
+                  onEdit={handleEditProject}
+                  onDelete={handleDeleteProject}
+                />
               </motion.div>
             ))}
           </div>
         )}
       </div>
-
-      {uploadModalOpen && (
-        <ProjectUploadModal
-          isOpen={uploadModalOpen}
-          onClose={() => setUploadModalOpen(false)}
-          onSuccess={handleUploadSuccess}
-          projectType="residential"
-        />
-      )}
     </div>
   )
 }

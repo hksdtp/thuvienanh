@@ -7,14 +7,12 @@ import { motion } from 'framer-motion'
 import { Project, ApiResponse } from '@/types/database'
 import PageHeader from '@/components/PageHeader'
 import ProjectCard from '@/components/ProjectCard'
-import ProjectUploadModal from '@/components/ProjectUploadModal'
 
 export default function CongTrinhTieuBieuPage() {
   const router = useRouter()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [uploadModalOpen, setUploadModalOpen] = useState(false)
 
   useEffect(() => {
     fetchProjects()
@@ -35,11 +33,6 @@ export default function CongTrinhTieuBieuPage() {
     }
   }
 
-  const handleUploadSuccess = () => {
-    fetchProjects()
-    setUploadModalOpen(false)
-  }
-
   const filteredProjects = projects.filter(project =>
     project.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -53,7 +46,7 @@ export default function CongTrinhTieuBieuPage() {
         actions={
           <motion.button
             whileTap={{ scale: 0.95 }}
-            onClick={() => setUploadModalOpen(true)}
+            onClick={() => router.push('/projects/upload?featured=true')}
             className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all hover:shadow-md"
           >
             <PlusIcon className="w-5 h-5" strokeWidth={2} />
@@ -107,7 +100,7 @@ export default function CongTrinhTieuBieuPage() {
             </p>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              onClick={() => setUploadModalOpen(true)}
+              onClick={() => router.push('/projects/upload?featured=true')}
               className="inline-flex items-center space-x-2 px-4 py-2.5 bg-ios-blue text-white text-sm font-medium rounded-lg hover:bg-ios-blue-dark transition-all"
             >
               <PlusIcon className="w-5 h-5" strokeWidth={2} />
@@ -129,15 +122,6 @@ export default function CongTrinhTieuBieuPage() {
           </div>
         )}
       </div>
-
-      {uploadModalOpen && (
-        <ProjectUploadModal
-          isOpen={uploadModalOpen}
-          onClose={() => setUploadModalOpen(false)}
-          onSuccess={handleUploadSuccess}
-          projectType="featured"
-        />
-      )}
     </div>
   )
 }

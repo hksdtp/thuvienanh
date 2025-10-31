@@ -215,102 +215,99 @@ export default function FabricsPage() {
         </div>
       </motion.div>
 
-      <div className="flex">
-        {/* Desktop Filters Sidebar */}
-        {!isMobile && (
-          <motion.div
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="w-64 bg-white border-r border-gray-200 flex-shrink-0 h-[calc(100vh-73px)] sticky top-[73px]"
-          >
-            <FabricFilters
-              collections={collections}
-              filters={filters}
-              onFiltersChange={handleFilterChange}
-              onClearFilters={clearFilters}
-            />
-          </motion.div>
+      {/* Desktop Filters - Horizontal Bar */}
+      {!isMobile && (
+        <motion.div
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <FabricFilters
+            collections={collections}
+            filters={filters}
+            onFiltersChange={handleFilterChange}
+            onClearFilters={clearFilters}
+          />
+        </motion.div>
+      )}
+
+      {/* Mobile Filters Bottom Sheet */}
+      <AnimatePresence>
+        {isMobile && mobileFiltersOpen && (
+          <FabricFilters
+            collections={collections}
+            filters={filters}
+            onFiltersChange={handleFilterChange}
+            onClearFilters={clearFilters}
+            isMobile={true}
+            isOpen={mobileFiltersOpen}
+            onClose={() => setMobileFiltersOpen(false)}
+          />
         )}
+      </AnimatePresence>
 
-        {/* Mobile Filters Bottom Sheet */}
-        <AnimatePresence>
-          {isMobile && mobileFiltersOpen && (
-            <FabricFilters
-              collections={collections}
-              filters={filters}
-              onFiltersChange={handleFilterChange}
-              onClearFilters={clearFilters}
-              isMobile={true}
-              isOpen={mobileFiltersOpen}
-              onClose={() => setMobileFiltersOpen(false)}
-            />
-          )}
-        </AnimatePresence>
+      {/* Main Content */}
+      <div className="flex-1">
+        <div className="px-4 lg:px-8 py-6 lg:py-8">
+          {/* Section Header */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="mb-6 flex items-center justify-between"
+          >
+            <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">
+              {t('fabric.title')}
+            </h2>
+            <span className="text-sm text-gray-600">
+              {fabrics.length} {fabrics.length === 1 ? 'mẫu' : 'mẫu'}
+            </span>
+          </motion.div>
 
-        {/* Main Content */}
-        <div className="flex-1">
-          <div className="px-4 lg:px-8 py-6 lg:py-8">
-            {/* Section Header */}
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="mb-6 flex items-center justify-between"
-            >
-              <h2 className="text-xl lg:text-2xl font-semibold text-gray-900">
-                {t('fabric.title')}
-              </h2>
-              <span className="text-sm text-gray-600">
-                {fabrics.length} {fabrics.length === 1 ? 'mẫu' : 'mẫu'}
-              </span>
-            </motion.div>
-
-            {/* Content */}
-            {loading ? (
-              <div className="flex flex-col items-center justify-center py-16">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                  className="rounded-full h-10 w-10 border-2 border-cyan-500 border-t-transparent"
-                />
-                <span className="mt-3 text-gray-600 font-medium">{t('common.loading')}</span>
-              </div>
-            ) : fabrics.length === 0 ? (
+          {/* Content */}
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-16">
               <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="bg-white rounded-xl border border-gray-200 p-12 lg:p-16 text-center"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                className="rounded-full h-10 w-10 border-2 border-cyan-500 border-t-transparent"
+              />
+              <span className="mt-3 text-gray-600 font-medium">{t('common.loading')}</span>
+            </div>
+          ) : fabrics.length === 0 ? (
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="bg-white rounded-xl border border-gray-200 p-12 lg:p-16 text-center"
+            >
+              <PhotoIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" strokeWidth={1.5} />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {t('messages.noFabrics')}
+              </h3>
+              <p className="text-sm text-gray-600 mb-6">
+                {t('messages.tryDifferent')}
+              </p>
+              <button
+                onClick={clearFilters}
+                className="text-cyan-500 hover:text-cyan-600 font-medium text-sm transition-colors active:scale-95"
               >
-                <PhotoIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" strokeWidth={1.5} />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {t('messages.noFabrics')}
-                </h3>
-                <p className="text-sm text-gray-600 mb-6">
-                  {t('messages.tryDifferent')}
-                </p>
-                <button
-                  onClick={clearFilters}
-                  className="text-cyan-500 hover:text-cyan-600 font-medium text-sm transition-colors active:scale-95"
+                {t('filters.clearFilters')}
+              </button>
+            </motion.div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 lg:gap-6">
+              {fabrics.map((fabric, index) => (
+                <motion.div
+                  key={fabric.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
                 >
-                  {t('filters.clearFilters')}
-                </button>
-              </motion.div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 lg:gap-6">
-                {fabrics.map((fabric, index) => (
-                  <motion.div
-                    key={fabric.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05, duration: 0.3 }}
-                  >
-                    <FabricCard fabric={fabric} />
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </div>
+                  <FabricCard fabric={fabric} />
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -318,7 +315,10 @@ export default function FabricsPage() {
       <FabricUploadModal
         isOpen={uploadModalOpen}
         onClose={() => setUploadModalOpen(false)}
-        onUploadComplete={handleUploadComplete}
+        onSuccess={() => {
+          setUploadModalOpen(false)
+          fetchFilteredFabrics(filters)
+        }}
       />
     </div>
   )

@@ -98,8 +98,8 @@ export default function MainContentNew() {
       icon: FolderIcon,
       href: '/collections',
       count: stats.totalCollections,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50'
+      color: 'text-[#343F48]',
+      bgColor: 'bg-[#343F48]/5'
     },
     {
       title: 'Công Trình',

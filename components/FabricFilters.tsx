@@ -102,12 +102,137 @@ export default function FabricFilters({
     (Array.isArray(value) ? value.length > 0 : true)
   )
 
-  const content = (
+  // Desktop: Horizontal layout
+  const desktopContent = (
+    <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="flex items-center gap-4 flex-wrap">
+        {/* Color Filter */}
+        <div className="flex-1 min-w-[160px]">
+          <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            {t('filters.color')}
+          </label>
+          <div className="relative">
+            <select
+              value={filters.color?.[0] || ''}
+              onChange={(e) => handleColorChange(e.target.value)}
+              className="w-full appearance-none px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent cursor-pointer transition-all hover:border-gray-400"
+            >
+              <option value="">{t('common.any')}</option>
+              {commonColors.map((color) => (
+                <option key={color} value={color}>
+                  {color}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Material Filter */}
+        <div className="flex-1 min-w-[160px]">
+          <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            {t('filters.material')}
+          </label>
+          <div className="relative">
+            <select
+              value={filters.material?.[0] || ''}
+              onChange={(e) => handleMaterialChange(e.target.value)}
+              className="w-full appearance-none px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent cursor-pointer transition-all hover:border-gray-400"
+            >
+              <option value="">{t('common.any')}</option>
+              {FABRIC_MATERIALS.map((material) => (
+                <option key={material} value={material}>
+                  {material}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Pattern Filter */}
+        <div className="flex-1 min-w-[160px]">
+          <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            {t('filters.pattern')}
+          </label>
+          <div className="relative">
+            <select
+              value={filters.pattern?.[0] || ''}
+              onChange={(e) => handlePatternChange(e.target.value)}
+              className="w-full appearance-none px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent cursor-pointer transition-all hover:border-gray-400"
+            >
+              <option value="">{t('common.any')}</option>
+              {FABRIC_PATTERNS.map((pattern) => (
+                <option key={pattern} value={pattern}>
+                  {pattern}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Price Filter */}
+        <div className="flex-1 min-w-[160px]">
+          <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            {t('filters.price')}
+          </label>
+          <div className="relative">
+            <select
+              value={getCurrentPriceLabel()}
+              onChange={(e) => handlePriceChange(e.target.value)}
+              className="w-full appearance-none px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent cursor-pointer transition-all hover:border-gray-400"
+            >
+              {priceRanges.map((range) => (
+                <option key={range.label} value={range.label}>
+                  {range.label}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Clear Filters Button */}
+        {hasActiveFilters && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            onClick={onClearFilters}
+            className="self-end px-4 py-2 text-sm font-medium text-cyan-600 bg-cyan-50 hover:bg-cyan-100 rounded-lg transition-colors flex items-center gap-2"
+            title={t('filters.clearFilters')}
+          >
+            <XMarkIcon className="w-4 h-4" />
+            <span className="hidden lg:inline">{t('filters.clearFilters')}</span>
+          </motion.button>
+        )}
+      </div>
+    </div>
+  )
+
+  // Mobile: Vertical layout (bottom sheet)
+  const mobileContent = (
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
       <div className="px-6 py-6 border-b border-gray-200 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">{t('filters.title')}</h2>
-        {isMobile && onClose && (
+        {onClose && (
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -275,12 +400,12 @@ export default function FabricFilters({
           transition={{ type: 'spring', damping: 30, stiffness: 300 }}
           className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl max-h-[80vh] overflow-hidden"
         >
-          {content}
+          {mobileContent}
         </motion.div>
       </>
     )
   }
 
-  // Desktop: Sidebar
-  return content
+  // Desktop: Horizontal layout
+  return desktopContent
 }

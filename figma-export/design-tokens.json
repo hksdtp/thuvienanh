@@ -1,0 +1,207 @@
+{
+  "colors": {
+    "Image Upload Interface": {
+      "hex": "#ffffff",
+      "rgb": "rgb(255, 255, 255)",
+      "rgba": "rgba(255, 255, 255, 1)"
+    },
+    "Container": {
+      "hex": "#ffffff",
+      "rgb": "rgb(255, 255, 255)",
+      "rgba": "rgba(255, 255, 255, 1)"
+    },
+    "Tạo Công Trình Mới": {
+      "hex": "#314158",
+      "rgb": "rgb(49, 65, 88)",
+      "rgba": "rgba(49, 65, 88, 1)"
+    },
+    "Thêm Công Trình": {
+      "hex": "#0f172b",
+      "rgb": "rgb(15, 23, 43)",
+      "rgba": "rgba(15, 23, 43, 1)"
+    },
+    "Điền thông tin và tải lên hình ảnh công trình của ": {
+      "hex": "#45556c",
+      "rgb": "rgb(69, 85, 108)",
+      "rgba": "rgba(69, 85, 108, 1)"
+    },
+    "Tên công trình": {
+      "hex": "#314158",
+      "rgb": "rgb(49, 65, 88)",
+      "rgba": "rgba(49, 65, 88, 1)"
+    },
+    "Input": {
+      "hex": "#ffffff",
+      "rgb": "rgb(255, 255, 255)",
+      "rgba": "rgba(255, 255, 255, 1)"
+    },
+    "Nhập tên công trình...": {
+      "hex": "#717182",
+      "rgb": "rgb(113, 113, 130)",
+      "rgba": "rgba(113, 113, 130, 1)"
+    },
+    "Mô tả": {
+      "hex": "#314158",
+      "rgb": "rgb(49, 65, 88)",
+      "rgba": "rgba(49, 65, 88, 1)"
+    },
+    "Textarea": {
+      "hex": "#ffffff",
+      "rgb": "rgb(255, 255, 255)",
+      "rgba": "rgba(255, 255, 255, 1)"
+    },
+    "Mô tả chi tiết về công trình...": {
+      "hex": "#717182",
+      "rgb": "rgb(113, 113, 130)",
+      "rgba": "rgba(113, 113, 130, 1)"
+    },
+    "Hình ảnh": {
+      "hex": "#314158",
+      "rgb": "rgb(49, 65, 88)",
+      "rgba": "rgba(49, 65, 88, 1)"
+    },
+    "Kéo thả hình ảnh vào đây hoặc": {
+      "hex": "#0f172b",
+      "rgb": "rgb(15, 23, 43)",
+      "rgba": "rgba(15, 23, 43, 1)"
+    },
+    "Chọn file": {
+      "hex": "#9810fa",
+      "rgb": "rgb(152, 16, 250)",
+      "rgba": "rgba(152, 16, 250, 1)"
+    },
+    "PNG, JPG, GIF tối đa 10MB": {
+      "hex": "#62748e",
+      "rgb": "rgb(98, 116, 142)",
+      "rgba": "rgba(98, 116, 142, 1)"
+    },
+    "Chưa có hình ảnh nào": {
+      "hex": "#90a1b9",
+      "rgb": "rgb(144, 161, 185)",
+      "rgba": "rgba(144, 161, 185, 1)"
+    },
+    "Button": {
+      "hex": "#ffffff",
+      "rgb": "rgb(255, 255, 255)",
+      "rgba": "rgba(255, 255, 255, 1)"
+    },
+    "Hủy": {
+      "hex": "#0a0a0a",
+      "rgb": "rgb(10, 10, 10)",
+      "rgba": "rgba(10, 10, 10, 1)"
+    },
+    "Lưu Công Trình": {
+      "hex": "#ffffff",
+      "rgb": "rgb(255, 255, 255)",
+      "rgba": "rgba(255, 255, 255, 1)"
+    }
+  },
+  "typography": {
+    "Tạo Công Trình Mới": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 20,
+      "letterSpacing": -0.150390625
+    },
+    "Thêm Công Trình": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    },
+    "Điền thông tin và tải lên hình ảnh công trình của ": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    },
+    "Tên công trình": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 500,
+      "lineHeight": 14,
+      "letterSpacing": -0.150390625
+    },
+    "Nhập tên công trình...": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 16.94318199157715,
+      "letterSpacing": -0.150390625
+    },
+    "Mô tả": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 500,
+      "lineHeight": 14,
+      "letterSpacing": -0.150390625
+    },
+    "Mô tả chi tiết về công trình...": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 20,
+      "letterSpacing": -0.150390625
+    },
+    "Hình ảnh": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 500,
+      "lineHeight": 14,
+      "letterSpacing": -0.150390625
+    },
+    "Kéo thả hình ảnh vào đây hoặc": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    },
+    "Chọn file": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    },
+    "PNG, JPG, GIF tối đa 10MB": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 400,
+      "lineHeight": 20,
+      "letterSpacing": -0.150390625
+    },
+    "Chưa có hình ảnh nào": {
+      "fontFamily": "Inter",
+      "fontSize": 16,
+      "fontWeight": 400,
+      "lineHeight": 24,
+      "letterSpacing": -0.3125
+    },
+    "Hủy": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 500,
+      "lineHeight": 20,
+      "letterSpacing": -0.150390625
+    },
+    "Lưu Công Trình": {
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "fontWeight": 500,
+      "lineHeight": 20,
+      "letterSpacing": -0.150390625
+    }
+  },
+  "spacing": {},
+  "borderRadius": {
+    "Container": 10,
+    "Input": 8,
+    "Textarea": 8,
+    "Button": 8
+  },
+  "shadows": {}
+}

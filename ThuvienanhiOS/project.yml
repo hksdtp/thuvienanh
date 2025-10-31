@@ -1,0 +1,15 @@
+name: Thuvienanh
+options:
+  bundleIdPrefix: com.thuvienanh
+  deploymentTarget:
+    iOS: "17.0"
+targets:
+  Thuvienanh:
+    type: application
+    platform: iOS
+    sources: [Thuvienanh]
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.thuvienanh.ios
+      INFOPLIST_FILE: Thuvienanh/Info.plist
+      TARGETED_DEVICE_FAMILY: "1,2"
+      SWIFT_VERSION: "5.0"
