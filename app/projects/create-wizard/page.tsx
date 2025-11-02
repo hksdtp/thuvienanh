@@ -95,7 +95,7 @@ export default function ProjectCreateWizardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gradient-to-br from-gray-50 to-gray-100 py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
       {/* Header Text */}
       <div className="max-w-3xl mx-auto mb-6 sm:mb-8 text-center">
         <motion.div
