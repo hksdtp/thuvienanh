@@ -577,6 +577,12 @@ class SynologyPhotosService {
 
   // Authenticate with Synology
   async authenticate(): Promise<boolean> {
+    // Skip authentication during build time
+    if (process.env.NEXT_PHASE === 'phase-production-build') {
+      console.log('⏭️  Skipping Synology authentication during build')
+      return false
+    }
+
     try {
       // Find working URL first
       const workingUrl = await this.findWorkingUrl()
@@ -588,10 +594,14 @@ class SynologyPhotosService {
       // Update baseUrl to working URL
       this.config.baseUrl = workingUrl
 
-      // Get API info
+      // Get API info (silently)
       const apiInfoResponse = await fetch(`${workingUrl}/webapi/query.cgi?api=SYNO.API.Info&version=1&method=query&query=all`)
       const apiInfo = await apiInfoResponse.json()
-      console.log('Synology API Info:', apiInfo)
+
+      // Only log API info in development
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Synology API Info:', apiInfo)
+      }
 
       // Try different authentication methods
       const authMethods = [
@@ -603,7 +613,6 @@ class SynologyPhotosService {
 
       for (const method of authMethods) {
         try {
-          console.log(`Trying authentication with session: ${method.session}`)
           const response = await fetch(`${workingUrl}/webapi/auth.cgi`, {
             method: 'POST',
             headers: {
@@ -621,24 +630,22 @@ class SynologyPhotosService {
           })
 
           const result: SynologyAuthResponse = await response.json()
-          console.log(`Auth result for ${method.session}:`, result)
 
           if (result.success && result.data?.sid) {
             this.sessionId = result.data.sid
-            console.log(`✅ Synology authentication successful with session: ${method.session}`)
+            console.log(`✅ Synology authenticated with ${method.session}`)
             return true
           }
-
-          console.warn(`❌ Authentication failed for session ${method.session}:`, result.error)
         } catch (error) {
-          console.warn(`❌ Error trying session ${method.session}:`, error)
+          // Silently continue to next method
+          continue
         }
       }
 
-      console.error('All Synology authentication methods failed')
+      console.error('❌ All Synology authentication methods failed')
       return false
     } catch (error) {
-      console.error('Synology authentication error:', error)
+      console.error('❌ Synology authentication error:', error)
       return false
     }
   }
@@ -1077,6 +1084,12 @@ export class SynologyPhotosAPIService {
 
   // Authenticate with Synology Photos API
   async authenticate(): Promise<boolean> {
+    // Skip authentication during build time
+    if (process.env.NEXT_PHASE === 'phase-production-build') {
+      console.log('⏭️  Skipping Synology Photos authentication during build')
+      return false
+    }
+
     try {
       // Find working URL first
       const workingUrl = await this.findWorkingPhotosUrl()
@@ -1103,11 +1116,10 @@ export class SynologyPhotosAPIService {
       })
 
       const result: SynologyAuthResponse = await response.json()
-      console.log('📋 Photos API auth result:', result)
 
       if (result.success && result.data?.sid) {
         this.sessionId = result.data.sid
-        console.log('✅ Synology Photos API authentication successful')
+        console.log('✅ Synology Photos authenticated')
 
         // Also authenticate with FileStation for uploads
         await this.authenticateFileStation()
@@ -1115,10 +1127,10 @@ export class SynologyPhotosAPIService {
         return true
       }
 
-      console.error('❌ Synology Photos API authentication failed:', result.error)
+      console.error('❌ Synology Photos authentication failed:', result.error)
       return false
     } catch (error) {
-      console.error('❌ Synology Photos API authentication error:', error)
+      console.error('❌ Synology Photos authentication error:', error)
       return false
     }
   }
