@@ -14,13 +14,9 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit }: Create
   const [formData, setFormData] = useState<CreateProjectForm>({
     name: '',
     description: '',
-    project_type: 'residential',
-    location: '',
-    client_name: '',
-    status: 'planning',
-    tags: []
+    type: 'residential',
+    location: ''
   })
-  const [tagInput, setTagInput] = useState('')
   const [loading, setLoading] = useState(false)
 
   if (!isOpen) return null
@@ -34,13 +30,9 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit }: Create
       setFormData({
         name: '',
         description: '',
-        project_type: 'residential',
-        location: '',
-        client_name: '',
-        status: 'planning',
-        tags: []
+        type: 'residential',
+        location: ''
       })
-      setTagInput('')
     } catch (error) {
       console.error('Error:', error)
     } finally {
@@ -48,22 +40,7 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit }: Create
     }
   }
 
-  const handleAddTag = () => {
-    if (tagInput.trim() && !formData.tags?.includes(tagInput.trim())) {
-      setFormData({
-        ...formData,
-        tags: [...(formData.tags || []), tagInput.trim()]
-      })
-      setTagInput('')
-    }
-  }
 
-  const handleRemoveTag = (tag: string) => {
-    setFormData({
-      ...formData,
-      tags: formData.tags?.filter(t => t !== tag) || []
-    })
-  }
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -111,116 +88,39 @@ export default function CreateProjectModal({ isOpen, onClose, onSubmit }: Create
               />
             </div>
 
-            {/* Project Type & Status */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-macos-text-primary mb-2">
-                  Loại công trình
-                </label>
-                <select
-                  value={formData.project_type}
-                  onChange={(e) => setFormData({ ...formData, project_type: e.target.value as any })}
-                  className="w-full px-4 py-2.5 border border-ios-gray-300 rounded-lg focus:outline-none focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
-                >
-                  <option value="residential">Nhà ở</option>
-                  <option value="commercial">Thương mại</option>
-                  <option value="office">Văn phòng</option>
-                  <option value="hotel">Khách sạn</option>
-                  <option value="restaurant">Nhà hàng</option>
-                  <option value="retail">Bán lẻ</option>
-                  <option value="hospitality">Khách sạn</option>
-                  <option value="other">Khác</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-macos-text-primary mb-2">
-                  Trạng thái
-                </label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                  className="w-full px-4 py-2.5 border border-ios-gray-300 rounded-lg focus:outline-none focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
-                >
-                  <option value="planning">Đang lên kế hoạch</option>
-                  <option value="in_progress">Đang thực hiện</option>
-                  <option value="completed">Hoàn thành</option>
-                  <option value="on_hold">Tạm dừng</option>
-                  <option value="archived">Lưu trữ</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Location & Client */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-macos-text-primary mb-2">
-                  Địa điểm
-                </label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-ios-gray-300 rounded-lg focus:outline-none focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
-                  placeholder="Địa điểm công trình..."
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-macos-text-primary mb-2">
-                  Khách hàng
-                </label>
-                <input
-                  type="text"
-                  value={formData.client_name}
-                  onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
-                  className="w-full px-4 py-2.5 border border-ios-gray-300 rounded-lg focus:outline-none focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
-                  placeholder="Tên khách hàng..."
-                />
-              </div>
-            </div>
-
-            {/* Tags */}
+            {/* Project Type */}
             <div>
               <label className="block text-sm font-medium text-macos-text-primary mb-2">
-                Tags
+                Loại công trình
               </label>
-              <div className="flex gap-2 mb-2">
-                <input
-                  type="text"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                  className="flex-1 px-4 py-2.5 border border-ios-gray-300 rounded-lg focus:outline-none focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
-                  placeholder="Thêm tag..."
-                />
-                <button
-                  type="button"
-                  onClick={handleAddTag}
-                  className="px-4 py-2.5 bg-ios-gray-100 text-macos-text-primary rounded-lg hover:bg-ios-gray-200 transition-colors"
-                >
-                  Thêm
-                </button>
-              </div>
-              {formData.tags && formData.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {formData.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-ios-blue/10 text-ios-blue rounded-full text-sm"
-                    >
-                      {tag}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveTag(tag)}
-                        className="hover:text-ios-blue-dark"
-                      >
-                        <XMarkIcon className="w-4 h-4" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
+              <select
+                value={formData.type}
+                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                className="w-full px-4 py-2.5 border border-ios-gray-300 rounded-lg focus:outline-none focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
+              >
+                <option value="residential">Nhà ở</option>
+                <option value="commercial">Thương mại</option>
+                <option value="office">Văn phòng</option>
+                <option value="hotel">Khách sạn</option>
+                <option value="restaurant">Nhà hàng</option>
+                <option value="retail">Bán lẻ</option>
+                <option value="hospitality">Khách sạn</option>
+                <option value="other">Khác</option>
+              </select>
+            </div>
+
+            {/* Location */}
+            <div>
+              <label className="block text-sm font-medium text-macos-text-primary mb-2">
+                Địa điểm
+              </label>
+              <input
+                type="text"
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                className="w-full px-4 py-2.5 border border-ios-gray-300 rounded-lg focus:outline-none focus:border-ios-blue focus:ring-2 focus:ring-ios-blue focus:ring-opacity-20 transition-all"
+                placeholder="Địa điểm công trình..."
+              />
             </div>
 
             {/* Actions */}
