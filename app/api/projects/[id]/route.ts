@@ -70,14 +70,9 @@ export async function PUT(
     const {
       name,
       description,
-      project_type,
+      type,
       location,
-      client_name,
-      completion_date,
-      tags,
-      status,
-      cover_image_id,
-      cover_image_url
+      cover_image
     } = body
 
     const sql = `
@@ -85,30 +80,20 @@ export async function PUT(
       SET
         name = COALESCE($1, name),
         description = COALESCE($2, description),
-        project_type = COALESCE($3, project_type),
+        type = COALESCE($3, type),
         location = COALESCE($4, location),
-        client_name = COALESCE($5, client_name),
-        completion_date = COALESCE($6, completion_date),
-        tags = COALESCE($7, tags),
-        status = COALESCE($8, status),
-        cover_image_id = COALESCE($9, cover_image_id),
-        cover_image_url = COALESCE($10, cover_image_url),
+        cover_image = COALESCE($5, cover_image),
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $11 AND is_active = true
+      WHERE id = $6
       RETURNING *
     `
 
     const params = [
       name,
       description,
-      project_type,
+      type,
       location,
-      client_name,
-      completion_date,
-      tags,
-      status,
-      cover_image_id,
-      cover_image_url,
+      cover_image,
       id
     ]
 
@@ -155,14 +140,9 @@ export async function PATCH(
     const {
       name,
       description,
-      project_type,
+      type,
       location,
-      client_name,
-      completion_date,
-      tags,
-      status,
-      cover_image_id,
-      cover_image_url
+      cover_image
     } = body
 
     const sql = `
@@ -170,30 +150,20 @@ export async function PATCH(
       SET
         name = COALESCE($1, name),
         description = COALESCE($2, description),
-        project_type = COALESCE($3, project_type),
+        type = COALESCE($3, type),
         location = COALESCE($4, location),
-        client_name = COALESCE($5, client_name),
-        completion_date = COALESCE($6, completion_date),
-        tags = COALESCE($7, tags),
-        status = COALESCE($8, status),
-        cover_image_id = COALESCE($9, cover_image_id),
-        cover_image_url = COALESCE($10, cover_image_url),
+        cover_image = COALESCE($5, cover_image),
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $11 AND is_active = true
+      WHERE id = $6
       RETURNING *
     `
 
     const params = [
       name,
       description,
-      project_type,
+      type,
       location,
-      client_name,
-      completion_date,
-      tags,
-      status,
-      cover_image_id,
-      cover_image_url,
+      cover_image,
       id
     ]
 
@@ -237,7 +207,7 @@ export async function DELETE(
     const { id } = context.params
 
     // Get project info first
-    const projectSql = `SELECT id, name, project_type FROM projects WHERE id = $1`
+    const projectSql = `SELECT id, name, type FROM projects WHERE id = $1`
     const projectResult = await query(projectSql, [id])
 
     if (projectResult.rows.length === 0) {
@@ -251,7 +221,7 @@ export async function DELETE(
     }
 
     const project = projectResult.rows[0]
-    const projectType = project.project_type === 'commercial' ? 'du-an' : 'nha-dan'
+    const projectType = project.type || 'nha-dan'
     const folderPath = `/Marketing/Ninh/thuvienanh/projects/${projectType}/${project.name.toLowerCase().replace(/\s+/g, '-')}_${project.id}`
 
     // Delete folder from Synology NAS
