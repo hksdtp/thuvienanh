@@ -181,39 +181,42 @@
 }
 
 /* ============================================
-   DARK MODE (Optional - for future)
+   DARK MODE (Disabled - Force Light Mode Only)
    ============================================ */
 
+/*
+  Dark mode is currently disabled to ensure consistent light mode experience.
+  Uncomment the code below to enable automatic dark mode based on system preference.
+*/
+
+/*
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Backgrounds */
     --bg-primary: #000000;
     --bg-secondary: #1C1C1E;
     --bg-tertiary: #2C2C2E;
     --bg-card: #1C1C1E;
     --bg-elevated: #2C2C2E;
-    
-    /* Text Colors */
+
     --text-primary: #FFFFFF;
     --text-secondary: #EBEBF5;
     --text-tertiary: rgba(235, 235, 245, 0.6);
     --text-quaternary: rgba(235, 235, 245, 0.3);
-    
-    /* Border Colors */
+
     --border-light: #38383A;
     --border-medium: #48484A;
     --border-dark: #58585A;
-    
-    /* Overlays */
+
     --overlay-light: rgba(255, 255, 255, 0.04);
     --overlay-medium: rgba(255, 255, 255, 0.08);
     --overlay-dark: rgba(0, 0, 0, 0.6);
     --overlay-darker: rgba(0, 0, 0, 0.8);
   }
 }
+*/
 
-/* Force light mode for now */
-:root[data-theme="light"] {
-  color-scheme: light;
+/* Force light mode always */
+:root {
+  color-scheme: light only;
 }
 
