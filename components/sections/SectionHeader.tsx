@@ -21,7 +21,10 @@ export default function SectionHeader({
   action
 }: SectionHeaderProps) {
   return (
-    <div className="flex items-end justify-between mb-6">
+    <div
+      className="flex items-end justify-between"
+      style={{ marginBottom: 'var(--space-6)' }}
+    >
       <div>
         {overline && (
           <span className="text-overline text-secondary">
@@ -43,10 +46,17 @@ export default function SectionHeader({
           {viewAllHref ? (
             <Link
               href={viewAllHref}
-              className="inline-flex items-center text-headline text-accent font-semibold transition-colors hover:opacity-80"
+              className="inline-flex items-center text-headline font-semibold transition-colors hover:opacity-80"
+              style={{ color: 'var(--accent-primary)' }}
             >
               {viewAllText}
-              <svg className="ml-1 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                style={{ marginLeft: 'var(--space-1)' }}
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </Link>

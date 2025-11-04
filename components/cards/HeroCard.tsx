@@ -67,32 +67,54 @@ export default function HeroCard({
       )}
 
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
+      <div
+        className="absolute bottom-0 left-0 right-0"
+        style={{
+          color: '#FFFFFF',
+          padding: 'var(--space-6)'
+        }}
+      >
         {category && (
           <span className="text-overline opacity-80 mb-2 block">
             {category}
           </span>
         )}
-        
+
         <h2 className="text-title1 mb-3 text-shadow-lg">
           {title}
         </h2>
-        
+
         {subtitle && (
           <p className="text-body opacity-90 mb-4 max-w-2xl text-shadow">
             {subtitle}
           </p>
         )}
-        
+
         {ctaText && (
-          <button className="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-md rounded-full text-headline font-semibold transition-all duration-200 hover:bg-white/30 hover:scale-105 active:scale-95">
+          <button
+            className="inline-flex items-center backdrop-blur-md rounded-full text-headline font-semibold transition-all duration-200 hover:scale-105 active:scale-95"
+            style={{
+              paddingLeft: 'var(--space-6)',
+              paddingRight: 'var(--space-6)',
+              paddingTop: 'var(--space-3)',
+              paddingBottom: 'var(--space-3)',
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              color: '#FFFFFF'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+            }}
+          >
             {ctaText}
             <svg className="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
         )}
-        
+
         {children}
       </div>
     </Link>

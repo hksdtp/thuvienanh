@@ -12,7 +12,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-ios-gray-50 flex">
+    <div
+      className="min-h-screen flex"
+      style={{ backgroundColor: 'var(--bg-secondary)' }}
+    >
       {/* Sidebar */}
       <SidebarIOS open={sidebarOpen} setOpen={setSidebarOpen} />
 

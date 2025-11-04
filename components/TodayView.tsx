@@ -95,11 +95,22 @@ export default function TodayView() {
   }, [])
 
   return (
-    <main 
+    <main
       className="flex-1 overflow-y-auto"
       style={{ backgroundColor: 'var(--bg-secondary)' }}
     >
-      <div className="max-w-[1400px] mx-auto px-5 md:px-6 py-8 md:py-12 space-y-12">
+      <div
+        className="max-w-[1400px] mx-auto"
+        style={{
+          paddingLeft: 'var(--space-5)',
+          paddingRight: 'var(--space-5)',
+          paddingTop: 'var(--space-8)',
+          paddingBottom: 'var(--space-12)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--space-12)'
+        }}
+      >
         
         {/* Hero Section - Featured Project */}
         {loading ? (
@@ -128,13 +139,19 @@ export default function TodayView() {
           />
           
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+              style={{ gap: 'var(--space-4)' }}
+            >
               {[1, 2, 3, 4].map((i) => (
                 <CardSkeleton key={i} variant="standard" />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+              style={{ gap: 'var(--space-4)' }}
+            >
               {latestFabrics.map((fabric, index) => (
                 <div 
                   key={fabric.id} 
@@ -246,8 +263,17 @@ export default function TodayView() {
         {/* Empty State */}
         {!loading && !featuredProject && latestFabrics.length === 0 && (
           <div className="text-center py-20">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-4">
-              <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div
+              className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4"
+              style={{ backgroundColor: 'var(--bg-tertiary)' }}
+            >
+              <svg
+                className="w-10 h-10"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                style={{ color: 'var(--text-quaternary)' }}
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>

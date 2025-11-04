@@ -28,16 +28,20 @@ export default function StandardCard({
   return (
     <Link
       href={href}
-      className="group block bg-white overflow-hidden transition-all duration-300 hover-scale gpu-accelerated"
+      className="group block overflow-hidden transition-all duration-300 hover-scale gpu-accelerated"
       style={{
+        backgroundColor: 'var(--bg-card)',
         borderRadius: 'var(--radius-lg)',
         boxShadow: 'var(--shadow-card)'
       }}
     >
       {/* Image Container */}
-      <div 
-        className="relative overflow-hidden bg-gray-100"
-        style={{ aspectRatio }}
+      <div
+        className="relative overflow-hidden"
+        style={{
+          aspectRatio,
+          backgroundColor: 'var(--bg-tertiary)'
+        }}
       >
         <Image
           src={imageUrl}
@@ -56,7 +60,7 @@ export default function StandardCard({
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div style={{ padding: 'var(--space-4)' }}>
         {category && (
           <span className="text-caption text-secondary uppercase font-semibold">
             {category}
@@ -74,7 +78,13 @@ export default function StandardCard({
         )}
         
         {footer && (
-          <div className="mt-3 pt-3 border-t border-gray-100">
+          <div
+            style={{
+              marginTop: 'var(--space-3)',
+              paddingTop: 'var(--space-3)',
+              borderTop: `1px solid var(--border-light)`
+            }}
+          >
             {footer}
           </div>
         )}

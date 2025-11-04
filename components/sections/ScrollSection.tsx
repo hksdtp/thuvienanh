@@ -33,7 +33,7 @@ export default function ScrollSection({
   }
 
   return (
-    <section className="mb-12">
+    <section style={{ marginBottom: 'var(--space-12)' }}>
       <SectionHeader
         title={title}
         overline={overline}
@@ -45,20 +45,40 @@ export default function ScrollSection({
         {/* Scroll Buttons */}
         <button
           onClick={() => scroll('left')}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center hover:scale-110 active:scale-95"
-          style={{ marginLeft: '-20px' }}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center hover:scale-110 active:scale-95"
+          style={{
+            marginLeft: '-20px',
+            backgroundColor: 'var(--bg-card)',
+            boxShadow: 'var(--shadow-lg)'
+          }}
         >
-          <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            style={{ color: 'var(--text-primary)' }}
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        
+
         <button
           onClick={() => scroll('right')}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center hover:scale-110 active:scale-95"
-          style={{ marginRight: '-20px' }}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center hover:scale-110 active:scale-95"
+          style={{
+            marginRight: '-20px',
+            backgroundColor: 'var(--bg-card)',
+            boxShadow: 'var(--shadow-lg)'
+          }}
         >
-          <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            style={{ color: 'var(--text-primary)' }}
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>

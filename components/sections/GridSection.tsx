@@ -19,11 +19,11 @@ export default function GridSection({
   subtitle,
   viewAllHref,
   columns = 4,
-  gap = 16,
+  gap = 16, // Default 16px = var(--space-4)
   children
 }: GridSectionProps) {
   return (
-    <section className="mb-12">
+    <section style={{ marginBottom: 'var(--space-12)' }}>
       <SectionHeader
         title={title}
         overline={overline}

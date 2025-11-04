@@ -24,19 +24,29 @@ export default function CompactCard({
   return (
     <Link
       href={href}
-      className="group flex items-center gap-4 p-4 bg-white overflow-hidden transition-all duration-200 hover:bg-gray-50"
+      className="group flex items-center overflow-hidden transition-all duration-200"
       style={{
+        gap: 'var(--space-4)',
+        padding: 'var(--space-4)',
+        backgroundColor: 'var(--bg-card)',
         borderRadius: 'var(--radius-md)',
         boxShadow: 'var(--shadow-sm)'
       }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'var(--bg-card)'
+      }}
     >
       {/* Image/Icon */}
-      <div 
-        className="relative flex-shrink-0 overflow-hidden bg-gray-100"
+      <div
+        className="relative flex-shrink-0 overflow-hidden"
         style={{
           width: '80px',
           height: '80px',
-          borderRadius: 'var(--radius-md)'
+          borderRadius: 'var(--radius-md)',
+          backgroundColor: 'var(--bg-tertiary)'
         }}
       >
         {imageUrl ? (
@@ -48,7 +58,10 @@ export default function CompactCard({
             sizes="80px"
           />
         ) : icon ? (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
+          <div
+            className="w-full h-full flex items-center justify-center"
+            style={{ color: 'var(--text-quaternary)' }}
+          >
             {icon}
           </div>
         ) : null}
@@ -74,11 +87,12 @@ export default function CompactCard({
       </div>
 
       {/* Arrow */}
-      <svg 
-        className="w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-200 group-hover:translate-x-1" 
-        fill="none" 
-        viewBox="0 0 24 24" 
+      <svg
+        className="w-5 h-5 flex-shrink-0 transition-transform duration-200 group-hover:translate-x-1"
+        fill="none"
+        viewBox="0 0 24 24"
         stroke="currentColor"
+        style={{ color: 'var(--text-quaternary)' }}
       >
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
       </svg>
