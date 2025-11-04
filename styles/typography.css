@@ -1,0 +1,211 @@
+/**
+ * Typography System - Apple App Store Style
+ * Thư Viện Anh
+ */
+
+/* ============================================
+   BASE TYPOGRAPHY
+   ============================================ */
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================
+   DISPLAY
+   ============================================ */
+
+.text-display {
+  font-size: var(--text-display-size);
+  line-height: var(--text-display-line);
+  font-weight: var(--text-display-weight);
+  letter-spacing: var(--text-display-spacing);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   TITLES
+   ============================================ */
+
+.text-title1 {
+  font-size: var(--text-title1-size);
+  line-height: var(--text-title1-line);
+  font-weight: var(--text-title1-weight);
+  letter-spacing: var(--text-title1-spacing);
+  color: var(--text-primary);
+}
+
+.text-title2 {
+  font-size: var(--text-title2-size);
+  line-height: var(--text-title2-line);
+  font-weight: var(--text-title2-weight);
+  letter-spacing: var(--text-title2-spacing);
+  color: var(--text-primary);
+}
+
+.text-title3 {
+  font-size: var(--text-title3-size);
+  line-height: var(--text-title3-line);
+  font-weight: var(--text-title3-weight);
+  letter-spacing: var(--text-title3-spacing);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   HEADLINE
+   ============================================ */
+
+.text-headline {
+  font-size: var(--text-headline-size);
+  line-height: var(--text-headline-line);
+  font-weight: var(--text-headline-weight);
+  letter-spacing: var(--text-headline-spacing);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   BODY
+   ============================================ */
+
+.text-body {
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line);
+  font-weight: var(--text-body-weight);
+  letter-spacing: var(--text-body-spacing);
+  color: var(--text-primary);
+}
+
+.text-body-small {
+  font-size: var(--text-body-small-size);
+  line-height: var(--text-body-small-line);
+  font-weight: var(--text-body-small-weight);
+  letter-spacing: var(--text-body-small-spacing);
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   CAPTION
+   ============================================ */
+
+.text-caption {
+  font-size: var(--text-caption-size);
+  line-height: var(--text-caption-line);
+  font-weight: var(--text-caption-weight);
+  letter-spacing: var(--text-caption-spacing);
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   OVERLINE
+   ============================================ */
+
+.text-overline {
+  font-size: var(--text-overline-size);
+  line-height: var(--text-overline-line);
+  font-weight: var(--text-overline-weight);
+  letter-spacing: var(--text-overline-spacing);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   TEXT COLORS
+   ============================================ */
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.text-accent {
+  color: var(--accent-primary);
+}
+
+.text-white {
+  color: #FFFFFF;
+}
+
+/* ============================================
+   TEXT UTILITIES
+   ============================================ */
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY
+   ============================================ */
+
+@media (max-width: 768px) {
+  .text-display {
+    font-size: 36px;
+    line-height: 40px;
+    letter-spacing: -0.4px;
+  }
+  
+  .text-title1 {
+    font-size: 28px;
+    line-height: 34px;
+    letter-spacing: -0.3px;
+  }
+  
+  .text-title2 {
+    font-size: 24px;
+    line-height: 30px;
+    letter-spacing: -0.2px;
+  }
+  
+  .text-title3 {
+    font-size: 20px;
+    line-height: 26px;
+    letter-spacing: -0.2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .text-display {
+    font-size: 32px;
+    line-height: 36px;
+  }
+  
+  .text-title1 {
+    font-size: 24px;
+    line-height: 30px;
+  }
+  
+  .text-title2 {
+    font-size: 20px;
+    line-height: 26px;
+  }
+}
+

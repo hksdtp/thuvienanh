@@ -1,5 +1,5 @@
-import MainContent from '@/components/MainContent'
+import TodayView from '@/components/TodayView'
 
 export default function Home() {
-  return <MainContent />
+  return <TodayView />
 }

@@ -1,0 +1,165 @@
+/**
+ * Responsive Utilities
+ * Mobile-first approach
+ */
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+
+.container-app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+@media (max-width: 768px) {
+  .container-app {
+    padding: 0 var(--space-4);
+  }
+}
+
+/* ============================================
+   GRID RESPONSIVE
+   ============================================ */
+
+.grid-responsive-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 1024px) {
+  .grid-responsive-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-responsive-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-responsive-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-responsive-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .grid-responsive-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-responsive-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   VISIBILITY
+   ============================================ */
+
+.hide-mobile {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none;
+  }
+}
+
+.show-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .show-mobile {
+    display: block;
+  }
+}
+
+/* ============================================
+   TOUCH OPTIMIZATIONS
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets on mobile */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Remove hover effects on touch devices */
+  .hover-lift:hover,
+  .hover-scale:hover {
+    transform: none;
+  }
+
+  /* Add active states instead */
+  .hover-lift:active,
+  .hover-scale:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ============================================
+   SAFE AREAS (for notched devices)
+   ============================================ */
+
+@supports (padding: max(0px)) {
+  .safe-area-inset-top {
+    padding-top: max(var(--space-4), env(safe-area-inset-top));
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+  }
+
+  .safe-area-inset-left {
+    padding-left: max(var(--space-4), env(safe-area-inset-left));
+  }
+
+  .safe-area-inset-right {
+    padding-right: max(var(--space-4), env(safe-area-inset-right));
+  }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-light: #000000;
+    --border-medium: #000000;
+  }
+}
+

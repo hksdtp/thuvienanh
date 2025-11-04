@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Design System */
+@import '../styles/design-tokens.css';
+@import '../styles/typography.css';
+@import '../styles/animations.css';
+@import '../styles/responsive.css';
+
 /* Custom macOS/iOS-like styles */
 @layer base {
   * {
