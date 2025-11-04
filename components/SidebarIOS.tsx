@@ -117,10 +117,9 @@ export default function SidebarIOS({ open, setOpen }: SidebarIOSProps) {
     <div
       className="h-full flex flex-col"
       style={{
-        backgroundColor: isMobile ? 'var(--bg-primary)' : 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: isMobile ? 'none' : 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: isMobile ? 'none' : 'blur(20px) saturate(180%)',
-        boxShadow: isMobile ? 'none' : 'var(--shadow-card)'
+        backgroundColor: isMobile ? 'var(--bg-primary)' : 'var(--bg-primary)',
+        borderRight: isMobile ? 'none' : '1px solid var(--border-light)',
+        boxShadow: isMobile ? 'none' : 'none'
       }}
     >
       {/* Header - Apple style */}
