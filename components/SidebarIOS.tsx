@@ -26,7 +26,6 @@ import {
   ShoppingCartIcon,
   ArrowUpTrayIcon,
 } from '@heroicons/react/24/outline'
-import clsx from 'clsx'
 
 // Menu structure
 const menuStructure = [
@@ -115,17 +114,41 @@ export default function SidebarIOS({ open, setOpen }: SidebarIOSProps) {
 
   // Sidebar content (reusable for both desktop and mobile)
   const SidebarContent = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <div className="h-full bg-white flex flex-col border-r border-ios-gray-200">
-      {/* Header - More compact */}
-      <div className="flex items-center justify-between h-16 px-5 border-b border-ios-gray-200 flex-shrink-0">
-        <div className="flex items-center space-x-2">
-          <img
-            src="/logo.svg"
-            alt="TVA Logo"
-            className="w-8 h-8 rounded-lg object-cover"
-          />
+    <div
+      className="h-full flex flex-col"
+      style={{
+        backgroundColor: isMobile ? 'var(--bg-primary)' : 'rgba(255, 255, 255, 0.8)',
+        backdropFilter: isMobile ? 'none' : 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: isMobile ? 'none' : 'blur(20px) saturate(180%)',
+        boxShadow: isMobile ? 'none' : 'var(--shadow-card)'
+      }}
+    >
+      {/* Header - Apple style */}
+      <div
+        className="flex items-center justify-between flex-shrink-0"
+        style={{
+          height: '64px',
+          padding: '0 var(--space-5)',
+          borderBottom: `1px solid var(--border-light)`
+        }}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className="flex items-center justify-center"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: 'var(--radius-md)',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)'
+            }}
+          >
+            <PhotoIcon className="w-5 h-5 text-white" strokeWidth={2} />
+          </div>
           {!isMobile && (
-            <span className="text-base font-semibold text-ios-gray-900 tracking-tight">TVA</span>
+            <span className="text-headline font-semibold" style={{ color: 'var(--text-primary)', letterSpacing: '-0.022em' }}>
+              Thư Viện Anh
+            </span>
           )}
         </div>
 
@@ -133,118 +156,272 @@ export default function SidebarIOS({ open, setOpen }: SidebarIOSProps) {
         {isMobile && (
           <button
             onClick={() => setOpen(false)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-ios-gray-100 active:bg-ios-gray-200 transition-colors"
+            className="flex items-center justify-center transition-all hover-scale"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: 'var(--radius-sm)',
+              backgroundColor: 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent'
+            }}
           >
-            <XMarkIcon className="w-5 h-5 text-ios-gray-600" strokeWidth={2} />
+            <XMarkIcon className="w-5 h-5" strokeWidth={2} style={{ color: 'var(--text-secondary)' }} />
           </button>
         )}
       </div>
 
-      {/* Navigation - More spacious */}
-      <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
-        {menuStructure.map((item, index) => {
-          if (item.type === 'item') {
-            // Regular menu item - Cleaner design
-            const Icon = item.icon
-            const active = isActive(item.href)
+      {/* Navigation - Apple style */}
+      <nav
+        className="flex-1 overflow-y-auto"
+        style={{
+          padding: 'var(--space-4)',
+          paddingTop: 'var(--space-5)'
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+          {menuStructure.map((item, index) => {
+            if (item.type === 'item') {
+              // Regular menu item - Apple style
+              const Icon = item.icon
+              const active = isActive(item.href)
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => isMobile && setOpen(false)}
-                className={clsx(
-                  'flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all',
-                  active
-                    ? 'bg-ios-gray-100 text-ios-gray-900'
-                    : 'text-ios-gray-700 hover:bg-ios-gray-50 hover:text-ios-gray-900'
-                )}
-              >
-                <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={1.8} />
-                <span>{item.name}</span>
-              </Link>
-            )
-          } else {
-            // Group with collapsible items - Cleaner design
-            const GroupIcon = item.icon
-            const groupHasActive = hasActiveItem(item.items)
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => isMobile && setOpen(false)}
+                  className="flex items-center transition-all hover-lift"
+                  style={{
+                    gap: 'var(--space-3)',
+                    padding: 'var(--space-3)',
+                    borderRadius: 'var(--radius-md)',
+                    backgroundColor: active ? 'var(--accent-primary)' : 'transparent',
+                    color: active ? '#FFFFFF' : 'var(--text-primary)',
+                    fontSize: '15px',
+                    fontWeight: active ? 600 : 500,
+                    letterSpacing: '-0.022em',
+                    textDecoration: 'none'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!active) {
+                      e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!active) {
+                      e.currentTarget.style.backgroundColor = 'transparent'
+                    }
+                  }}
+                >
+                  <Icon
+                    className="flex-shrink-0"
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      strokeWidth: 1.8,
+                      color: active ? '#FFFFFF' : 'var(--text-secondary)'
+                    }}
+                  />
+                  <span>{item.name}</span>
+                </Link>
+              )
+            } else {
+              // Group with collapsible items - Apple style
+              const GroupIcon = item.icon
+              const groupHasActive = hasActiveItem(item.items)
 
-            return (
-              <Disclosure key={item.groupName} defaultOpen={groupHasActive}>
-                {({ open: groupOpen }) => (
-                  <div className="space-y-1">
-                    {/* Group header - More subtle */}
-                    <Disclosure.Button
-                      className={clsx(
-                        'w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold transition-all',
-                        groupHasActive
-                          ? 'text-ios-gray-900'
-                          : 'text-ios-gray-700 hover:bg-ios-gray-50'
-                      )}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <GroupIcon className="w-5 h-5 flex-shrink-0" strokeWidth={1.8} />
-                        <span>{item.groupName}</span>
-                      </div>
-                      <ChevronRightIcon
-                        className={clsx(
-                          'w-4 h-4 text-ios-gray-500 transition-transform transform',
-                          groupOpen ? 'rotate-90' : 'rotate-0'
-                        )}
-                        strokeWidth={2.5}
-                      />
-                    </Disclosure.Button>
+              return (
+                <Disclosure key={item.groupName} defaultOpen={groupHasActive}>
+                  {({ open: groupOpen }) => (
+                    <div style={{ marginTop: index > 2 ? 'var(--space-4)' : '0' }}>
+                      {/* Group header - Apple style */}
+                      <Disclosure.Button
+                        className="w-full flex items-center justify-between transition-all"
+                        style={{
+                          padding: 'var(--space-3)',
+                          borderRadius: 'var(--radius-md)',
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent'
+                        }}
+                      >
+                        <div className="flex items-center" style={{ gap: 'var(--space-3)' }}>
+                          <GroupIcon
+                            className="flex-shrink-0"
+                            style={{
+                              width: '20px',
+                              height: '20px',
+                              strokeWidth: 1.8,
+                              color: groupHasActive ? 'var(--accent-primary)' : 'var(--text-secondary)'
+                            }}
+                          />
+                          <span
+                            className="text-headline"
+                            style={{
+                              color: groupHasActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                              fontWeight: 600,
+                              letterSpacing: '-0.022em'
+                            }}
+                          >
+                            {item.groupName}
+                          </span>
+                        </div>
+                        <ChevronRightIcon
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            color: 'var(--text-tertiary)',
+                            strokeWidth: 2.5,
+                            transform: groupOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+                            transition: 'transform var(--transition-normal)'
+                          }}
+                        />
+                      </Disclosure.Button>
 
-                    {/* Group items - Cleaner spacing */}
-                    <Transition
-                      enter="transition duration-200 ease-out"
-                      enterFrom="opacity-0 -translate-y-1"
-                      enterTo="opacity-100 translate-y-0"
-                      leave="transition duration-150 ease-in"
-                      leaveFrom="opacity-100 translate-y-0"
-                      leaveTo="opacity-0 -translate-y-1"
-                    >
-                      <Disclosure.Panel className="space-y-0.5 pl-8 pt-1">
-                        {item.items.map((subItem) => {
-                          const SubIcon = subItem.icon
-                          const active = isActive(subItem.href)
+                      {/* Group items - Apple style */}
+                      <Transition
+                        enter="transition duration-200 ease-out"
+                        enterFrom="opacity-0 -translate-y-1"
+                        enterTo="opacity-100 translate-y-0"
+                        leave="transition duration-150 ease-in"
+                        leaveFrom="opacity-100 translate-y-0"
+                        leaveTo="opacity-0 -translate-y-1"
+                      >
+                        <Disclosure.Panel
+                          style={{
+                            paddingLeft: 'var(--space-8)',
+                            paddingTop: 'var(--space-2)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 'var(--space-1)'
+                          }}
+                        >
+                          {item.items.map((subItem) => {
+                            const SubIcon = subItem.icon
+                            const active = isActive(subItem.href)
 
-                          return (
-                            <Link
-                              key={subItem.href}
-                              href={subItem.href}
-                              onClick={() => isMobile && setOpen(false)}
-                              className={clsx(
-                                'flex items-center space-x-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all',
-                                active
-                                  ? 'bg-ios-gray-100 text-ios-gray-900'
-                                  : 'text-ios-gray-600 hover:bg-ios-gray-50 hover:text-ios-gray-900'
-                              )}
-                            >
-                              <SubIcon className="w-4 h-4 flex-shrink-0" strokeWidth={1.8} />
-                              <span>{subItem.name}</span>
-                            </Link>
-                          )
-                        })}
-                      </Disclosure.Panel>
-                    </Transition>
-                  </div>
-                )}
-              </Disclosure>
-            )
-          }
-        })}
+                            return (
+                              <Link
+                                key={subItem.href}
+                                href={subItem.href}
+                                onClick={() => isMobile && setOpen(false)}
+                                className="flex items-center transition-all hover-lift"
+                                style={{
+                                  gap: 'var(--space-2)',
+                                  padding: 'var(--space-2) var(--space-3)',
+                                  borderRadius: 'var(--radius-md)',
+                                  backgroundColor: active ? 'var(--bg-tertiary)' : 'transparent',
+                                  color: active ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                                  fontSize: '14px',
+                                  fontWeight: active ? 600 : 500,
+                                  letterSpacing: '-0.022em',
+                                  textDecoration: 'none'
+                                }}
+                                onMouseEnter={(e) => {
+                                  if (!active) {
+                                    e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'
+                                    e.currentTarget.style.color = 'var(--text-primary)'
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  if (!active) {
+                                    e.currentTarget.style.backgroundColor = 'transparent'
+                                    e.currentTarget.style.color = 'var(--text-secondary)'
+                                  }
+                                }}
+                              >
+                                <SubIcon
+                                  className="flex-shrink-0"
+                                  style={{
+                                    width: '16px',
+                                    height: '16px',
+                                    strokeWidth: 1.8
+                                  }}
+                                />
+                                <span>{subItem.name}</span>
+                              </Link>
+                            )
+                          })}
+                        </Disclosure.Panel>
+                      </Transition>
+                    </div>
+                  )}
+                </Disclosure>
+              )
+            }
+          })}
+        </div>
       </nav>
 
-      {/* User section - Cleaner */}
-      <div className="border-t border-ios-gray-200 p-4 flex-shrink-0">
-        <button className="flex items-center space-x-3 w-full px-3 py-2.5 rounded-lg hover:bg-ios-gray-50 transition-all">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-semibold text-sm">A</span>
+      {/* User section - Apple style */}
+      <div
+        className="flex-shrink-0"
+        style={{
+          borderTop: `1px solid var(--border-light)`,
+          padding: 'var(--space-4)'
+        }}
+      >
+        <button
+          className="flex items-center w-full transition-all hover-lift"
+          style={{
+            gap: 'var(--space-3)',
+            padding: 'var(--space-3)',
+            borderRadius: 'var(--radius-md)',
+            backgroundColor: 'transparent',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'transparent'
+          }}
+        >
+          <div
+            className="flex items-center justify-center flex-shrink-0"
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)'
+            }}
+          >
+            <span
+              className="font-semibold"
+              style={{
+                color: '#FFFFFF',
+                fontSize: '14px'
+              }}
+            >
+              A
+            </span>
           </div>
           <div className="flex-1 text-left min-w-0">
-            <p className="text-sm font-semibold text-ios-gray-900 truncate">Admin</p>
-            <p className="text-xs text-ios-gray-600 truncate">admin@tva.com</p>
+            <p
+              className="text-body-small font-semibold truncate"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              Admin
+            </p>
+            <p
+              className="text-caption truncate"
+              style={{ color: 'var(--text-tertiary)' }}
+            >
+              admin@tva.com
+            </p>
           </div>
         </button>
       </div>
@@ -253,41 +430,57 @@ export default function SidebarIOS({ open, setOpen }: SidebarIOSProps) {
 
   return (
     <>
-      {/* Desktop Sidebar - Always visible, more compact */}
-      <div className="hidden lg:block lg:w-56 lg:flex-shrink-0">
+      {/* Desktop Sidebar - Always visible, Apple style */}
+      <div
+        className="hidden lg:block lg:flex-shrink-0"
+        style={{ width: '240px' }}
+      >
         <div className="h-screen sticky top-0">
           <SidebarContent />
         </div>
       </div>
 
-      {/* Mobile Sidebar - Dialog overlay */}
+      {/* Mobile Sidebar - Dialog overlay with Apple style */}
       <Transition show={open} as={Fragment}>
         <Dialog as="div" className="relative z-50 lg:hidden" onClose={setOpen}>
-          {/* Backdrop */}
+          {/* Backdrop - Apple style blur */}
           <Transition.Child
             as={Fragment}
-            enter="transition-opacity ease-linear duration-300"
+            enter="transition-opacity ease-out duration-300"
             enterFrom="opacity-0"
             enterTo="opacity-100"
-            leave="transition-opacity ease-linear duration-300"
+            leave="transition-opacity ease-in duration-200"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" />
+            <div
+              className="fixed inset-0"
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)'
+              }}
+            />
           </Transition.Child>
 
           {/* Sidebar panel */}
           <div className="fixed inset-0 flex">
             <Transition.Child
               as={Fragment}
-              enter="transition ease-in-out duration-300 transform"
+              enter="transition ease-out duration-300 transform"
               enterFrom="-translate-x-full"
               enterTo="translate-x-0"
-              leave="transition ease-in-out duration-300 transform"
+              leave="transition ease-in duration-200 transform"
               leaveFrom="translate-x-0"
               leaveTo="-translate-x-full"
             >
-              <Dialog.Panel className="relative mr-16 flex w-full max-w-[280px]">
+              <Dialog.Panel
+                className="relative flex w-full"
+                style={{
+                  maxWidth: '280px',
+                  marginRight: '64px'
+                }}
+              >
                 <SidebarContent isMobile={true} />
               </Dialog.Panel>
             </Transition.Child>
